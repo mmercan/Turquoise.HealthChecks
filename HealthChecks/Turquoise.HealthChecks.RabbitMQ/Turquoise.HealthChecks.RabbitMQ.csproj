@@ -2,6 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Turquoise.HealthChecks.RabbitMQ</PackageId>
+    <VersionPrefix>2.2.1</VersionPrefix>
+    <Authors>Matt Mercan</Authors>
+    <Company>Mercan</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EasyNetQ" Version="3.4.5"/>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
