@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageId>Turquoise.HealthChecks.ServiceBus</PackageId>
+    <PackageId>Turquoise.HealthChecks.Common</PackageId>
     <VersionPrefix>2.2.1</VersionPrefix>
     <Authors>Matt Mercan</Authors>
     <Company>Mercan</Company>
