@@ -15,7 +15,12 @@ steps:
 
 - script: |
     cd $(Build.SourcesDirectory)/HealthChecks/Turquoise.HealthChecks.Common
+
+
     dotnet --version
+    
+    dotnet restore
+    dotnet build
     b="$(Build.SourceBranchName)"
     if ($b -eq "master") then
       dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
