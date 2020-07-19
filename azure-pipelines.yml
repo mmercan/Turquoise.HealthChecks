@@ -14,12 +14,21 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    cd $(Build.SourcesDirectory)\Turquoise.HealthChecks.Common
+    # show dotnet
+    dotnet --version
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'
-    packagesToPack: 'Turquoise.HealthChecks.Common.csproj/Turquoise.HealthChecks.Common.csproj'
-    versioningScheme: 'byBuildNumber'
+    # create nuget
+    $v = git rev-parse --short HEAD
+    $b = "$(Build.SourceBranchName)"
+    $bn = $b -replace "([a-z])[a-z]+/(.+)",'$1-$2' -replace "[^a-z0-9-]",""
+    if ($b -eq "master") {
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$v-$bn
+    } else {
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$v-$bn
+    }
+    # check error
+    if ($LASTEXITCODE -ne 0) {
+      write-host "##vso[task.complete result=Failed]"
+    }
+  displayName: 'Run a multi-line script'
