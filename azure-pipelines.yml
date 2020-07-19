@@ -17,14 +17,9 @@ steps:
     cd $(Build.SourcesDirectory)/HealthChecks/Turquoise.HealthChecks.Common
     dotnet --version
     b="$(Build.SourceBranchName)"
-    bn = $b -replace "([a-z])[a-z]+/(.+)",'$1-$2' -replace "[^a-z0-9-]",""
-    if ($b -eq "master") {
-      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$bn
-    } else {
-      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$bn
-    }
-    # check error
-    if ($LASTEXITCODE -ne 0) {
-      write-host "##vso[task.complete result=Failed]"
-    }
+    if ($b -eq "master") then
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+     else 
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+    fi
   displayName: 'Run a multi-line script'
