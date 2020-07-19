@@ -16,16 +16,12 @@ steps:
 - script: |
     cd $(Build.SourcesDirectory)/HealthChecks/Turquoise.HealthChecks.Common
     dotnet --version
-
-    $(Build.SourceBranch)
-
-    v=git rev-parse --short HEAD
     b="$(Build.SourceBranchName)"
     bn = $b -replace "([a-z])[a-z]+/(.+)",'$1-$2' -replace "[^a-z0-9-]",""
     if ($b -eq "master") {
-      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$v-$bn
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$bn
     } else {
-      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$v-$bn
+      dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$bn
     }
     # check error
     if ($LASTEXITCODE -ne 0) {
