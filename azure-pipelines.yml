@@ -14,7 +14,7 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    cd $(Build.SourcesDirectory)\Turquoise.HealthChecks.Common
+    cd $(Build.SourcesDirectory)/Turquoise.HealthChecks.Common
     # show dotnet
     dotnet --version
 
