@@ -19,9 +19,9 @@ steps:
     dotnet --version
 
     # create nuget
-    $v = git rev-parse --short HEAD
-    $b = "$(Build.SourceBranchName)"
-    $bn = $b -replace "([a-z])[a-z]+/(.+)",'$1-$2' -replace "[^a-z0-9-]",""
+    v = git rev-parse --short HEAD
+    b = "$(Build.SourceBranchName)"
+    bn = $b -replace "([a-z])[a-z]+/(.+)",'$1-$2' -replace "[^a-z0-9-]",""
     if ($b -eq "master") {
       dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)-$v-$bn
     } else {
