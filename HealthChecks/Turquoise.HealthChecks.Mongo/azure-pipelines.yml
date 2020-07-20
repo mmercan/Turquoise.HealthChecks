@@ -13,6 +13,7 @@ trigger:
   paths:
     include:
       - HealthChecks/Turquoise.HealthChecks.Mongo/**
+      - HealthChecks/Turquoise.HealthChecks.Mongo/*
 
 
 pool:
