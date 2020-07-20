@@ -15,7 +15,6 @@ trigger:
       - HealthChecks/Turquoise.HealthChecks.Mongo/**
       - HealthChecks/Turquoise.HealthChecks.Mongo/*
 
-
 pool:
   vmImage: "ubuntu-latest"
 
