@@ -13,6 +13,7 @@ trigger:
   paths:
     include:
       - HealthChecks/Turquoise.HealthChecks.MySql/**
+      - HealthChecks/Turquoise.HealthChecks.MySql/*
 
 pool:
   vmImage: "ubuntu-latest"
