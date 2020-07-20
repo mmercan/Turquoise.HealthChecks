@@ -4,7 +4,16 @@
 # https://aka.ms/yaml
 
 trigger:
-  - master
+  batch: true
+  branches:
+    include:
+      - "*"
+    exclude:
+      - features/experimental/*
+  paths:
+    include:
+      - HealthChecks/Turquoise.HealthChecks.Nats/**
+      - HealthChecks/Turquoise.HealthChecks.Nats/*
 
 pool:
   vmImage: "ubuntu-latest"
