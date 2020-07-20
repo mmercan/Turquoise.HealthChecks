@@ -1,0 +1,14 @@
+version: "3.4"
+
+services:
+  turquoise-api-healthmonitoring-test:
+    image: mmercan/turquoise-api-healthmonitoring-test:${TAGVersion}-prod-linux
+    build:
+      target: test
+      context: ../
+      dockerfile: Turquoise.Api.HealthMonitoring/Dockerfile-test
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    # ports:
+    #   - "5005:80"
