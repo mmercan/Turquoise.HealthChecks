@@ -4,7 +4,16 @@
 # https://aka.ms/yaml
 
 trigger:
-  - master
+  batch: true
+  branches:
+    include:
+      - "*"
+    exclude:
+      - features/experimental/*
+  paths:
+    include:
+      - HealthChecks/Turquoise.HealthChecks.Redis/**
+      - HealthChecks/Turquoise.HealthChecks.Redis/*
 
 pool:
   vmImage: "ubuntu-latest"
