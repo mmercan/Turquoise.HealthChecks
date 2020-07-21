@@ -56,7 +56,7 @@ namespace Turquoise.HealthChecks.Common.Checks
                 try
                 {
                     var serviceprovider = services.BuildServiceProvider();
-                    foreach (var service in services)
+                    foreach (var service in services.ToList())
                     {
                         order++;
                         try
