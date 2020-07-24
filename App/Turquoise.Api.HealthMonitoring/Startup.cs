@@ -28,6 +28,7 @@ using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Turquoise.Api.HealthMonitoring.CustomFeatureFilter;
+using Turquoise.Api.HealthMonitoring.GRPCServices;
 using Turquoise.Common;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.CheckCaller;
@@ -79,20 +80,34 @@ namespace Turquoise.Api.HealthMonitoring
             services.AddApplicationInsightsKubernetesEnricher();
 
             services.ConfigureJwtAuthService(Configuration);
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                // builder.AllowAnyOrigin()
-                // .AllowAnyMethod()
-                // .AllowAnyHeader()
-                // .SetIsOriginAllowedToAllowWildcardSubdomains();
-                // //.AllowCredentials();
-                builder
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowedToAllowWildcardSubdomains()
-                .AllowCredentials()
-                .WithOrigins("http://localhost:4300", "https://app-health-ui.dev.myrcan.com", "https://health.dev.ui.sentinel.mercan.io");
-            }));
+            services.AddCors(
+                o =>
+                {
+                    o.AddPolicy("MyPolicy", builder =>
+                    {
+                        // builder.AllowAnyOrigin()
+                        // .AllowAnyMethod()
+                        // .AllowAnyHeader()
+                        // .SetIsOriginAllowedToAllowWildcardSubdomains();
+                        // //.AllowCredentials();
+                        builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowCredentials()
+                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
+                        .WithOrigins("http://localhost:4200", "https://app-health-ui.dev.myrcan.com", "https://health.dev.ui.sentinel.mercan.io");
+                    });
+
+                    o.AddPolicy("GRPCPolicy", builder =>
+                    {
+                        builder.WithOrigins("localhost:4200", "YourCustomDomain");
+                        builder.WithMethods("POST, OPTIONS");
+                        builder.AllowAnyHeader();
+                        builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
+                    });
+                }
+            );
 
 
             services.AddApiVersioning(options =>
@@ -192,14 +207,14 @@ namespace Turquoise.Api.HealthMonitoring
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IApiVersionDescriptionProvider provider, IHostApplicationLifetime lifetime, IDistributedCache cache)
         {
-            lifetime.ApplicationStarted.Register(() =>
-           {
-               var currentTimeUTC = DateTime.UtcNow.ToString();
-               byte[] encodedCurrentTimeUTC = Encoding.UTF8.GetBytes(currentTimeUTC);
-               var options = new DistributedCacheEntryOptions()
-                   .SetSlidingExpiration(TimeSpan.FromSeconds(20));
-               cache.Set("cachedTimeUTC", encodedCurrentTimeUTC, options);
-           });
+            //     lifetime.ApplicationStarted.Register(() =>
+            //    {
+            //        var currentTimeUTC = DateTime.UtcNow.ToString();
+            //        byte[] encodedCurrentTimeUTC = Encoding.UTF8.GetBytes(currentTimeUTC);
+            //        var options = new DistributedCacheEntryOptions()
+            //            .SetSlidingExpiration(TimeSpan.FromSeconds(20));
+            //        cache.Set("cachedTimeUTC", encodedCurrentTimeUTC, options);
+            //    });
 
 
             if (env.IsDevelopment())
@@ -232,16 +247,19 @@ namespace Turquoise.Api.HealthMonitoring
                 options.RoutePrefix = string.Empty;
             });
 
-            app.UseCors("MyPolicy");
+
             app.UseRouting();
+            app.UseCors("MyPolicy");
             app.UseAllAuthentication();
             app.UseAuthorization();
+
+            app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-                // endpoints.MapGrpcService<CreditRatingCheckService>();
+                endpoints.MapGrpcService<GreeterGRPCService>();
+                endpoints.MapGrpcService<CountryGRPCService>();
                 // endpoints.MapGrpcService<MeterReaderService>();
             });
 

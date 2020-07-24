@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+service CountryService {
+  rpc GetAll(EmptyRequest) returns (CountriesReply) {}
+}
+
+message EmptyRequest {
+}
+
+message CountryReply {
+	int32 Id = 1;
+    string Name = 2;
+    string Description = 3;
+}
+
+message CountriesReply {
+	repeated CountryReply Countries = 1;
+}

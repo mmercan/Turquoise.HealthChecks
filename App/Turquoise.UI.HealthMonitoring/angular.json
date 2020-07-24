@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "HealthMonitoring": {
+    "healthchecker": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/HealthMonitoring",
+            "outputPath": "dist/healthchecker",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -70,18 +70,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "HealthMonitoring:build"
+            "browserTarget": "healthchecker:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "HealthMonitoring:build:production"
+              "browserTarget": "healthchecker:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "HealthMonitoring:build"
+            "browserTarget": "healthchecker:build"
           }
         },
         "test": {
@@ -120,18 +120,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "HealthMonitoring:serve"
+            "devServerTarget": "healthchecker:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "HealthMonitoring:serve:production"
+              "devServerTarget": "healthchecker:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "HealthMonitoring",
+  "defaultProject": "healthchecker",
   "cli": {
     "analytics": false
   }
