@@ -1,5 +1,15 @@
-export interface FuseConfig
-{
+export enum logLevel {
+    data = 6,
+    debug = 5,
+    info = 4,
+    log = 3,
+    warn = 2,
+    error = 1,
+    none = 0
+}
+
+
+export interface FuseConfig {
     colorTheme: string;
     customScrollbars: boolean;
     layout: {
@@ -29,5 +39,17 @@ export interface FuseConfig
             hidden: boolean,
             position: 'left' | 'right'
         }
+    };
+    authenticationType: 'Adal' | 'local';
+    adalConfig: {
+        tenant: string,
+        clientId: string,
+        redirectUri: string,
+        postLogoutRedirectUri: string,
+        cacheLocation: string
+    };
+    login: {
+        loginUrl: string,
+        bearerToken: string
     };
 }
