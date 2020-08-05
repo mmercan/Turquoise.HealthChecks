@@ -10,6 +10,8 @@
  <ItemGroup>
   <Protobuf Include="Protos\country.proto" GrpcServices="Server" ProtoRoot="Protos\" />
   <Protobuf Include="Protos\greet.proto" GrpcServices="Server" ProtoRoot="Protos\" />
+  <Protobuf Include="Protos\K8sHealthcheck.proto" GrpcServices="Server" ProtoRoot="Protos\" />
+  
  </ItemGroup>
  <ItemGroup>
    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
@@ -36,5 +38,6 @@
  <ItemGroup>
    <ProjectReference Include="..\Turquoise.Common\Turquoise.Common.csproj" />
    <ProjectReference Include="..\Turquoise.Models\Turquoise.Models.csproj" />
+   <ProjectReference Include="..\Turquoise.K8s\Turquoise.K8s.csproj" />
  </ItemGroup>
 </Project>

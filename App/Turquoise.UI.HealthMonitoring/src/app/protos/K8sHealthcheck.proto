@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Turquoise.Api.HealthMonitoring";
+
+
+package k8App;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service NamespaceService {
+  rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
+}
+
+
+message NamespaceListReply{
+    repeated string namespaces = 1;
+}

@@ -1,0 +1,5527 @@
+[
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "azure-pipelines/jobName": "deploy Web App",
+        "azure-pipelines/org": "https://bupaaunz.visualstudio.com/",
+        "azure-pipelines/pipeline": "CookBook.Admin.UI",
+        "azure-pipelines/pipelineId": "3230",
+        "azure-pipelines/project": "AKS_Experiment",
+        "azure-pipelines/run": "20200707.4",
+        "azure-pipelines/runuri": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233212",
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:41:12Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-admin-ui-dev-548d558849-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-admin-ui",
+        "app.kubernetes.io/instance": "cookbook-admin-ui-dev",
+        "app.kubernetes.io/name": "cookbook-admin-ui",
+        "branch": "master",
+        "pod-template-hash": "548d558849",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-admin-ui",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-admin-ui-dev-548d558849-4dqxm",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "cookbook-admin-ui-dev-548d558849",
+          "uid": "2d42166d-8408-4a09-8f98-703ec553c6c2"
+        }
+      ],
+      "resourceVersion": "11829642",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-admin-ui-dev-548d558849-4dqxm",
+      "uid": "fe042b5f-d27e-41cc-bf41-a42028a52834"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": [
+            {
+              "name": "buildnumber",
+              "value": "unknown",
+              "valueFrom": null
+            },
+            {
+              "name": "branch",
+              "value": "master",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "mmercan/cookbook-ui-admin:20200707.4",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-admin-ui/livez",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "name": "cookbook-admin-ui",
+          "ports": [
+            {
+              "containerPort": 80,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-admin-ui/readyz",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-admin-ui-dev-token-5k9d7",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-admin-ui.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"name\":\"http\",\"containerPort\":80,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-admin-ui\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_METAJSON_ANNOTATIONS",
+              "value": "{\"azure-pipelines/jobName\":\"deploy Web App\",\"azure-pipelines/org\":\"https://bupaaunz.visualstudio.com/\",\"azure-pipelines/pipeline\":\"CookBook.Admin.UI\",\"azure-pipelines/pipelineId\":\"3230\",\"azure-pipelines/project\":\"AKS_Experiment\",\"azure-pipelines/run\":\"20200707.4\",\"azure-pipelines/runuri\":\"https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233212\"}\n",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-admin-ui-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/deployments/cookbook-admin-ui-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{\"/app-health/cookbook-admin-ui/livez\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1},\"/app-health/cookbook-admin-ui/readyz\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1}}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-admin-ui-dev-token-5k9d7",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": null,
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-admin-ui-dev-token-5k9d7",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003n",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-admin-ui-dev",
+      "serviceAccountName": "cookbook-admin-ui-dev",
+      "shareProcessNamespace": null,
+      "subdomain": null,
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-admin-ui-dev-token-5k9d7",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-admin-ui-dev-token-5k9d7"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:34Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:11Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:11Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:12Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://92a1b359f30ac4278913b856bf8fcb8a0c3431cb5a3973f6300945a4148fb226",
+          "image": "mmercan/cookbook-ui-admin:20200707.4",
+          "imageID": "docker-pullable://mmercan/cookbook-ui-admin@sha256:19f043d1337727d44128cae2734ba0c0a0a0858be71a7307f0f6c39ed467eed3",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-admin-ui",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:42:07Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://e8daa24c66a9c6a8f961ded494e4cb5aefa62774b417f3400c6a277eb3a52a37",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:42:07Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.6",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://807a98dcc34a0a253a5c039244345942f0ff281483c012f320658be98b9ce830",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://807a98dcc34a0a253a5c039244345942f0ff281483c012f320658be98b9ce830",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:41:31Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:41:31Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.5.5",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:41:19Z"
+    }
+  },
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "azure-pipelines/jobName": "deploy cookbook-comms-api to cookbook-dev",
+        "azure-pipelines/org": "https://bupaaunz.visualstudio.com/",
+        "azure-pipelines/pipeline": "CookBook.Comms.Api",
+        "azure-pipelines/pipelineId": "3240",
+        "azure-pipelines/project": "AKS_Experiment",
+        "azure-pipelines/run": "20200717.1",
+        "azure-pipelines/runuri": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=235658",
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:41:03Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-comms-api-dev-7d696cf65f-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-comms-api",
+        "app.kubernetes.io/instance": "cookbook-comms-api-dev",
+        "app.kubernetes.io/name": "cookbook-comms-api",
+        "branch": "master",
+        "pod-template-hash": "7d696cf65f",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-comms-api",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-comms-api-dev-7d696cf65f-4xcst",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "cookbook-comms-api-dev-7d696cf65f",
+          "uid": "43c280ad-0612-4449-84af-ed1b31d32629"
+        }
+      ],
+      "resourceVersion": "11829672",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-comms-api-dev-7d696cf65f-4xcst",
+      "uid": "1e266c5b-9522-45c7-802c-a5b8e4eab480"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": [
+            {
+              "name": "buildnumber",
+              "value": "unknown",
+              "valueFrom": null
+            },
+            {
+              "name": "branch",
+              "value": "master",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "mmercan/cookbook-api-comms:20200717.1",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-comms-api/livez",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "name": "cookbook-comms-api",
+          "ports": [
+            {
+              "containerPort": 80,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-comms-api/readyz",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-comms-api-dev-token-nqn2n",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-comms-api.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"name\":\"http\",\"containerPort\":80,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-comms-api\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_METAJSON_ANNOTATIONS",
+              "value": "{\"azure-pipelines/jobName\":\"deploy cookbook-comms-api to cookbook-dev\",\"azure-pipelines/org\":\"https://bupaaunz.visualstudio.com/\",\"azure-pipelines/pipeline\":\"CookBook.Comms.Api\",\"azure-pipelines/pipelineId\":\"3240\",\"azure-pipelines/project\":\"AKS_Experiment\",\"azure-pipelines/run\":\"20200717.1\",\"azure-pipelines/runuri\":\"https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=235658\"}\n",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-comms-api-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/deployments/cookbook-comms-api-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{\"/app-health/cookbook-comms-api/livez\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1},\"/app-health/cookbook-comms-api/readyz\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1}}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-comms-api-dev-token-nqn2n",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": null,
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-comms-api-dev-token-nqn2n",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003n",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-comms-api-dev",
+      "serviceAccountName": "cookbook-comms-api-dev",
+      "shareProcessNamespace": null,
+      "subdomain": null,
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-comms-api-dev-token-nqn2n",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-comms-api-dev-token-nqn2n"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:23Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:13Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:13Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:03Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://7746ee264d168de1c639590d6cff273612406a191751d7aca9c8dbaad0442e57",
+          "image": "mmercan/cookbook-api-comms:20200717.1",
+          "imageID": "docker-pullable://mmercan/cookbook-api-comms@sha256:7c1dcf2d2298b9642e53b3c125815c871d951ff1ece34ef787b4181470e88a5f",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-comms-api",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:42:03Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://24bf1158da150127ac26139b4c70a6bc3a2e89723c0f86b8901ddc0371a3175c",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:42:05Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.6",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://273a19ad526c8aa40d3f0c8768e417a103bfc4d704164b1f96123bc53016c16a",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://273a19ad526c8aa40d3f0c8768e417a103bfc4d704164b1f96123bc53016c16a",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:41:23Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:41:22Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.5.4",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:41:03Z"
+    }
+  },
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "azure-pipelines/jobName": "deploy Web App",
+        "azure-pipelines/org": "https://bupaaunz.visualstudio.com/",
+        "azure-pipelines/pipeline": "CookBook.MongoDB",
+        "azure-pipelines/pipelineId": "3225",
+        "azure-pipelines/project": "AKS_Experiment",
+        "azure-pipelines/run": "20200707.2",
+        "azure-pipelines/runuri": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233207",
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:44:12Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-mongodb-dev-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-mongodb",
+        "app.kubernetes.io/instance": "cookbook-mongodb-dev",
+        "app.kubernetes.io/name": "cookbook-mongodb",
+        "branch": "master",
+        "controller-revision-hash": "cookbook-mongodb-dev-69b9bd9df8",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-mongodb",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "statefulset.kubernetes.io/pod-name": "cookbook-mongodb-dev-0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-mongodb-dev-0",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "StatefulSet",
+          "name": "cookbook-mongodb-dev",
+          "uid": "bb8f3218-29a9-4481-a2fa-69b07ca56089"
+        }
+      ],
+      "resourceVersion": "11831347",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-mongodb-dev-0",
+      "uid": "52fe84b3-ff04-489f-99db-1147929230e4"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": null,
+          "envFrom": [
+            {
+              "configMapRef": {
+                "name": "cookbook-mongodb-dev-config",
+                "optional": null
+              },
+              "prefix": null,
+              "secretRef": null
+            },
+            {
+              "configMapRef": null,
+              "prefix": null,
+              "secretRef": {
+                "name": "cookbook-mongodb-dev-secret",
+                "optional": null
+              }
+            }
+          ],
+          "image": "mmercan/cookbook-db-mongodb:20200707.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "cookbook-mongodb",
+          "ports": [
+            {
+              "containerPort": 27017,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "tcp",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": null,
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/data/db",
+              "mountPropagation": null,
+              "name": "cookbook-mongodb",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-mongodb-dev-token-jqkfv",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-mongodb.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"name\":\"tcp\",\"containerPort\":27017,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-mongodb\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_METAJSON_ANNOTATIONS",
+              "value": "{\"azure-pipelines/jobName\":\"deploy Web App\",\"azure-pipelines/org\":\"https://bupaaunz.visualstudio.com/\",\"azure-pipelines/pipeline\":\"CookBook.MongoDB\",\"azure-pipelines/pipelineId\":\"3225\",\"azure-pipelines/project\":\"AKS_Experiment\",\"azure-pipelines/run\":\"20200707.2\",\"azure-pipelines/runuri\":\"https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233207\"}\n",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-mongodb-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/statefulsets/cookbook-mongodb-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-mongodb-dev-token-jqkfv",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": "cookbook-mongodb-dev-0",
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-mongodb-dev-token-jqkfv",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003n",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-mongodb-dev",
+      "serviceAccountName": "cookbook-mongodb-dev",
+      "shareProcessNamespace": null,
+      "subdomain": "cookbook-mongodb-dev",
+      "terminationGracePeriodSeconds": 15,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-mongodb",
+          "nfs": null,
+          "persistentVolumeClaim": {
+            "claimName": "px-cookbook-mongo-pvc",
+            "readOnlyProperty": null
+          },
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-mongodb-dev-token-jqkfv",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-mongodb-dev-token-jqkfv"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:41Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:45:25Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:45:25Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:12Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://c34e682dac473a380e959eb9a07fee79811c5008bbcad58c881a90b459ab0e17",
+          "image": "mmercan/cookbook-db-mongodb:20200707.2",
+          "imageID": "docker-pullable://mmercan/cookbook-db-mongodb@sha256:5b09b65e8f3a39fb20cf211a82c1015cd4110173db46dfbec3fd8ad268e8d9ea",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-mongodb",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:45:23Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://4344607b0c9c39d8e075829b2a339c35fe560048accbd25820796e8b15639f4a",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:45:23Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.6",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://92ed160b7b176ea2b5f2a02c4e18ada2344a682c23fbb482005c5d7550410ab5",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://92ed160b7b176ea2b5f2a02c4e18ada2344a682c23fbb482005c5d7550410ab5",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:44:38Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:44:38Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.5.13",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:44:13Z"
+    }
+  },
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "azure-pipelines/jobName": "deploy Web App",
+        "azure-pipelines/org": "https://bupaaunz.visualstudio.com/",
+        "azure-pipelines/pipeline": "CookBook.RabbitMQ",
+        "azure-pipelines/pipelineId": "3228",
+        "azure-pipelines/project": "AKS_Experiment",
+        "azure-pipelines/run": "20200708.1",
+        "azure-pipelines/runuri": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233430",
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:42:04Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-rabbitmq-dev-67d7966b4c-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-rabbitmq",
+        "app.kubernetes.io/instance": "cookbook-rabbitmq-dev",
+        "app.kubernetes.io/name": "cookbook-rabbitmq",
+        "branch": "master",
+        "pod-template-hash": "67d7966b4c",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-rabbitmq",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-rabbitmq-dev-67d7966b4c-j4bmq",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "cookbook-rabbitmq-dev-67d7966b4c",
+          "uid": "cd44a98e-5223-41a6-96e7-59340787ae42"
+        }
+      ],
+      "resourceVersion": "11831390",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-rabbitmq-dev-67d7966b4c-j4bmq",
+      "uid": "964ba359-9e75-4d9d-b5df-afbe12dea99f"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": null,
+          "envFrom": [
+            {
+              "configMapRef": {
+                "name": "cookbook-rabbitmq-dev-config",
+                "optional": null
+              },
+              "prefix": null,
+              "secretRef": null
+            },
+            {
+              "configMapRef": null,
+              "prefix": null,
+              "secretRef": {
+                "name": "cookbook-rabbitmq-dev-secret",
+                "optional": null
+              }
+            }
+          ],
+          "image": "mmercan/cookbook-rabbitmq:20200708.1",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "cookbook-rabbitmq",
+          "ports": [
+            {
+              "containerPort": 5672,
+              "hostIP": null,
+              "hostPort": null,
+              "name": null,
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 15672,
+              "hostIP": null,
+              "hostPort": null,
+              "name": null,
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": null,
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-rabbitmq-dev-token-lxfvn",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-rabbitmq.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"containerPort\":5672,\"protocol\":\"TCP\"}\n    ,{\"containerPort\":15672,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-rabbitmq\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_METAJSON_ANNOTATIONS",
+              "value": "{\"azure-pipelines/jobName\":\"deploy Web App\",\"azure-pipelines/org\":\"https://bupaaunz.visualstudio.com/\",\"azure-pipelines/pipeline\":\"CookBook.RabbitMQ\",\"azure-pipelines/pipelineId\":\"3228\",\"azure-pipelines/project\":\"AKS_Experiment\",\"azure-pipelines/run\":\"20200708.1\",\"azure-pipelines/runuri\":\"https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233430\"}\n",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-rabbitmq-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/deployments/cookbook-rabbitmq-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-rabbitmq-dev-token-lxfvn",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": null,
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-rabbitmq-dev-token-lxfvn",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003m",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-rabbitmq-dev",
+      "serviceAccountName": "cookbook-rabbitmq-dev",
+      "shareProcessNamespace": null,
+      "subdomain": null,
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-rabbitmq-dev-token-lxfvn",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-rabbitmq-dev-token-lxfvn"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:43:08Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:45:30Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:45:30Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:04Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://581a5a5eadda063e858325cfb1dc27f9c69da1628a340907f8b583f211d12869",
+          "image": "mmercan/cookbook-rabbitmq:20200708.1",
+          "imageID": "docker-pullable://mmercan/cookbook-rabbitmq@sha256:c4dc4b323d330cead27d303e7c684f32f927243951973d44c95e93a336412c99",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-rabbitmq",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:45:15Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://98777c6a137e8e8f252509af4060e85656f90ca1e832b6e62bebfdc38684f411",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:45:27Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.5",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://a9d4756811f98ec6db6d0eaa0e7f718b1bef087b3d5bc14226bf05f831813d39",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://a9d4756811f98ec6db6d0eaa0e7f718b1bef087b3d5bc14226bf05f831813d39",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:42:44Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:42:44Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.4.9",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:42:05Z"
+    }
+  },
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "azure-pipelines/jobName": "deploy Web App",
+        "azure-pipelines/org": "https://bupaaunz.visualstudio.com/",
+        "azure-pipelines/pipeline": "CookBook.Recipe.UI",
+        "azure-pipelines/pipelineId": "3232",
+        "azure-pipelines/project": "AKS_Experiment",
+        "azure-pipelines/run": "20200707.4",
+        "azure-pipelines/runuri": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233324",
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:41:33Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-recipe-ui-dev-5d59956ddf-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-recipe-ui",
+        "app.kubernetes.io/instance": "cookbook-recipe-ui-dev",
+        "app.kubernetes.io/name": "cookbook-recipe-ui",
+        "branch": "master",
+        "pod-template-hash": "5d59956ddf",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-recipe-ui",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-recipe-ui-dev-5d59956ddf-gbwkr",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "cookbook-recipe-ui-dev-5d59956ddf",
+          "uid": "0bd86880-4661-4b3d-99af-ea4a95994b81"
+        }
+      ],
+      "resourceVersion": "11830962",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-recipe-ui-dev-5d59956ddf-gbwkr",
+      "uid": "2ee19613-bf37-4a36-995b-67e2212326d6"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": [
+            {
+              "name": "buildnumber",
+              "value": "unknown",
+              "valueFrom": null
+            },
+            {
+              "name": "branch",
+              "value": "master",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "mmercan/cookbook-ui-recipe:20200707.4",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-recipe-ui/livez",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "name": "cookbook-recipe-ui",
+          "ports": [
+            {
+              "containerPort": 80,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 3,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/app-health/cookbook-recipe-ui/readyz",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": null,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-recipe-ui-dev-token-h88xp",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-recipe-ui.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"name\":\"http\",\"containerPort\":80,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-recipe-ui\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_METAJSON_ANNOTATIONS",
+              "value": "{\"azure-pipelines/jobName\":\"deploy Web App\",\"azure-pipelines/org\":\"https://bupaaunz.visualstudio.com/\",\"azure-pipelines/pipeline\":\"CookBook.Recipe.UI\",\"azure-pipelines/pipelineId\":\"3232\",\"azure-pipelines/project\":\"AKS_Experiment\",\"azure-pipelines/run\":\"20200707.4\",\"azure-pipelines/runuri\":\"https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=233324\"}\n",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-recipe-ui-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/deployments/cookbook-recipe-ui-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{\"/app-health/cookbook-recipe-ui/livez\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1},\"/app-health/cookbook-recipe-ui/readyz\":{\"httpGet\":{\"path\":\"/\",\"port\":80,\"scheme\":\"HTTP\"},\"timeoutSeconds\":1}}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-recipe-ui-dev-token-h88xp",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": null,
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-recipe-ui-dev-token-h88xp",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003m",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-recipe-ui-dev",
+      "serviceAccountName": "cookbook-recipe-ui-dev",
+      "shareProcessNamespace": null,
+      "subdomain": null,
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-recipe-ui-dev-token-h88xp",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-recipe-ui-dev-token-h88xp"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:42:38Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:41Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:41Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:33Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://41a57c2ebca83252988c6abeaa4cd01dbe9e09c61a53e66478f65a9e3dad1d61",
+          "image": "mmercan/cookbook-ui-recipe:20200707.4",
+          "imageID": "docker-pullable://mmercan/cookbook-ui-recipe@sha256:193346d53690bf3023f3e40240a3a2ea6ae44bfc1df7080f4069a5feb6f1f246",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-recipe-ui",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:44:30Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://56a963a07f653061346a98fcb56081922840bbbf5f4442ba1e0d6c1a1a4795f2",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:44:34Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.5",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://84224df0e3cda5d769430b411dd2e6fe228b8c2827faa943147429d2d377fa13",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://84224df0e3cda5d769430b411dd2e6fe228b8c2827faa943147429d2d377fa13",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:42:36Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:42:35Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.4.6",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:41:55Z"
+    }
+  },
+  {
+    "apiVersion": null,
+    "kind": null,
+    "metadata": {
+      "annotations": {
+        "sidecar.istio.io/status": "{\"version\":\"fca84600f9d5ec316cf1cf577da902f38bac258ab0fd595ee208ec0203dc0c6d\",\"initContainers\":[\"istio-init\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null}"
+      },
+      "clusterName": null,
+      "creationTimestamp": "2020-07-30T14:40:42Z",
+      "deletionGracePeriodSeconds": null,
+      "deletionTimestamp": null,
+      "finalizers": null,
+      "generateName": "cookbook-redis-dev-749599fcbf-",
+      "generation": null,
+      "labels": {
+        "app": "cookbook-redis",
+        "app.kubernetes.io/instance": "cookbook-redis-dev",
+        "app.kubernetes.io/name": "cookbook-redis",
+        "branch": "master",
+        "pod-template-hash": "749599fcbf",
+        "security.istio.io/tlsMode": "istio",
+        "service.istio.io/canonical-name": "cookbook-redis",
+        "service.istio.io/canonical-revision": "1.0.0",
+        "version": "1.0.0"
+      },
+      "managedFields": null,
+      "name": "cookbook-redis-dev-749599fcbf-sgkrn",
+      "namespaceProperty": "cookbook-dev",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "cookbook-redis-dev-749599fcbf",
+          "uid": "61128642-8c8b-450a-acb7-c8dad2272668"
+        }
+      ],
+      "resourceVersion": "11830734",
+      "selfLink": "/api/v1/namespaces/cookbook-dev/pods/cookbook-redis-dev-749599fcbf-sgkrn",
+      "uid": "ac372098-510e-40d4-a39d-5fd26acf5f13"
+    },
+    "spec": {
+      "activeDeadlineSeconds": null,
+      "affinity": null,
+      "automountServiceAccountToken": null,
+      "containers": [
+        {
+          "args": null,
+          "command": null,
+          "env": null,
+          "envFrom": null,
+          "image": "mmercan/cookbook-db-redis:20200703.9",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "cookbook-redis",
+          "ports": [
+            {
+              "containerPort": 6379,
+              "hostIP": null,
+              "hostPort": null,
+              "name": null,
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": null,
+          "resources": {
+            "limits": null,
+            "requests": null
+          },
+          "securityContext": null,
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/redis-master",
+              "mountPropagation": null,
+              "name": "config",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-redis-dev-token-pkdbs",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        },
+        {
+          "args": [
+            "proxy",
+            "sidecar",
+            "--domain",
+            "$(POD_NAMESPACE).svc.cluster.local",
+            "--configPath",
+            "/etc/istio/proxy",
+            "--binaryPath",
+            "/usr/local/bin/envoy",
+            "--serviceCluster",
+            "cookbook-redis.$(POD_NAMESPACE)",
+            "--drainDuration",
+            "45s",
+            "--parentShutdownDuration",
+            "1m0s",
+            "--discoveryAddress",
+            "istiod.istio-system.svc:15012",
+            "--zipkinAddress",
+            "zipkin.istio-system:9411",
+            "--proxyLogLevel=warning",
+            "--proxyComponentLogLevel=misc:error",
+            "--connectTimeout",
+            "10s",
+            "--proxyAdminPort",
+            "15000",
+            "--concurrency",
+            "2",
+            "--controlPlaneAuthPolicy",
+            "NONE",
+            "--dnsRefreshRate",
+            "300s",
+            "--statusPort",
+            "15020",
+            "--trust-domain=cluster.local",
+            "--controlPlaneBootstrap=false"
+          ],
+          "command": null,
+          "env": [
+            {
+              "name": "JWT_POLICY",
+              "value": "third-party-jwt",
+              "valueFrom": null
+            },
+            {
+              "name": "PILOT_CERT_PROVIDER",
+              "value": "istiod",
+              "valueFrom": null
+            },
+            {
+              "name": "CA_ADDR",
+              "value": "istio-pilot.istio-system.svc:15012",
+              "valueFrom": null
+            },
+            {
+              "name": "POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "POD_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "INSTANCE_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.podIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "SERVICE_ACCOUNT",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "spec.serviceAccountName"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "HOST_IP",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "status.hostIP"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_POD_PORTS",
+              "value": "[\n    {\"containerPort\":6379,\"protocol\":\"TCP\"}\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_APP_CONTAINERS",
+              "value": "[\n    cookbook-redis\n]",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_CLUSTER_ID",
+              "value": "Kubernetes",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_POD_NAME",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.name"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_CONFIG_NAMESPACE",
+              "value": null,
+              "valueFrom": {
+                "configMapKeyRef": null,
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                },
+                "resourceFieldRef": null,
+                "secretKeyRef": null
+              }
+            },
+            {
+              "name": "ISTIO_META_INTERCEPTION_MODE",
+              "value": "REDIRECT",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_WORKLOAD_NAME",
+              "value": "cookbook-redis-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_OWNER",
+              "value": "kubernetes://apis/apps/v1/namespaces/cookbook-dev/deployments/cookbook-redis-dev",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_META_MESH_ID",
+              "value": "cluster.local",
+              "valueFrom": null
+            },
+            {
+              "name": "ISTIO_KUBE_APP_PROBERS",
+              "value": "{}",
+              "valueFrom": null
+            }
+          ],
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-proxy",
+          "ports": [
+            {
+              "containerPort": 15090,
+              "hostIP": null,
+              "hostPort": null,
+              "name": "http-envoy-prom",
+              "protocol": "TCP"
+            }
+          ],
+          "readinessProbe": {
+            "exec": null,
+            "failureThreshold": 30,
+            "httpGet": {
+              "host": null,
+              "httpHeaders": null,
+              "path": "/healthz/ready",
+              "port": {
+                "value": "15020"
+              },
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 1,
+            "periodSeconds": 2,
+            "successThreshold": 1,
+            "tcpSocket": null,
+            "timeoutSeconds": 1
+          },
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": null,
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": true,
+            "runAsGroup": 1337,
+            "runAsNonRoot": true,
+            "runAsUser": 1337,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/istio",
+              "mountPropagation": null,
+              "name": "istiod-ca-cert",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/proxy",
+              "mountPropagation": null,
+              "name": "istio-envoy",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/tokens",
+              "mountPropagation": null,
+              "name": "istio-token",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/etc/istio/pod",
+              "mountPropagation": null,
+              "name": "podinfo",
+              "readOnlyProperty": null,
+              "subPath": null,
+              "subPathExpr": null
+            },
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-redis-dev-token-pkdbs",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "dnsConfig": null,
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "ephemeralContainers": null,
+      "hostAliases": null,
+      "hostIPC": null,
+      "hostNetwork": null,
+      "hostPID": null,
+      "hostname": null,
+      "imagePullSecrets": null,
+      "initContainers": [
+        {
+          "args": null,
+          "command": [
+            "istio-iptables",
+            "-p",
+            "15001",
+            "-z",
+            "15006",
+            "-u",
+            "1337",
+            "-m",
+            "REDIRECT",
+            "-i",
+            "*",
+            "-x",
+            "",
+            "-b",
+            "*",
+            "-d",
+            "15090,15020"
+          ],
+          "env": null,
+          "envFrom": null,
+          "image": "docker.io/istio/proxyv2:1.5.2",
+          "imagePullPolicy": "IfNotPresent",
+          "lifecycle": null,
+          "livenessProbe": null,
+          "name": "istio-init",
+          "ports": null,
+          "readinessProbe": null,
+          "resources": {
+            "limits": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            },
+            "requests": {
+              "cpu": {
+                "format": 2
+              },
+              "memory": {
+                "format": 1
+              }
+            }
+          },
+          "securityContext": {
+            "allowPrivilegeEscalation": false,
+            "capabilities": {
+              "add": [
+                "NET_ADMIN",
+                "NET_RAW"
+              ],
+              "drop": [
+                "ALL"
+              ]
+            },
+            "privileged": false,
+            "procMount": null,
+            "readOnlyRootFilesystem": false,
+            "runAsGroup": 0,
+            "runAsNonRoot": false,
+            "runAsUser": 0,
+            "seLinuxOptions": null,
+            "windowsOptions": null
+          },
+          "startupProbe": null,
+          "stdin": null,
+          "stdinOnce": null,
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "tty": null,
+          "volumeDevices": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "mountPropagation": null,
+              "name": "cookbook-redis-dev-token-pkdbs",
+              "readOnlyProperty": true,
+              "subPath": null,
+              "subPathExpr": null
+            }
+          ],
+          "workingDir": null
+        }
+      ],
+      "nodeName": "aks-agentpool-54824633-vmss00003m",
+      "nodeSelector": null,
+      "overhead": null,
+      "preemptionPolicy": null,
+      "priority": 0,
+      "priorityClassName": null,
+      "readinessGates": null,
+      "restartPolicy": "Always",
+      "runtimeClassName": null,
+      "schedulerName": "default-scheduler",
+      "securityContext": {
+        "fsGroup": 1337,
+        "fsGroupChangePolicy": null,
+        "runAsGroup": null,
+        "runAsNonRoot": null,
+        "runAsUser": null,
+        "seLinuxOptions": null,
+        "supplementalGroups": null,
+        "sysctls": null,
+        "windowsOptions": null
+      },
+      "serviceAccount": "cookbook-redis-dev",
+      "serviceAccountName": "cookbook-redis-dev",
+      "shareProcessNamespace": null,
+      "subdomain": null,
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operatorProperty": "Exists",
+          "tolerationSeconds": 300,
+          "value": null
+        }
+      ],
+      "topologySpreadConstraints": null,
+      "volumes": [
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "key": "redis-config",
+                "mode": null,
+                "path": "redis.conf"
+              }
+            ],
+            "name": "cookbook-redis-dev-config",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "config",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "cookbook-redis-dev-token-pkdbs",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": {
+            "defaultMode": 420,
+            "items": null,
+            "optional": null,
+            "secretName": "cookbook-redis-dev-token-pkdbs"
+          },
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": null
+          },
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-envoy",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": {
+            "defaultMode": 420,
+            "items": [
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.labels"
+                },
+                "mode": null,
+                "path": "labels",
+                "resourceFieldRef": null
+              },
+              {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.annotations"
+                },
+                "mode": null,
+                "path": "annotations",
+                "resourceFieldRef": null
+              }
+            ]
+          },
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "podinfo",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": null,
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istio-token",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "configMap": null,
+                "downwardAPI": null,
+                "secret": null,
+                "serviceAccountToken": {
+                  "audience": "istio-ca",
+                  "expirationSeconds": 43200,
+                  "path": "istio-token"
+                }
+              }
+            ]
+          },
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        },
+        {
+          "awsElasticBlockStore": null,
+          "azureDisk": null,
+          "azureFile": null,
+          "cephfs": null,
+          "cinder": null,
+          "configMap": {
+            "defaultMode": 420,
+            "items": null,
+            "name": "istio-ca-root-cert",
+            "optional": null
+          },
+          "csi": null,
+          "downwardAPI": null,
+          "emptyDir": null,
+          "fc": null,
+          "flexVolume": null,
+          "flocker": null,
+          "gcePersistentDisk": null,
+          "gitRepo": null,
+          "glusterfs": null,
+          "hostPath": null,
+          "iscsi": null,
+          "name": "istiod-ca-cert",
+          "nfs": null,
+          "persistentVolumeClaim": null,
+          "photonPersistentDisk": null,
+          "portworxVolume": null,
+          "projected": null,
+          "quobyte": null,
+          "rbd": null,
+          "scaleIO": null,
+          "secret": null,
+          "storageos": null,
+          "vsphereVolume": null
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:41:08Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:20Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:44:20Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2020-07-30T14:40:42Z",
+          "message": null,
+          "reason": null,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "docker://9e3b1be312a06729e8b18940b0c1e7aed2e979a81cc3730c25106b4a8f46d7b5",
+          "image": "mmercan/cookbook-db-redis:20200703.9",
+          "imageID": "docker-pullable://mmercan/cookbook-db-redis@sha256:36624619041a8f9ec715cf27e8e96c327c819be6619ea31bb4b60a1d84e3cde8",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "cookbook-redis",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:44:16Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        },
+        {
+          "containerID": "docker://1011b44d617e0cf07be9af8d4ac1f29a008a6dcf003ad2b71ed03958a2557ef2",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-proxy",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": {
+              "startedAt": "2020-07-30T14:44:18Z"
+            },
+            "terminated": null,
+            "waiting": null
+          }
+        }
+      ],
+      "ephemeralContainerStatuses": null,
+      "hostIP": "10.240.0.5",
+      "initContainerStatuses": [
+        {
+          "containerID": "docker://d6abc48aec56c50327f9c5a79cb625f25d1ce1811ca7c91ed3c63baf687f5912",
+          "image": "istio/proxyv2:1.5.2",
+          "imageID": "docker-pullable://istio/proxyv2@sha256:b569b3226624b63ca007f3252162390545643433770c79a9aadb1406687d767a",
+          "lastState": {
+            "running": null,
+            "terminated": null,
+            "waiting": null
+          },
+          "name": "istio-init",
+          "ready": true,
+          "restartCount": 0,
+          "started": null,
+          "state": {
+            "running": null,
+            "terminated": {
+              "containerID": "docker://d6abc48aec56c50327f9c5a79cb625f25d1ce1811ca7c91ed3c63baf687f5912",
+              "exitCode": 0,
+              "finishedAt": "2020-07-30T14:41:08Z",
+              "message": null,
+              "reason": "Completed",
+              "signal": null,
+              "startedAt": "2020-07-30T14:41:07Z"
+            },
+            "waiting": null
+          }
+        }
+      ],
+      "message": null,
+      "nominatedNodeName": null,
+      "phase": "Running",
+      "podIP": "10.244.4.3",
+      "podIPs": null,
+      "qosClass": "Burstable",
+      "reason": null,
+      "startTime": "2020-07-30T14:40:42Z"
+    }
+  }
+]

@@ -33,6 +33,8 @@ using Turquoise.Common;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.CheckCaller;
 using Turquoise.HealthChecks.Common.Checks;
+using Turquoise.K8s;
+using Turquoise.K8s.Services;
 
 namespace Turquoise.Api.HealthMonitoring
 {
@@ -200,8 +202,13 @@ namespace Turquoise.Api.HealthMonitoring
             // services.AddHostedService<HealthCheckSubscribeService>();
 
             services.AddSignalR();
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
             services.AddGrpc();
+
+
+            services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>();
+            services.AddSingleton<K8sService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -260,6 +267,7 @@ namespace Turquoise.Api.HealthMonitoring
                 endpoints.MapControllers();
                 endpoints.MapGrpcService<GreeterGRPCService>();
                 endpoints.MapGrpcService<CountryGRPCService>();
+                endpoints.MapGrpcService<NamespaceGRPCService>();
                 // endpoints.MapGrpcService<MeterReaderService>();
             });
 
