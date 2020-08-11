@@ -43,13 +43,13 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Helm db-mongodb"
             inputs:
-              SourceFolder: "Helm/Turquoise/charts/turquoise-db-mongodb"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-db-mongodb"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-db-mongodb"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
             inputs:
-              SourceFolder: "Helm/values"
+              SourceFolder: "App/Helm/values"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/values"
 
           - task: PublishBuildArtifacts@1
