@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DeploymentAppService } from 'app/shared/grpc-services/deployment-app.service';
-import { Console } from 'console';
 import { fuseAnimations } from '@fuse/animations';
 
 @Component({
