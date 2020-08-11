@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-Turquoise.Scheduler-3F64F417-CE7E-484E-8B4D-2510CF91921C</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <PackageReference Include="EasyNetQ" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.6" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+    <PackageReference Include="Quartz" Version="3.1.0" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turquoise.K8s\Turquoise.K8s.csproj" />
+  </ItemGroup>
+</Project>

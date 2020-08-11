@@ -15,7 +15,12 @@ npm install --save google-protobuf
 npm install --save-dev @types/google-protobuf   
 npm install --save @improbable-eng/grpc-web   
 
-npm install   
+npm install  
 
-./node_modules/protoc/protoc/bin/protoc --plugin="protoc-gen-ts=.\node_modules\.bin\protoc-gen-ts.cmd" --js_out="import_style=commonjs,binary:./../Protos" --ts_out="service=grpc-web:src/app/proto" -I ./../Protos ../Protos/*.proto
+protoc --plugin=protoc-gen-ts="{ABSOLUTEPATH}\node_modules\.bin\protoc-gen-ts.cmd" 
+       --js_out="import_style=commonjs,binary:src/app/generated" 
+       --ts_out="service=grpc-web:src/app/generated" src/app/protos/{YOURPROTOFILENAME}.proto
+
+
+./node_modules/protoc/protoc/bin/protoc --plugin="protoc-gen-ts=.\node_modules\.bin\protoc-gen-ts.cmd" --js_out="import_style=commonjs,binary:src/app/proto" --ts_out="service=grpc-web:src/app/proto" -I ./../Protos ../Protos/*.proto
 

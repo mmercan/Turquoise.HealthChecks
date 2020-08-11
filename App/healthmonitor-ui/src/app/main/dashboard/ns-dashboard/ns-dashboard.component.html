@@ -1,0 +1,172 @@
+<div class="page-layout carded fullwidth tabbed">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
+            <h2 class="m-0">{{currentNamespace}}</h2>
+        </div>
+        <!-- / CONTENT HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <mat-tab-group>
+
+                    <mat-tab label="Deployments">
+                        <div class="tab-content p-24">
+                            <!-- PUT YOUR TAB CONTENT HERE -->
+                            
+
+<div class="content" fxLayout="row wrap" fxLayoutGap="16px grid">
+  <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" *ngFor="let num of [1,2,3,4,5,6,7]">
+    <mat-card class="mat-elevation-z4" >
+      <mat-card-header>
+        <mat-card-title>Mountains {{num}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image src="./../assets/images/cards/card3-square.jpg">
+      <mat-card-content>
+        <p>
+          The Himalayas is a mountain range in Asia.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+
+                            <!-- / PUT YOUR TAB CONTENT HERE -->
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Health Checks">
+                        <div class="tab-content p-24">
+
+
+   <div class="content-card">
+
+            <mat-table class="products-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.id}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Image Column -->
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <img class="product-image"
+                             *ngIf="product.featuredImageId" [alt]="product.name"
+                             [src]="product.images[product.featuredImageId].url"/>
+                        <img *ngIf="!product.featuredImageId"
+                             [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Category Column -->
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
+                        <p class="category text-truncate">
+                            {{product.categories[0]}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                        <p class="price text-truncate">
+                            {{product.priceTaxIncl | currency:'USD':'symbol'}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
+
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':product.quantity <= 5, 'amber-500':product.quantity > 5 && product.quantity <= 25,'green-600':product.quantity > 25}">
+                        </span>
+                        <span>
+                            {{product.quantity}}
+                        </span>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Active Column -->
+                <ng-container matColumnDef="active">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="product.active" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="!product.active" class="active-icon red-500 s-16">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                         class="product"
+                         matRipple
+                         [routerLink]="'/apps/e-commerce/products/'+product.id+'/'+product.handle">
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+
+                        </div>
+                    </mat-tab>
+
+                
+                </mat-tab-group>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

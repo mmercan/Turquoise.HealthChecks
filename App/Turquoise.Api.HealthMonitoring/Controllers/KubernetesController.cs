@@ -55,7 +55,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> GetDeployment()
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetDeployments("ingress-basic");
+            return await _k8sService.GetDeploymentsAsync("ingress-basic");
             // KubernetesClientConfiguration config = null;
             // try
             // {

@@ -2,20 +2,44 @@ syntax = "proto3";
 
 option csharp_namespace = "Turquoise.Api.HealthMonitoring";
 
-
 package k8App;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
 service NamespaceService {
   rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
+  rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
 }
 
+message GetDeploymentsRequest
+{
+  string namespace=1;
+}
 
 message NamespaceListReply{
-    repeated string namespaces = 1;
+    repeated NamespaceReply namespaces = 1;
+    google.protobuf.Timestamp UpdatedTime = 2;
+}
+message NamespaceReply{
+  string namespace=1;
+  int32 Warning=2;
+  int32 Errors=3;
+  google.protobuf.Timestamp CreationDate=4;
+}
+
+message DeploymentListReply{
+  repeated DeploymentReply deployments = 1;
+  google.protobuf.Timestamp UpdatedTime = 2;
 }
 
 message DeploymentReply{
-  google.protobuf.Timestamp dateTimeStamp = 1;
+  string Name = 1;
+  repeated Pair Labels = 2;
+  string Image=3;
+  string status=4;
+}
+
+message Pair {
+  string key = 1;
+  string value = 2;
 }

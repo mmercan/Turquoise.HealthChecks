@@ -98,7 +98,7 @@ namespace Turquoise.Api.HealthMonitoring
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials()
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
-                        .WithOrigins("http://localhost:4200", "https://app-health-ui.dev.myrcan.com", "https://health.dev.ui.sentinel.mercan.io");
+                        .WithOrigins("http://localhost:4201", "https://app-health-ui.dev.myrcan.com", "https://health.dev.ui.sentinel.mercan.io");
                     });
 
                     o.AddPolicy("GRPCPolicy", builder =>

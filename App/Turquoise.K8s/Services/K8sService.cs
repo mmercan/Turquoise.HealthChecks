@@ -36,17 +36,17 @@ namespace Turquoise.K8s.Services
             this.logger = logger;
         }
 
-        public async Task<List<string>> GetNamespaces()
+        public async Task<List<V1Namespace>> GetNamespaces()
         {
             var items = await namespacesClient.GetAsync();
-            return items.Select(ns => ns.Name()).ToList();
+            return items.ToList();//items.Select(ns => ns.Name()).ToList();
         }
 
-        public async Task<IList<V1Deployment>> GetDeployments(string namespaceParam)
+        public async Task<IList<V1Deployment>> GetDeploymentsAsync(string namespaceParam)
         {
 
             var items = await deploymentsClient.GetAsync(namespaceParam);
-            var dtoitems = mapper.Map<IList<Deployment>>(items);
+            // var dtoitems = mapper.Map<IList<Deployment>>(items);
             return items;//items;
         }
 

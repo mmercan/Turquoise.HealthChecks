@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+  healthmonitor-ui:
+    image: mmercan/healthmonitor-ui:${TAGVersion}-prod-linux
+    build:
+      target: prod
+      context: ../
+      dockerfile: healthmonitor-ui/Dockerfile

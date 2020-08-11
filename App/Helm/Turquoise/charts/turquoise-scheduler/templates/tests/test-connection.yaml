@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "Turquoise.Scheduler.fullname" . }}-test-connection"
+  labels:
+    {{- include "Turquoise.Scheduler.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "Turquoise.Scheduler.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

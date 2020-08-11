@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Turquoise.Scheduler": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
