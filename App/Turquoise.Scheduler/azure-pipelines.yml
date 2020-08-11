@@ -7,9 +7,9 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - Turquoise.Scheduler/*
-      - Sentinel.Api.Comms.Tests/*
-      - Helm/Turquoise/charts/Turquoise.Scheduler/*
+      - App/Turquoise.Scheduler/*
+      - App/Sentinel.Api.Comms.Tests/*
+      - App/Helm/Turquoise/charts/Turquoise.Scheduler/*
 
 stages:
   - stage: build
@@ -24,7 +24,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "Turquoise.Scheduler/docker-compose-test.yml"
+              dockerComposeFile: "App/Turquoise.Scheduler/docker-compose-test.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -58,7 +58,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "Turquoise.Scheduler/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Scheduler/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -69,7 +69,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "Turquoise.Scheduler/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Scheduler/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -78,13 +78,13 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Helm comms-api"
             inputs:
-              SourceFolder: "Helm/Turquoise/charts/turquoise-scheduler"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-scheduler"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-scheduler"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
             inputs:
-              SourceFolder: "Helm/values"
+              SourceFolder: "App/Helm/values"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/values"
 
           - task: PublishBuildArtifacts@1
