@@ -7,8 +7,9 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/healthmonitor-ui/*
-      - App/Helm/Turquoise/charts/turquoise-ui-healthmonitoring/*
+      - App/Turquoise.Api.HealthMonitoring/*
+      - App/Turquoise.Api.HealthMonitoring/*
+      - App/Helm/Turquoise/charts/turquoise-api-healthmonitoring/*
 
 stages:
   - stage: build
@@ -23,7 +24,41 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/healthmonitor-ui/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Api.HealthMonitoring/docker-compose-test.yml"
+              dockerComposeFileArgs: "TAGVersion=01"
+              action: "Build services"
+              additionalImageTags: "$(Build.BuildNumber)"
+              includeLatestTag: true
+              arguments: "--build-arg buildtime_APPID=$(buildtime_APPID)  --build-arg buildtime_APPSECRET=$(buildtime_APPSECRET) --build-arg buildtime_ADID=$(buildtime_ADID) --build-arg buildtime_SONARKEY=$(buildtime_SONARKEY)"
+
+          - task: Docker@2
+            displayName: run
+            inputs:
+              containerRegistry: dockerhub
+              command: run
+              arguments: "-i -v $(Build.ArtifactStagingDirectory):/TestResults turquoise-api-healthmonitoring-test"
+            continueOnError: true
+
+          - task: PublishTestResults@2
+            displayName: "Publish Test Results *.trx"
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: "*.trx"
+              searchFolder: "$(Build.ArtifactStagingDirectory)"
+
+          - task: PublishCodeCoverageResults@1
+            displayName: "Publish code coverage from $(Build.ArtifactStagingDirectory)/coverage.cobertura.xml"
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: "$(Build.ArtifactStagingDirectory)/coverage.cobertura.xml"
+              pathToSources: "$(Build.SourcesDirectory)"
+
+          - task: DockerCompose@0
+            displayName: "Build Images"
+            inputs:
+              containerregistrytype: "Container Registry"
+              dockerRegistryEndpoint: dockerhub
+              dockerComposeFile: "App/Turquoise.Api.HealthMonitoring/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -34,7 +69,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/healthmonitor-ui/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Api.HealthMonitoring/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -43,8 +78,8 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Helm comms-api"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-ui-healthmonitoring"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-ui-healthmonitoring"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-api-healthmonitoring"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-api-healthmonitoring"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
@@ -64,9 +99,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "turquoise-ui-healthmonitoring"
+          chartName: "turquoise-api-healthmonitoring"
           namespace: "turquoise-dev"
-          releaseName: "turquoise-ui-healthmonitoring-dev"
+          releaseName: "turquoise-api-healthmonitoring-dev"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'

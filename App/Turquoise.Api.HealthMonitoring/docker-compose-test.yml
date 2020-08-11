@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   turquoise-api-healthmonitoring-test:
-    image: mmercan/turquoise-api-healthmonitoring-test:${TAGVersion}-prod-linux
+    image: turquoise-api-healthmonitoring-test:${TAGVersion}-prod-linux
     build:
       target: test
       context: ../
