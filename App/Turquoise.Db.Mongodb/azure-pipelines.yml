@@ -7,8 +7,8 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - Turquoise.Db.Mongodb/*
-      - Helm/Turquoise/charts/turquoise-db-mongodb/*
+      - App/Turquoise.Db.Mongodb/*
+      - App/Helm/Turquoise/charts/turquoise-db-mongodb/*
 
 stages:
   - stage: build
