@@ -7,8 +7,9 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/Turquoise.Db.Redis/*
-      - App/Helm/Turquoise/charts/turquoise-redis/*
+      - Sentinel.Service.Rabbitmq/*
+      - Helm/sentinel/charts/service-rabbitmq/*
+      - devops/Sentinel.Service.Rabbitmq/azure-pipelines.yml
 
 stages:
   - stage: build
@@ -23,7 +24,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
+              dockerComposeFile: "Sentinel.Service.Rabbitmq/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -34,23 +35,33 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
+              dockerComposeFile: "Sentinel.Service.Rabbitmq/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
               includeLatestTag: true
 
           - task: CopyFiles@2
-            displayName: "Copy Helm db-redis"
+            displayName: "Copy Helm Sentinel.Api.HealthMonitoring"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-redis"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-redis"
+              SourceFolder: "Helm/sentinel/charts/service-rabbitmq"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/sentinel/charts/service-rabbitmq"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
             inputs:
-              SourceFolder: "App/Helm/values"
+              SourceFolder: "Helm/values"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/values"
+
+          - task: GitHubRelease@1
+            displayName: "GitHub release (create)"
+            inputs:
+              gitHubConnection: "mrtmrcn github"
+              tagSource: userSpecifiedTag
+              tag: "release-v1.0.$(Build.BuildNumber)"
+              assets: "$(Build.ArtifactStagingDirectory)/**"
+              isPreRelease: true
+            enabled: false
 
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts: drop"
@@ -64,9 +75,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "turquoise-redis"
-          namespace: "turquoise-dev"
-          releaseName: "turquoise-redis-dev"
+          chartName: "service-rabbitmq"
+          namespace: "sentinel-dev"
+          releaseName: "sentinel-dev-service-rabbitmq"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
@@ -92,7 +103,7 @@ stages:
                     kubernetesServiceConnection: "sentinel-dev"
                     namespace: $(namespace)
                     command: package
-                    chartPath: "$(Pipeline.Workspace)/drop/Helm/Turquoise/charts/$(chartName)"
+                    chartPath: "$(Pipeline.Workspace)/drop/Helm/sentinel/charts/$(chartName)"
                     chartVersion: "2.0.0-$(Build.BuildNumber)"
                     destination: "$(System.DefaultWorkingDirectory)"
                     save: false
@@ -100,7 +111,7 @@ stages:
                 - task: PowerShell@2
                   inputs:
                     targetType: "inline"
-                    script: 'helm template "$ENV:PIPELINE_WORKSPACE/drop/Helm/Turquoise/charts/$(chartName)" -f "$ENV:PIPELINE_WORKSPACE/drop/Helm/values/$(chartName)/dev-values.yaml"'
+                    script: 'helm template "$ENV:PIPELINE_WORKSPACE/drop/Helm/sentinel/charts/service-rabbitmq" -f "$ENV:PIPELINE_WORKSPACE/drop/Helm/values/service-rabbitmq/dev-values.yaml"'
                     errorActionPreference: "silentlyContinue"
 
                 - task: HelmDeploy@0
@@ -112,7 +123,7 @@ stages:
                     command: upgrade
                     chartType: FilePath
                     chartPath: "$(System.DefaultWorkingDirectory)/$(chartName)-2.0.0-$(Build.BuildNumber).tgz"
-                    valueFile: "$(Pipeline.Workspace)/drop/Helm/values/$(chartName)/dev-values.yaml"
+                    valueFile: "$(Pipeline.Workspace)/drop/Helm/values/service-rabbitmq/dev-values.yaml"
                     releaseName: "$(releaseName)"
                     overrideValues: "image.tag=$(Build.BuildNumber) --set branch=$(Build.SourceBranchName) --set azurepipelines.pipeline=$(pipelines_pipeline)  --set azurepipelines.run='$(pipelines_run)'  --set azurepipelines.pipelineId='$(pipelines_pipelineId)'  --set azurepipelines.project=$(pipelines_project)  --set azurepipelines.org='$(pipelines_org)'  --set azurepipelines.jobName='$(pipelines_jobName)' --set azurepipelines.runuri='$(pipelines_runuri)' "
 
@@ -125,9 +136,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "healthmonitoring-api"
+          chartName: "service-rabbitmq"
           namespace: "sentinel-test"
-          releaseName: "sentinel-dev-health-api"
+          releaseName: "sentinel-test-service-rabbitmq"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
