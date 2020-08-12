@@ -7,8 +7,8 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/Turquoise.Db.Redis/*
-      - App/Helm/Turquoise/charts/turquoise-redis/*
+      - Turquoise.Db.Mongodb/*
+      - Helm/Turquoise/charts/turquoise-db-mongodb/*
 
 stages:
   - stage: build
@@ -23,7 +23,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Db.Mongodb/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -34,17 +34,17 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Db.Mongodb/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
               includeLatestTag: true
 
           - task: CopyFiles@2
-            displayName: "Copy Helm db-redis"
+            displayName: "Copy Helm db-mongodb"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-redis"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-redis"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-db-mongodb"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-db-mongodb"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
@@ -64,9 +64,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "turquoise-redis"
+          chartName: "turquoise-db-mongodb"
           namespace: "turquoise-dev"
-          releaseName: "turquoise-redis-dev"
+          releaseName: "turquoise-db-mongodb-dev"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'

@@ -7,8 +7,8 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/healthmonitor-ui/*
-      - App/Helm/Turquoise/charts/turquoise-ui-healthmonitoring/*
+      - App/Turquoise.Db.Redis/*
+      - App/Helm/Turquoise/charts/turquoise-redis/*
 
 stages:
   - stage: build
@@ -23,7 +23,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/healthmonitor-ui/docker-compose.yml"
+              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -34,17 +34,17 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/healthmonitor-ui/docker-compose.yml"
+              dockerComposeFile: "App/Sentinel.Db.Redis/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
               includeLatestTag: true
 
           - task: CopyFiles@2
-            displayName: "Copy Helm comms-api"
+            displayName: "Copy Helm db-redis"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-ui-healthmonitoring"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-ui-healthmonitoring"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-redis"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-redis"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
@@ -64,9 +64,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "turquoise-ui-healthmonitoring"
+          chartName: "turquoise-redis"
           namespace: "turquoise-dev"
-          releaseName: "turquoise-ui-healthmonitoring-dev"
+          releaseName: "turquoise-redis-dev"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
@@ -125,9 +125,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "comms-api"
+          chartName: "healthmonitoring-api"
           namespace: "sentinel-test"
-          releaseName: "sentinel-dev-comms-api"
+          releaseName: "sentinel-dev-health-api"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
