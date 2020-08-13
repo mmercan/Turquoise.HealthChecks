@@ -24,7 +24,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/App/Turquoise.K8s.RepoSync/docker-compose-test.yml"
+              dockerComposeFile: "App/Turquoise.K8s.RepoSync/docker-compose-test.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
