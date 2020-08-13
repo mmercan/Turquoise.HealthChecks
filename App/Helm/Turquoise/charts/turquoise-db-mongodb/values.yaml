@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: mmercan/sentinel-db-mongodb
+  repository: mmercan/turquoise-db-mongodb
   tag: latest
   pullPolicy: IfNotPresent
 
