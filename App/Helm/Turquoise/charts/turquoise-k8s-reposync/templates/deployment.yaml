@@ -1,0 +1,63 @@
+{{- $name := include "turquoise-k8s-reposync.fullname" . -}}
+{{- $cfgname := printf "%s-%s" $name "config" -}}
+{{- $secretname := printf "%s-%s" $name "secret" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "turquoise-k8s-reposync.fullname" . }}
+  labels:
+    {{- include "turquoise-k8s-reposync.labels" . | nindent 4 }}
+  annotations:
+    {{- include "turquoise-k8s-reposync.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      {{- include "turquoise-k8s-reposync.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "turquoise-k8s-reposync.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- include "turquoise-k8s-reposync.annotations" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "turquoise-k8s-reposync.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image:  "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ $cfgname }}
+            - secretRef:
+                name: {{ $secretname }}
+          env:
+          {{- if .Values.envVariables -}}
+          {{- range $key, $value := .Values.envVariables }}
+            - name: {{ $key }}
+              value: {{  $value | quote }}
+          {{- end -}}
+          {{- end -}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
