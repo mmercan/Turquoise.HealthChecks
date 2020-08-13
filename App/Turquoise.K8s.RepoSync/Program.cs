@@ -6,23 +6,25 @@ using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Events;
-using Microsoft.Extensions.Logging;
-using Quartz.Spi;
 using Quartz;
 using Quartz.Impl;
-using Turquoise.Handler.HealthMonitoring.Jobs;
+using Quartz.Spi;
+using Serilog;
+using Serilog.Events;
 using Turquoise.Common.Scheduler;
+using Microsoft.Extensions.Logging;
+using Turquoise.K8s.RepoSync.Services;
+using Turquoise.K8s.Services;
+using AutoMapper;
 
-namespace Turquoise.Handler.HealthMonitoring
+namespace Turquoise.K8s.RepoSync
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var host = new HostBuilder()
-            .ConfigureAppConfiguration((hostContext, config) =>
+             .ConfigureAppConfiguration((hostContext, config) =>
             {
                 config.AddJsonFile("appsettings.json", optional: true);
                 config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true);
@@ -52,26 +54,37 @@ namespace Turquoise.Handler.HealthMonitoring
                 services.AddLogging();
                 services.AddSingleton<IConfiguration>(hostContext.Configuration);
 
+                //Add Dependencies
 
+                services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+
+                if (hostContext.Configuration["RunOnCluster"] == "true")
+                {
+                    services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>();
+                }
+                else
+                {
+                    services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>();
+                }
+                services.AddSingleton<K8sService>();
 
                 services.AddSingleton<EasyNetQ.IBus>((ctx) =>
                 {
                     return RabbitHutch.CreateBus(hostContext.Configuration["RabbitMQConnection"]);
                 });
 
-                //                services.AddHostedService<ProductSubscribeService>();
-                //                services.AddHostedService<ProductAsyncSubscribeService>();
 
                 services.AddHostedService<QuartzHostedService>();
-                // Add Quartz services
+                // // Add Quartz services
                 services.AddSingleton<IJobFactory, SingletonJobFactory>();
                 services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
                 // Add our job
-                services.AddSingleton<HelloWorldJob>();
+                services.AddSingleton<SyncNamespaceService>();
                 services.AddSingleton(new JobSchedule(
-                    jobType: typeof(HelloWorldJob),
-                    cronExpression: "0/5 * * * * ?"));
+                    jobType: typeof(SyncNamespaceService),
+                    cronExpression: "0 */15 * * * ?"));
+                // cronExpression: "0/5 * * * * ?"));
 
 
 
@@ -91,8 +104,5 @@ namespace Turquoise.Handler.HealthMonitoring
 
 
         }
-
-
-
     }
 }

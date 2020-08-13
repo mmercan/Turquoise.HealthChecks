@@ -1,0 +1,40 @@
+{{- $name := include "Turquoise.Db.Mongodb.fullname" . -}}
+{{- $cfgname := printf "%s-%s" $name "config" -}}
+{{- $secretname := printf "%s-%s" $name "secret" -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  {{ include "Turquoise.Db.Mongodb.fullname" . }}
+  labels:
+    {{- include "Turquoise.Db.Mongodb.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "Turquoise.Db.Mongodb.fullname" . }}
+  # Number of PODS
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      service: {{ include "Turquoise.Db.Mongodb.fullname" . }}
+  template:
+    metadata:
+      labels:
+        {{- include "Turquoise.Db.Mongodb.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 15
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 27017
+          name: tcp
+        envFrom:
+          - configMapRef:
+              name: {{ $cfgname }}
+          - secretRef:
+              name: {{ $secretname }}
+        volumeMounts:
+          - mountPath: /data/db
+            name: mongodb
+      volumes:
+        - name: mongodb
+          persistentVolumeClaim:
+            claimName: px-turquoise-mongo-pvc 

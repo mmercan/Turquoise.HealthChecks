@@ -113,12 +113,13 @@ namespace Turquoise.Api.HealthMonitoring
 
 
             services.AddApiVersioning(options =>
-                        {
+            {
                             options.ReportApiVersions = true;
                             options.AssumeDefaultVersionWhenUnspecified = true;
                             options.DefaultApiVersion = new ApiVersion(1, 0);
                             options.ApiVersionReader = new HeaderApiVersionReader("api-version");
-                        });
+            });
+
             services.AddVersionedApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";

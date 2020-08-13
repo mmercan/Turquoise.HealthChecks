@@ -47,8 +47,28 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "Turquoise.Scheduler.selectorLabels" -}}
+app: {{ include "Turquoise.Scheduler.name" . }}
+version: {{ .Chart.AppVersion  | quote }}
 app.kubernetes.io/name: {{ include "Turquoise.Scheduler.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+branch:  {{ .Values.branch }}
+{{- end -}}
+
+
+{{- define "Turquoise.Scheduler.annotations" -}}
+azure-pipelines/run: {{ .Values.azurepipelines.run }}
+azure-pipelines/pipeline: {{ .Values.azurepipelines.pipeline }}
+azure-pipelines/pipelineId: {{ .Values.azurepipelines.pipelineId }}
+azure-pipelines/jobName: {{ .Values.azurepipelines.jobName }}
+azure-pipelines/runuri: {{ .Values.azurepipelines.runuri | replace " " "%20" | replace "(" "%28" | replace ")" "%29" | replace "*" "%2A"}}
+azure-pipelines/project: {{ .Values.azurepipelines.project | replace " " "%20" | replace "(" "%28" | replace ")" "%29" | replace "*" "%2A"}}
+azure-pipelines/org: {{ .Values.azurepipelines.org }}
+{{- end -}}
+
+{{- define "Turquoise.Scheduler.service.annotations" -}}
+healthcheck/isalive: "/healthcheck/isalive"
+healthcheck/isaliveandwell: "/healthcheck/isaliveandwell"
+healthcheck/crontab: "*/15 * * * *"
 {{- end -}}
 
 {{/*

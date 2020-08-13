@@ -1,3 +1,6 @@
+{{- $name := include "Turquoise.Scheduler.fullname" . -}}
+{{- $cfgname := printf "%s-%s" $name "config" -}}
+{{- $secretname := printf "%s-%s" $name "secret" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,22 +28,35 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+          {{- if or .Values.configmap .Values.secrets }}
+          envFrom:
+          {{- end }}
+          {{- if .Values.configmap }}
+            - configMapRef:
+                name: {{ $cfgname }}
+          {{- end }}
+          {{- if .Values.secrets }}   
+            - secretRef:
+                name: {{ $secretname }}
+           {{- end }}
+          env:
+            - name: buildnumber
+              value: {{ .Values.buildnumber | quote }}
+            - name: branch
+              value: {{  .Values.branch | quote }}
+          {{- if .Values.envVariables -}}
+          {{- range $key, $value := .Values.envVariables }}
+            - name: {{ $key }}
+              value: {{  $value | quote }}
+          {{- end -}}
+          {{- end -}}
+
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -53,3 +69,5 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+
+    

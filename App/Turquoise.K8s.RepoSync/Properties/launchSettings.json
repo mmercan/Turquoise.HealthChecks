@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Turquoise.K8s.RepoSync": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

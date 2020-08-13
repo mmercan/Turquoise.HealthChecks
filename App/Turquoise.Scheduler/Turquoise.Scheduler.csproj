@@ -25,6 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turquoise.K8s\Turquoise.K8s.csproj" />
+    <ProjectReference Include="..\Turquoise.Commons\Turquoise.K8s\Turquoise.K8s.csproj" />
   </ItemGroup>
 </Project>

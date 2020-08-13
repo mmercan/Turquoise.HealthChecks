@@ -1,6 +1,6 @@
 using System;
 
-namespace Turquoise.Handler.HealthMonitoring
+namespace Turquoise.Common.Scheduler
 {
     public class JobSchedule
     {

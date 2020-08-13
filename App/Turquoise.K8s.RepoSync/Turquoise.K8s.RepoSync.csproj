@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>dotnet-Turquoise.Handler.HealthMonitoring-12CBFE67-3F0E-45A4-9C96-5B30D2A20B60</UserSecretsId>
+    <UserSecretsId>dotnet-Turquoise.K8s.RepoSync-DFD30CBF-F5C3-479F-B9D3-697379E544B7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,5 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Turquoise.Commons\Turquoise.K8s\Turquoise.K8s.csproj" />
     <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common\Turquoise.Common.csproj" />
+    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common.Mongo\Mercan.Common.Mongo.csproj" />
   </ItemGroup>
 </Project>

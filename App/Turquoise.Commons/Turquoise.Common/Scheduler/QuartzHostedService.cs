@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Spi;
 
-namespace Turquoise.Handler.HealthMonitoring
+namespace Turquoise.Common.Scheduler
 {
     public class QuartzHostedService : IHostedService
     {
