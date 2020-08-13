@@ -6,7 +6,12 @@ kind: StatefulSet
 metadata:
   name:  {{ include "Turquoise.Db.Mongodb.fullname" . }}
   labels:
-    {{- include "Turquoise.Db.Mongodb.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "Turquoise.Db.Mongodb.name" . }}
+    helm.sh/chart: {{ include "Turquoise.Db.Mongodb.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version:  {{ .Chart.AppVersion }}
+    branch:  {{ .Values.branch }}
 spec:
   serviceName: {{ include "Turquoise.Db.Mongodb.fullname" . }}
   # Number of PODS
@@ -17,7 +22,13 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "Turquoise.Db.Mongodb.selectorLabels" . | nindent 8 }}
+        service: {{ include "Turquoise.Db.Mongodb.fullname" . }}
+        app.kubernetes.io/name: {{ include "Turquoise.Db.Mongodb.name" . }}
+        helm.sh/chart: {{ include "Turquoise.Db.Mongodb.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/version:  {{ .Chart.AppVersion }}
+        branch:  {{ .Values.branch }}
     spec:
       terminationGracePeriodSeconds: 15
       containers:
