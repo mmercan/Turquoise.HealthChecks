@@ -12,7 +12,6 @@ using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
-
 namespace Turquoise.Common.Mongo
 {
     public class MangoBaseRepo<T> where T : new()
@@ -93,6 +92,7 @@ namespace Turquoise.Common.Mongo
                 }
             }
 
+            logger.LogCritical(" IdFieldName " + IdFieldName);
             logger.LogCritical(" collectionName " + collectionName);
             // logger.LogCritical("mongoProductRepo " + items1.Count().ToString());
             // logger.LogCritical("mongoProductRepo " + items1.Count().ToString());
@@ -200,6 +200,16 @@ namespace Turquoise.Common.Mongo
             var filter = Builders<T>.Filter.Eq(IdFieldName, id);
             await Items.DeleteOneAsync(filter);
         }
+
+        public async Task Upsert(T item, Expression<Func<T, bool>> filter)
+        {
+            await Items.ReplaceOneAsync(
+                filter: filter,
+                replacement: item,
+                options: new UpdateOptions { IsUpsert = true }
+             );
+        }
+
         public async Task<T> GetAsync<TProperty>(Expression<Func<T, TProperty>> property, object value)
         {
             if (property.Body is System.Linq.Expressions.MemberExpression)

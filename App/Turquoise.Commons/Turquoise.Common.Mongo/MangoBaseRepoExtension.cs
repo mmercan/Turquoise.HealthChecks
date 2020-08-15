@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Turquoise.Common.Mongo;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -79,6 +81,28 @@ namespace Microsoft.Extensions.DependencyInjection
                 //     return new GlobalRepository(mode, apiKey);
                 var logger = ctx.GetService<ILogger<MangoBaseRepo<T>>>();
                 return new MangoBaseRepo<T>(connectionString, databaseName, collectionName, logger);
+                // return RabbitHutch.CreateBus(Configuration["RabbitMQConnection"]);
+            });
+
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddMangoRepo<T>(
+             this IServiceCollection serviceCollection,
+            string connectionString,
+            string databaseName,
+            string collectionName,
+            Expression<Func<T, object>> IdField
+            ) where T : new()
+        {
+            serviceCollection.AddSingleton<MangoBaseRepo<T>>((ctx) =>
+            {
+                //  var repo = sp.GetService<IDbRepository>();
+                //     var apiKey = repo.GetApiKeyMethodHere();
+                //     return new GlobalRepository(mode, apiKey);
+                var logger = ctx.GetService<ILogger<MangoBaseRepo<T>>>();
+                logger.LogInformation("databasename :" + databaseName + " collectionName" + collectionName);
+                return new MangoBaseRepo<T>(connectionString, databaseName, collectionName, IdField, logger);
                 // return RabbitHutch.CreateBus(Configuration["RabbitMQConnection"]);
             });
 

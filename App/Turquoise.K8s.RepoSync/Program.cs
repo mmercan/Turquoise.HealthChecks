@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Turquoise.K8s.RepoSync.Services;
 using Turquoise.K8s.Services;
 using AutoMapper;
+using k8s.Models;
 
 namespace Turquoise.K8s.RepoSync
 {
@@ -74,6 +75,13 @@ namespace Turquoise.K8s.RepoSync
                 });
 
 
+                services.AddMangoRepo<Turquoise.Models.Mongo.NamespaceV1>(
+                    hostContext.Configuration["Mongodb:ConnectionString"],
+                    hostContext.Configuration["Mongodb:DatabaseName"],
+                    hostContext.Configuration["Mongodb:CollectionName"],
+                    p => p.Name
+                    );
+
                 services.AddHostedService<QuartzHostedService>();
                 // // Add Quartz services
                 services.AddSingleton<IJobFactory, SingletonJobFactory>();
@@ -83,7 +91,8 @@ namespace Turquoise.K8s.RepoSync
                 services.AddSingleton<SyncNamespaceService>();
                 services.AddSingleton(new JobSchedule(
                     jobType: typeof(SyncNamespaceService),
-                    cronExpression: "0 */15 * * * ?"));
+                    cronExpression: "0 */2 * * * ?"));
+                // cronExpression: "0 */15 * * * ?"));
                 // cronExpression: "0/5 * * * * ?"));
 
 
