@@ -112,7 +112,8 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         [HttpGet("services")]
         public async Task<object> GetServices()
         {
-            var items = await _k8sService.GetServicesforCron();
+            // var items = await _k8sService.GetServicesforCron();
+            var items = await _k8sService.GetServices("sentinel-dev");
             return items;
             // KubernetesClientConfiguration config = null;
             // try

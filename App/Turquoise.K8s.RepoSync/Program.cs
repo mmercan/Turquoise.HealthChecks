@@ -78,9 +78,18 @@ namespace Turquoise.K8s.RepoSync
                 services.AddMangoRepo<Turquoise.Models.Mongo.NamespaceV1>(
                     hostContext.Configuration["Mongodb:ConnectionString"],
                     hostContext.Configuration["Mongodb:DatabaseName"],
-                    hostContext.Configuration["Mongodb:CollectionName"],
+                    "NamespaceSet",
                     p => p.Name
                     );
+
+                services.AddMangoRepo<Turquoise.Models.Mongo.ServiceV1>(
+                    hostContext.Configuration["Mongodb:ConnectionString"],
+                    hostContext.Configuration["Mongodb:DatabaseName"],
+                    "ServiceSet",
+                    p => p.Name
+                    );
+
+
 
                 services.AddHostedService<QuartzHostedService>();
                 // // Add Quartz services
@@ -88,12 +97,18 @@ namespace Turquoise.K8s.RepoSync
                 services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
                 // Add our job
+
+                services.AddSingleton<SyncK8sServiceV1>();
+                services.AddSingleton(new JobSchedule(
+                    jobType: typeof(SyncK8sServiceV1), cronExpression: "0 */2 * * * ?"));
+
+
                 services.AddSingleton<SyncNamespaceService>();
                 services.AddSingleton(new JobSchedule(
-                    jobType: typeof(SyncNamespaceService),
-                    cronExpression: "0 */2 * * * ?"));
-                // cronExpression: "0 */15 * * * ?"));
+                   jobType: typeof(SyncNamespaceService), cronExpression: "0 */15 * * * ?"));
                 // cronExpression: "0/5 * * * * ?"));
+
+
 
 
 

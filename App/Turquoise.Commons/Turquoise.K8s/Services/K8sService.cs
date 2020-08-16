@@ -56,6 +56,26 @@ namespace Turquoise.K8s.Services
             logger.LogWarning(services.Count + "service count");
             var filtered = services.Where(p => p.Metadata != null && p.Metadata.Annotations != null && p.Metadata.Annotations.Keys.Contains("healthcheck/isalive"));
             return filtered.ToList();
+
+
+        }
+
+
+
+        public async Task<IList<V1Service>> GetServices(string namespaceParam)
+        {
+            var services = await this.serviceClient.GetAsync(namespaceParam);
+            logger.LogWarning(services.Count + "service count");
+            // var filtered = services.Where(p => p.Metadata != null && p.Metadata.Annotations != null && p.Metadata.Annotations.Keys.Contains("healthcheck/isalive"));
+            return services.ToList();
+        }
+
+
+        public async Task<IList<V1Service>> GetAllServicesAsync()
+        {
+            var services = await this.serviceClient.GetAllAsync();
+            logger.LogWarning(services.Count + "GetAllServicesAsync count");
+            return services.ToList();
         }
 
         public void GetDeploymentDescribe()
