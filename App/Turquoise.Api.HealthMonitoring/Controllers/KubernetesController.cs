@@ -151,5 +151,118 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             var namespaces = client.ListNamespace();
             return namespaces.Items;
         }
+
+
+
+        [HttpGet("ingress")]
+        public async Task<object> GetIngress()
+        {
+            KubernetesClientConfiguration config = null;
+            try
+            {
+                config = KubernetesClientConfiguration.BuildDefaultConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            IKubernetes client = new Kubernetes(config);
+            Console.WriteLine("Starting Request!");
+
+
+            var ingresses = await _k8sService.GetAllIngressAsync();
+            return ingresses;
+        }
+
+        [HttpGet("MapServiceIngressAndPods")]
+        public async Task<object> GetMapServiceIngressAndPods()
+        {
+            KubernetesClientConfiguration config = null;
+            try
+            {
+                config = KubernetesClientConfiguration.BuildDefaultConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            IKubernetes client = new Kubernetes(config);
+            Console.WriteLine("Starting Request!");
+
+
+            var ingresses = await _k8sService.MapServiceIngressAndPods();
+            return ingresses;
+        }
+
+
+        [HttpGet("NodeMetrics")]
+        public async Task<object> GetNodeMetrics()
+        {
+            KubernetesClientConfiguration config = null;
+            try
+            {
+                config = KubernetesClientConfiguration.BuildDefaultConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            IKubernetes client = new Kubernetes(config);
+            Console.WriteLine("Starting Request!");
+
+
+            var nodesMetrics = await client.GetKubernetesNodesMetricsAsync().ConfigureAwait(false);
+
+
+            foreach (var item in nodesMetrics.Items)
+            {
+                Console.WriteLine(item.Metadata.Name);
+
+                foreach (var metric in item.Usage)
+                {
+                    Console.WriteLine($"{metric.Key}: {metric.Value}");
+                }
+            }
+            return nodesMetrics;
+        }
+
+
+        [HttpGet("PodMetrics")]
+        public async Task<object> GetPodMetrics()
+        {
+            KubernetesClientConfiguration config = null;
+            try
+            {
+                config = KubernetesClientConfiguration.BuildDefaultConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            IKubernetes client = new Kubernetes(config);
+            Console.WriteLine("Starting Request!");
+
+            var podsMetrics = await client.GetKubernetesPodsMetricsAsync().ConfigureAwait(false);
+
+            if (!podsMetrics.Items.Any())
+            {
+                Console.WriteLine("Empty");
+            }
+
+            foreach (var item in podsMetrics.Items)
+            {
+                foreach (var container in item.Containers)
+                {
+                    Console.WriteLine(container.Name);
+
+                    foreach (var metric in container.Usage)
+                    {
+                        Console.WriteLine($"{metric.Key}: {metric.Value}");
+                    }
+                }
+                Console.Write(Environment.NewLine);
+            }
+            return podsMetrics;
+        }
     }
 }

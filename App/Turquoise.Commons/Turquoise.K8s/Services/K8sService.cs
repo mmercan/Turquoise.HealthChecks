@@ -9,6 +9,7 @@ using Turquoise.Models;
 using System.Linq;
 using Microsoft.Rest;
 using Microsoft.Extensions.Logging;
+using Turquoise.K8s.K8sClients;
 
 namespace Turquoise.K8s.Services
 {
@@ -22,6 +23,7 @@ namespace Turquoise.K8s.Services
         private K8sNodeClient nodesClient;
         private K8sPodClient podsClient;
         private K8sServiceClient serviceClient;
+        private K8sIngressClient ingressClient;
         private ILogger<K8sService> logger;
 
         public K8sService(IKubernetesClient kubernetesClient, IMapper mapper, ILogger<K8sService> logger)
@@ -33,6 +35,7 @@ namespace Turquoise.K8s.Services
             nodesClient = new K8sNodeClient(this.client);
             podsClient = new K8sPodClient(this.client);
             serviceClient = new K8sServiceClient(this.client);
+            ingressClient = new K8sIngressClient(this.client);
             this.logger = logger;
         }
 
@@ -78,10 +81,83 @@ namespace Turquoise.K8s.Services
             return services.ToList();
         }
 
+
+        public async Task<IList<Extensionsv1beta1Ingress>> GetAllIngressAsync()
+        {
+            var ingresses = await this.ingressClient.GetAllAsync();
+            logger.LogWarning(ingresses.Count + "GetAllServicesAsync count");
+            return ingresses.ToList();
+        }
+
+        public async Task<List<MapServiceIngressPod>> MapServiceIngressAndPods()
+        {
+            var ingressTask = this.ingressClient.GetAllAsync();
+            var serviceTask = this.serviceClient.GetAllAsync();
+            // var podTask = this.podsClient.GetAllAsync();
+            Task.WaitAll(ingressTask, serviceTask);
+
+            var ingresses = ingressTask.Result;
+            var services = serviceTask.Result;
+            // var pods = podTask.Result;
+
+            List<MapServiceIngressPod> maps = new List<MapServiceIngressPod>();
+
+            foreach (var service in services)
+            {
+
+                var serviceName = service.Name();
+                var serviceNamespace = service.Namespace();
+
+                var map = new MapServiceIngressPod();
+                map.Service = service;
+                maps.Add(map);
+                logger.LogInformation("Pods for service: " + service.Metadata.Name);
+                logger.LogInformation("=-=-=-=-=-=-=-=-=-=-=");
+                if (service.Spec == null || service.Spec.Selector == null)
+                {
+                    continue;
+                }
+
+                var labels = new List<string>();
+                foreach (var key in service.Spec.Selector)
+                {
+                    labels.Add(key.Key + "=" + key.Value);
+                }
+
+                var labelStr = string.Join(",", labels.ToArray());
+                logger.LogInformation(labelStr);
+                var podList = client.ListNamespacedPod(serviceNamespace, labelSelector: labelStr);
+
+                foreach (var pod in podList.Items)
+                {
+                    map.Pods.Add(pod);
+                }
+
+
+                var ings = ingresses.Where(p => p.Metadata.Namespace() == serviceNamespace && p.Spec.Rules.FirstOrDefault()?.Http.Paths.FirstOrDefault()?.Backend.ServiceName == serviceName);
+                map.ingress = ings.FirstOrDefault();
+
+            }
+            return maps;
+
+        }
+
         public void GetDeploymentDescribe()
         {
 
         }
 
+    }
+
+    public class MapServiceIngressPod
+    {
+        public MapServiceIngressPod()
+        {
+            Pods = new List<V1Pod>();
+        }
+        public Extensionsv1beta1Ingress ingress { get; set; }
+        public V1Service Service { get; set; }
+
+        public List<V1Pod> Pods { get; set; }
     }
 }
