@@ -47,14 +47,14 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "Turquoise.Service.Rabbitmq.selectorLabels" -}}
-app: {{ include "Sentinel.Service.Rabbitmq.name" . }}
+app: {{ include "Turquoise.Service.Rabbitmq.name" . }}
 version: {{ .Chart.AppVersion  | quote }}
 app.kubernetes.io/name: {{ include "Turquoise.Service.Rabbitmq.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 branch:  {{ .Values.branch }}
 {{- end -}}
 
-{{- define "Sentinel.Service.Rabbitmq.annotations" -}}
+{{- define "Turquoise.Service.Rabbitmq.annotations" -}}
 azure-pipelines/run: {{ .Values.azurepipelines.run }}
 azure-pipelines/pipeline: {{ .Values.azurepipelines.pipeline }}
 azure-pipelines/pipelineId: {{ .Values.azurepipelines.pipelineId }}
