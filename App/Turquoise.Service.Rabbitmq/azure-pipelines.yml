@@ -23,7 +23,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "Turquoise.Service.Rabbitmq/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Service.Rabbitmq/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -34,7 +34,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "Turquoise.Service.Rabbitmq/docker-compose.yml"
+              dockerComposeFile: "App/Turquoise.Service.Rabbitmq/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -43,13 +43,13 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Helm chart"
             inputs:
-              SourceFolder: "Helm/Turquoise/charts/turquoise-rabbitmq"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-rabbitmq"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-rabbitmq"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
             inputs:
-              SourceFolder: "Helm/values"
+              SourceFolder: "App/Helm/values"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/values"
 
           - task: PublishBuildArtifacts@1
