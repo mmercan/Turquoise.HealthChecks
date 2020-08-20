@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "Turquoise.Service.Rabbitmq.fullname" . }}-tcp
+  labels:                    
+    {{- include "Turquoise.Service.Rabbitmq.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:        
+  - name: transport          
+    port: 5672               
+    targetPort: 5672
+    protocol: TCP
+  selector:
+    {{- include "Turquoise.Service.Rabbitmq.selectorLabels" . | nindent 4 }}
+
