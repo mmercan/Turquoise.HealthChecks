@@ -6,17 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Turquoise.Scheduler.HealthCheckScheduler;
-using Turquoise.Scheduler.HealthCheckScheduler.Cron;
+using Turquoise.Common.Scheduler;
 
 namespace Turquoise.Scheduler.Services
 {
     public class AppHealthCheckScheduler : BackgroundService
     {
-        private HealthCheckRepo healthCheckRepo;
+        private HealthCheckSchedulerRepository healthCheckRepo;
         private ILogger<AppHealthCheckScheduler> logger;
 
-        public AppHealthCheckScheduler(HealthCheckRepo healthCheckRepo, ILogger<AppHealthCheckScheduler> logger)
+        public AppHealthCheckScheduler(HealthCheckSchedulerRepository healthCheckRepo, ILogger<AppHealthCheckScheduler> logger)
         {
             this.healthCheckRepo = healthCheckRepo;
             this.logger = logger;

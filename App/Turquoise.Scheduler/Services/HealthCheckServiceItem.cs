@@ -1,9 +1,9 @@
 using System;
-using Turquoise.Scheduler.HealthCheckScheduler;
+using Turquoise.Common.Scheduler;
 
 namespace Turquoise.Scheduler.Services
 {
-    public class HealthCheckServiceItem : IHealthCheckScheduledTask
+    public class HealthCheckScheduledTask : IHealthCheckScheduledTask
     {
         public string Name { get; set; }
         public string Schedule { get; set; }

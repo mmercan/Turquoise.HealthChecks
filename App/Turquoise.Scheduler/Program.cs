@@ -6,10 +6,20 @@ using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using Serilog;
 using Serilog.Events;
-using Turquoise.Scheduler.Services;
+using Turquoise.Common.Scheduler;
 using Microsoft.Extensions.Logging;
+using Turquoise.K8s.Services;
+using AutoMapper;
+using k8s.Models;
+using Turquoise.K8s;
+using Turquoise.Common.Scheduler.QuartzScheduler;
+using Turquoise.Scheduler.JobSchedules;
+using Turquoise.Scheduler.Services;
 
 namespace Turquoise.Scheduler
 {
@@ -38,7 +48,7 @@ namespace Turquoise.Scheduler
                 .ReadFrom.Configuration(hostContext.Configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Enviroment", env.EnvironmentName)
-                .Enrich.WithProperty("ApplicationName", "Sentinel.Handler.Comms")
+                .Enrich.WithProperty("ApplicationName", "Turquoise.Scheduler")
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .WriteTo.Console()
                 .WriteTo.File("Logs/logs.txt");
@@ -48,30 +58,60 @@ namespace Turquoise.Scheduler
                 services.AddLogging();
                 services.AddSingleton<IConfiguration>(hostContext.Configuration);
 
+                //Add Dependencies
 
+                services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+
+                if (hostContext.Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
+                else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
+                services.AddSingleton<K8sService>();
 
                 services.AddSingleton<EasyNetQ.IBus>((ctx) =>
                 {
                     return RabbitHutch.CreateBus(hostContext.Configuration["RabbitMQConnection"]);
                 });
 
-                services.AddSingleton<HealthCheckRepo>();
 
-                services.AddHostedService<AppHealthCheckScheduler>();
-                //                services.AddHostedService<ProductAsyncSubscribeService>();
+                services.AddMangoRepo<Turquoise.Models.Mongo.NamespaceV1>(
+                    hostContext.Configuration["Mongodb:ConnectionString"],
+                    hostContext.Configuration["Mongodb:DatabaseName"],
+                    "NamespaceSet",
+                    p => p.Name
+                    );
 
-                // services.AddHostedService<QuartzHostedService>();
+                services.AddMangoRepo<Turquoise.Models.Mongo.ServiceV1>(
+                    hostContext.Configuration["Mongodb:ConnectionString"],
+                    hostContext.Configuration["Mongodb:DatabaseName"],
+                    "ServiceSet",
+                    p => p.Name
+                    );
+
+                services.AddHostedService<QuartzHostedService>();
                 // // Add Quartz services
-                // services.AddSingleton<IJobFactory, SingletonJobFactory>();
-                // services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+                services.AddSingleton<IJobFactory, SingletonJobFactory>();
+                services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
-                // // Add our job
-                // services.AddSingleton<HelloWorldJob>();
+                // Add our job
+
+                services.AddSingleton<SyncK8sServiceV1>();
+                services.AddSingleton(new JobSchedule(
+                    jobType: typeof(SyncK8sServiceV1), cronExpression: "0 */2 * * * ?"));
+
+
+                // services.AddSingleton<HealthCheckSchedulerRepositoryFeeder>();
                 // services.AddSingleton(new JobSchedule(
-                //     jobType: typeof(HelloWorldJob),
-                //     cronExpression: "0/5 * * * * ?"));
+                //     jobType: typeof(HealthCheckSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
 
 
+
+
+                services.AddSingleton<SyncNamespaceService>();
+                services.AddSingleton(new JobSchedule(
+                   jobType: typeof(SyncNamespaceService), cronExpression: "0 */15 * * * ?"));
+                // cronExpression: "0/5 * * * * ?"));
+
+                services.AddHealthCheckSchedulerRepository();
+                services.AddHostedService<AppHealthCheckScheduler>();
 
             })
             .UseConsoleLifetime()

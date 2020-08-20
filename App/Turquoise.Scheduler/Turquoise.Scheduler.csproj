@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="EasyNetQ" Version="5.2.0" />
+    <PackageReference Include="EasyNetQ" Version="5.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.6" />
@@ -26,5 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turquoise.Commons\Turquoise.K8s\Turquoise.K8s.csproj" />
+    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common.Scheduler\Turquoise.Common.Scheduler.csproj" />
+    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common.Mongo\Turquoise.Common.Mongo.csproj" />
+    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common\Turquoise.Common.csproj" />
   </ItemGroup>
 </Project>

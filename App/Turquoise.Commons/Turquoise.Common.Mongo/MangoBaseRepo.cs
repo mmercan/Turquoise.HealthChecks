@@ -60,6 +60,7 @@ namespace Turquoise.Common.Mongo
             if (IdField != null)
             {
                 this.IdFieldName = IdField;
+                //   CreateIdMap();
             }
             else
             {
