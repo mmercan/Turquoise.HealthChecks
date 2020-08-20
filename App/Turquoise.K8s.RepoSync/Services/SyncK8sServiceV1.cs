@@ -29,21 +29,20 @@ namespace Turquoise.K8s.RepoSync.Services
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var serives = await k8sService.GetAllServicesAsync();
+            var services = await k8sService.GetAllServicesWithIngressAsync();
 
-            var dtoitems = mapper.Map<IList<Turquoise.Models.Mongo.ServiceV1>>(serives);
-            _logger.LogCritical(dtoitems.ToJson());
+            _logger.LogCritical(services.ToJson());
 
-            foreach (var item in dtoitems)
+            foreach (var item in services)
             {
                 await serviceRepo.Upsert(item, p => p.Name == item.Name);
             }
 
-            var textarr = serives.Select(n => n.Metadata.Name);
+            var textarr = services.Select(n => n.Name);
             var text = string.Join(".", textarr);
             _logger.LogCritical(text);
 
-            _logger.LogInformation("Hello world!");
+            _logger.LogInformation("SyncK8sServiceV1 Completed");
             // return Task.CompletedTask;
         }
     }

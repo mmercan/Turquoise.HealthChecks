@@ -6,6 +6,7 @@ namespace Turquoise.Models.Mongo
     {
         public string LivenessProbe { get; set; }
         public string ReadinessProbe { get; set; }
+        public string Image { get; set; }
     }
 
     public class ProbeV1

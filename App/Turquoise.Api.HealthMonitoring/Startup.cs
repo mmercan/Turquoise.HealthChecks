@@ -114,10 +114,10 @@ namespace Turquoise.Api.HealthMonitoring
 
             services.AddApiVersioning(options =>
             {
-                            options.ReportApiVersions = true;
-                            options.AssumeDefaultVersionWhenUnspecified = true;
-                            options.DefaultApiVersion = new ApiVersion(1, 0);
-                            options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
 
             services.AddVersionedApiExplorer(options =>
@@ -150,6 +150,8 @@ namespace Turquoise.Api.HealthMonitoring
                 options.Configuration = Configuration["RedisConnection"];
                 options.InstanceName = "ApiComms";
             });
+
+
 
             // services.AddMangoRepo<PushNotificationModel>(Configuration.GetSection("Mongodb"));
 
@@ -206,9 +208,12 @@ namespace Turquoise.Api.HealthMonitoring
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
             services.AddGrpc();
 
+            services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
+            services.AddSingleton<AZAuthService>();
 
             services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>();
             services.AddSingleton<K8sService>();
+            services.AddSingleton<K8sMetricsService>();
 
         }
 
@@ -269,6 +274,7 @@ namespace Turquoise.Api.HealthMonitoring
                 endpoints.MapGrpcService<GreeterGRPCService>();
                 endpoints.MapGrpcService<CountryGRPCService>();
                 endpoints.MapGrpcService<NamespaceGRPCService>();
+                endpoints.MapGrpcService<MetricGRPCService>();
                 // endpoints.MapGrpcService<MeterReaderService>();
             });
 

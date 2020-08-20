@@ -3,6 +3,7 @@ using Turquoise.Models;
 using k8s.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Turquoise.Models.Mongo;
 
 namespace Turquoise.K8s
 {
@@ -83,6 +84,15 @@ namespace Turquoise.K8s
             .ForMember(dto => dto.SessionAffinity, map => map.MapFrom(source =>
                source.Spec.SessionAffinity
            ));
+
+
+
+            CreateMap<V1Pod, PodV1>();
+
+
+            CreateMap<V1Container, ContainerV1>();
+
+            CreateMap<V1Probe, ProbeV1>();
 
         }
     }

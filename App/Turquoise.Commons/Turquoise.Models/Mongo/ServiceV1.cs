@@ -20,6 +20,10 @@ namespace Turquoise.Models.Mongo
         public List<string> ExternalEndpoints { get; set; }
         public string Uid { get; set; }
 
+        public string IngressUrl { get; set; }
+
+        public string VirtualServiceUrl { get; set; }
+
         //TODO: Add Endpoints
         // Endpoints
 

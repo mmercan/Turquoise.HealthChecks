@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Turquoise.Api.HealthMonitoring";
+
+package k8App;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service K8MetricService {
+  rpc GetNodeMetric (google.protobuf.Empty) returns (NodeMetricListReply); 
+}
+
+
+message NodeMetricListReply
+{
+    repeated NodeMetricReply Metrics = 1;
+    google.protobuf.Timestamp UpdatedTime = 2;
+}
+
+
+message NodeMetricReply
+{
+    string Name=1;
+    string Timestamp=2;
+    string Window=3;
+    repeated UsagePair Usages=4;
+}
+
+message UsagePair
+{
+  string Key=1;
+  string Value=2;
+}
+

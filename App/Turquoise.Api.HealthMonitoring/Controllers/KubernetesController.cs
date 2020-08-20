@@ -16,11 +16,13 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly K8sService _k8sService;
+        private readonly AZAuthService _azservice;
 
-        public KubernetesController(ILogger<WeatherForecastController> logger, K8sService k8sService)
+        public KubernetesController(ILogger<WeatherForecastController> logger, K8sService k8sService, AZAuthService azservice)
         {
             _logger = logger;
             _k8sService = k8sService;
+            _azservice = azservice;
         }
 
 
@@ -51,33 +53,22 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             return list.Items;
         }
 
+
+        [HttpGet("podsmapped")]
+        public async Task<object> GetPodsMapped()
+        {
+
+            await _azservice.Authenticate();
+
+            _logger.LogCritical("GetDeployment called the service");
+            return await _k8sService.GetPodsMapped("sentinel-dev");
+        }
+
         [HttpGet("deployment")]
         public async Task<object> GetDeployment()
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetDeploymentsAsync("ingress-basic");
-            // KubernetesClientConfiguration config = null;
-            // try
-            // {
-            //     config = KubernetesClientConfiguration.BuildDefaultConfig();
-            // }
-            // catch
-            // {
-            //     config = KubernetesClientConfiguration.InClusterConfig();
-            // }
-            // IKubernetes client = new Kubernetes(config);
-            // Console.WriteLine("Starting Request!");
-
-            // var list = client.ListNamespacedDeployment("cookbook-dev");
-            // foreach (var item in list.Items)
-            // {
-            //     Console.WriteLine(item.Metadata.Name);
-            // }
-            // if (list.Items.Count == 0)
-            // {
-            //     Console.WriteLine("Empty!");
-            // }
-            // return list.Items;
+            return await _k8sService.GetDeploymentsAsync("sentinel-dev");
         }
 
 
@@ -113,7 +104,10 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> GetServices()
         {
             // var items = await _k8sService.GetServicesforCron();
-            var items = await _k8sService.GetServices("sentinel-dev");
+            //   var items = await _k8sService.GetServices("sentinel-dev");
+
+
+            var items = await _k8sService.GetAllServicesWithIngressAsync();
             return items;
             // KubernetesClientConfiguration config = null;
             // try
@@ -190,7 +184,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             Console.WriteLine("Starting Request!");
 
 
-            var ingresses = await _k8sService.MapServiceIngressAndPods();
+            var ingresses = _k8sService.MapServiceIngressAndPodsAsync();
             return ingresses;
         }
 
@@ -263,6 +257,14 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
                 Console.Write(Environment.NewLine);
             }
             return podsMetrics;
+        }
+
+
+        [HttpGet("virtualservices")]
+        public async Task<object> GetVirtualservices()
+        {
+            _logger.LogCritical("GetDeployment called the service");
+            return await _k8sService.GetVirtualServicesAsync("sentinel-dev");
         }
     }
 }

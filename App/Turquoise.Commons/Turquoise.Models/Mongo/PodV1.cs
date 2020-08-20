@@ -28,6 +28,8 @@ namespace Turquoise.Models.Mongo
         public DateTime StartTime { get; set; }
 
         public string NodeName { get; set; }
+
+        public List<string> Images { get; set; }
         // public List<string> InternalEndpoints { get; set; }
         // public List<string> ExternalEndpoints { get; set; }
     }

@@ -10,6 +10,8 @@ using System.Linq;
 using Microsoft.Rest;
 using Microsoft.Extensions.Logging;
 using Turquoise.K8s.K8sClients;
+using System;
+using Newtonsoft.Json.Linq;
 
 namespace Turquoise.K8s.Services
 {
@@ -47,7 +49,6 @@ namespace Turquoise.K8s.Services
 
         public async Task<IList<V1Deployment>> GetDeploymentsAsync(string namespaceParam)
         {
-
             var items = await deploymentsClient.GetAsync(namespaceParam);
             // var dtoitems = mapper.Map<IList<Deployment>>(items);
             return items;//items;
@@ -59,11 +60,14 @@ namespace Turquoise.K8s.Services
             logger.LogWarning(services.Count + "service count");
             var filtered = services.Where(p => p.Metadata != null && p.Metadata.Annotations != null && p.Metadata.Annotations.Keys.Contains("healthcheck/isalive"));
             return filtered.ToList();
-
-
         }
 
-
+        public async Task<List<Turquoise.Models.Mongo.PodV1>> GetPodsMapped(string namespaceParam)
+        {
+            var podsv1 = await this.podsClient.GetAsync(namespaceParam);
+            var dtoitems = mapper.Map<List<Turquoise.Models.Mongo.PodV1>>(podsv1);
+            return dtoitems;
+        }
 
         public async Task<IList<V1Service>> GetServices(string namespaceParam)
         {
@@ -73,7 +77,6 @@ namespace Turquoise.K8s.Services
             return services.ToList();
         }
 
-
         public async Task<IList<V1Service>> GetAllServicesAsync()
         {
             var services = await this.serviceClient.GetAllAsync();
@@ -81,6 +84,53 @@ namespace Turquoise.K8s.Services
             return services.ToList();
         }
 
+        public Task<List<Turquoise.Models.Mongo.ServiceV1>> GetAllServicesWithIngressAsync()
+        {
+            var returnservices = new List<Turquoise.Models.Mongo.ServiceV1>();
+            var ingressTask = this.ingressClient.GetAllAsync();
+            var serviceTask = this.serviceClient.GetAllAsync();
+            var vstask = GetAllVirtualServicesAsync();
+            Task.WaitAll(ingressTask, serviceTask, vstask);
+            var ingresses = ingressTask.Result;
+            var services = serviceTask.Result;
+            var virtualservices = vstask.Result;
+
+
+            foreach (var service in services)
+            {
+                var serviceName = service.Name();
+                var serviceNamespace = service.Namespace();
+
+                var dtoitems = mapper.Map<Turquoise.Models.Mongo.ServiceV1>(service);
+                returnservices.Add(dtoitems);
+                //            var ings = ingresses.Where(p => p.Metadata.Namespace() == serviceNamespace && p.Spec.Rules.FirstOrDefault()?.Http.Paths.FirstOrDefault()?.Backend.ServiceName == serviceName);
+                //  var ings =    ingresses.Where(p => p.Metadata.Namespace() == serviceNamespace && p.Spec.Rules.All(pp => pp.Http.Paths.All( ppp => ppp.Backend.ServiceName == serviceName)));
+
+                foreach (var ing in ingresses.Where(p => p.Namespace() == serviceNamespace))
+                {
+                    var paths = ing.Spec.Rules.FirstOrDefault(p => p.Http.Paths.All(pp => pp.Backend.ServiceName == serviceName));
+                    if (paths != null)
+                    {
+                        var prefix = "http://";
+                        if (ing.Spec.Tls != null)
+                        {
+                            prefix = "https://";
+                        }
+                        dtoitems.IngressUrl = prefix + paths.Host;
+                    }
+                }
+
+                var vs = virtualservices.FirstOrDefault(p => p.Namespace == serviceNamespace && p.Service == serviceName);
+                if (vs != null)
+                {
+                    dtoitems.VirtualServiceUrl = "http://" + vs.Host;
+                }
+
+            }
+
+            return Task.FromResult(returnservices);
+
+        }
 
         public async Task<IList<Extensionsv1beta1Ingress>> GetAllIngressAsync()
         {
@@ -89,7 +139,7 @@ namespace Turquoise.K8s.Services
             return ingresses.ToList();
         }
 
-        public async Task<List<MapServiceIngressPod>> MapServiceIngressAndPods()
+        public List<MapServiceIngressPod> MapServiceIngressAndPodsAsync()
         {
             var ingressTask = this.ingressClient.GetAllAsync();
             var serviceTask = this.serviceClient.GetAllAsync();
@@ -147,8 +197,47 @@ namespace Turquoise.K8s.Services
 
         }
 
-    }
+        public async Task<List<VirtualServiceV1>> GetVirtualServicesAsync(string namespaceParam)
+        {
+            List<VirtualServiceV1> items = new List<VirtualServiceV1>();
+            var result = await client.ListNamespacedCustomObjectAsync("networking.istio.io", "v1alpha3", namespaceParam, "virtualservices") as JObject;
+            var jtokens = result.GetValue("items").AsJEnumerable();
+            foreach (JObject jitem in jtokens)
+            {
+                var host = jitem.SelectToken("spec.hosts[0]").ToString();
+                var service = jitem.SelectToken("spec.http[0].route[0].destination.host").ToString();
+                var port = jitem.SelectToken("spec.http[0].route[0].destination.port.number").ToString();
 
+                var name = jitem.SelectToken("metadata.name").ToString();
+                var namespaceparam = jitem.SelectToken("metadata.namespace").ToString();
+
+                logger.LogCritical(host + " > " + service + ":" + port);
+                var item = new VirtualServiceV1 { Host = host, Service = service, Port = port, Name = name, Namespace = namespaceParam };
+                items.Add(item);
+            }
+            return items;
+        }
+
+        public async Task<List<VirtualServiceV1>> GetAllVirtualServicesAsync()
+        {
+            List<VirtualServiceV1> Items = new List<VirtualServiceV1>();
+            List<Task<List<VirtualServiceV1>>> tasks = new List<Task<List<VirtualServiceV1>>>();
+            var namespaces = await GetNamespaces();
+            foreach (var ns in namespaces)
+            {
+                var task = GetVirtualServicesAsync(ns.Name());
+                tasks.Add(task);
+            }
+
+            Task.WaitAll(tasks.ToArray());
+            foreach (var item in tasks)
+            {
+                Items.AddRange(item.Result);
+            }
+            return Items;
+        }
+
+    }
     public class MapServiceIngressPod
     {
         public MapServiceIngressPod()
@@ -160,4 +249,16 @@ namespace Turquoise.K8s.Services
 
         public List<V1Pod> Pods { get; set; }
     }
+
+
+    public class VirtualServiceV1
+    {
+        public string Host { get; set; }
+        public string Service { get; set; }
+        public string Port { get; set; }
+
+        public string Name { get; set; }
+        public string Namespace { get; set; }
+    }
+
 }
