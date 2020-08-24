@@ -5,13 +5,18 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: mmercan/turquoise-scheduler
   tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
 
 serviceAccount:
   # Specifies whether a service account should be created

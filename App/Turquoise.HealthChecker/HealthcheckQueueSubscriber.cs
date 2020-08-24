@@ -48,12 +48,6 @@ namespace Turquoise.HealthChecker
                 return executingTask;
             }
             return Task.CompletedTask;
-
-            // while (!stoppingToken.IsCancellationRequested)
-            // {
-            //     logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            //     await Task.Delay(1000, stoppingToken);
-            // }
         }
 
         private void SubscribeQueue()
