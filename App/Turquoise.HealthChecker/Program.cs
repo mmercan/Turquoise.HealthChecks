@@ -18,13 +18,17 @@ using AutoMapper;
 using k8s.Models;
 using Turquoise.K8s;
 using Turquoise.Common.Scheduler.QuartzScheduler;
-using Turquoise.Scheduler.JobSchedules;
-using Turquoise.Scheduler.Services;
+using Turquoise.HealthChecker.Services;
+using System.Net.Http.Headers;
+using Turquoise.Common;
+using System.Net.Http;
 
-namespace Turquoise.Scheduler
+namespace Turquoise.HealthChecker
 {
     public class Program
     {
+
+
         public static void Main(string[] args)
         {
             var host = new HostBuilder()
@@ -60,24 +64,20 @@ namespace Turquoise.Scheduler
 
                 //Add Dependencies
 
-                services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+                // services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
 
                 if (hostContext.Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
                 else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
                 services.AddSingleton<K8sService>();
 
+                services.Configure<AZAuthServiceSettings>(hostContext.Configuration.GetSection("AzureAd"));
+                services.AddSingleton<AZAuthService>();
+
+
                 services.AddSingleton<EasyNetQ.IBus>((ctx) =>
                 {
                     return RabbitHutch.CreateBus(hostContext.Configuration["RabbitMQConnection"]);
                 });
-
-
-                services.AddMangoRepo<Turquoise.Models.Mongo.NamespaceV1>(
-                    hostContext.Configuration["Mongodb:ConnectionString"],
-                    hostContext.Configuration["Mongodb:DatabaseName"],
-                    "NamespaceSet",
-                    p => p.Name
-                    );
 
                 services.AddMangoRepo<Turquoise.Models.Mongo.ServiceV1>(
                     hostContext.Configuration["Mongodb:ConnectionString"],
@@ -86,33 +86,50 @@ namespace Turquoise.Scheduler
                     p => p.Name
                     );
 
-                services.AddHostedService<QuartzHostedService>();
-                // // Add Quartz services
-                services.AddSingleton<IJobFactory, SingletonJobFactory>();
-                services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
-                // Add our job
-
-                services.AddSingleton<SyncK8sServiceV1>();
-                services.AddSingleton(new JobSchedule(
-                    jobType: typeof(SyncK8sServiceV1), cronExpression: "0 */15 * * * ?"));
-
-
-                services.AddSingleton<HealthCheckSchedulerRepositoryFeeder>();
-                services.AddSingleton(new JobSchedule(
-                    jobType: typeof(HealthCheckSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
+                services.AddMangoRepo<Turquoise.Models.Mongo.AliveAndWellResult>(
+                    hostContext.Configuration["Mongodb:ConnectionString"],
+                    hostContext.Configuration["Mongodb:DatabaseName"],
+                    "AliveAndWellResult",
+                    p => p.Id
+                    );
 
 
 
 
-                services.AddSingleton<SyncNamespaceService>();
-                services.AddSingleton(new JobSchedule(
-                   jobType: typeof(SyncNamespaceService), cronExpression: "0 */15 * * * ?"));
-                // cronExpression: "0/5 * * * * ?"));
+                services.AddHttpClient<IsAliveAndWellHealthChecker>("HealthCheckReportDownloader", options =>
+                {
+                    // options.BaseAddress = new Uri(Configuration["CrmConnection:ServiceUrl"] + "api/data/v8.2/");
+                    options.Timeout = new TimeSpan(0, 2, 0);
+                    options.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+                    options.DefaultRequestHeaders.Add("OData-Version", "4.0");
+                    options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                services.AddHealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1>();
-                services.AddHostedService<AppHealthCheckScheduler>();
+                })
+                .ConfigurePrimaryHttpMessageHandler((ch) =>
+                {
+                    var handler = new HttpClientHandler();
+                    //handler.
+                    return handler;
+                })
 
+                // .ConfigurePrimaryHttpMessageHandler((ch) =>
+                // {
+                //     var handler = new HttpClientHandler();
+                //     handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+                //     handler.ClientCertificates.Add(HttpClientHelpers.GetCert());
+                //     return handler;
+                // })
+                //.AddHttpMessageHandler()
+                //  .AddHttpMessageHandler<OAuthTokenHandler>()
+                .AddPolicyHandler(HttpClientHelpers.GetRetryPolicy())
+                .AddPolicyHandler(HttpClientHelpers.GetCircuitBreakerPolicy());
+
+
+
+
+
+                services.AddHostedService<HealthcheckQueueSubscriber>();
             })
             .UseConsoleLifetime()
             .Build();
@@ -129,7 +146,19 @@ namespace Turquoise.Scheduler
 
 
         }
+
+
+
+        // public static void Main(string[] args)
+        // {
+        //     CreateHostBuilder(args).Build().Run();
+        // }
+
+        // public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //     Host.CreateDefaultBuilder(args)
+        //         .ConfigureServices((hostContext, services) =>
+        //         {
+        //             services.AddHostedService<Worker>();
+        //         });
     }
-
 }
-

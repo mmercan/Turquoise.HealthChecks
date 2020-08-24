@@ -24,7 +24,7 @@ namespace Turquoise.K8s.Services
             this.settingsOptions = settingsOptions;
         }
 
-        public async Task Authenticate()
+        public async Task<string> Authenticate()
         {
 
             if (settingsOptions.Value == null)
@@ -55,6 +55,7 @@ namespace Turquoise.K8s.Services
             var expires_on = s.ExpiresOn as string;
             var date = convertDatetime(expires_on);
             logger.LogCritical(date.ToString());
+            return token;
         }
 
         private DateTime convertDatetime(string unixdate)

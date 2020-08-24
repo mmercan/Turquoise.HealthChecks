@@ -4,14 +4,16 @@ using Turquoise.Common.Scheduler.Cron;
 
 namespace Turquoise.Common.Scheduler
 {
-    public class HealthCheckSchedulerTaskWrapper
+    public class HealthCheckSchedulerTaskWrapper<T> where T : new()
     {
-        public Guid Uid { get; set; }
+        public string Uid { get; set; }
         public CrontabSchedule Schedule { get; set; }
-        public IHealthCheckScheduledTask Task { get; set; }
+        public IHealthCheckScheduledTask<T> Task { get; set; }
 
         public DateTime LastRunTime { get; set; }
         public DateTime NextRunTime { get; set; }
+
+        public T Item { get; set; }
 
         public void Increment()
         {

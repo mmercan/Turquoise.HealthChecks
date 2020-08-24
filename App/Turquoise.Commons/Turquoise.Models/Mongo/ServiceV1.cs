@@ -10,12 +10,12 @@ namespace Turquoise.Models.Mongo
 
         public ServiceV1()
         {
-            //   this._id = ObjectId.GenerateNewId();
         }
 
+        [BsonId]
+        public string NameandNamespace { get { return Name + "." + Namespace; } }
         public string Uid { get; set; }
 
-        [BsonId]
         public string Name { get; set; }
         public string Namespace { get; set; }
         public List<Label> Labels { get; set; }

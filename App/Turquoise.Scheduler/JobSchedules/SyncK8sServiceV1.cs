@@ -35,7 +35,7 @@ namespace Turquoise.Scheduler.JobSchedules
 
             foreach (var item in services)
             {
-                await serviceRepo.Upsert(item, p => p.Name == item.Name);
+                await serviceRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
             }
 
             var textarr = services.Select(n => n.Name);

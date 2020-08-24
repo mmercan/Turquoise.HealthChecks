@@ -45,7 +45,7 @@ namespace Turquoise.Scheduler.JobSchedules
             var text = string.Join(".", textarr);
             _logger.LogCritical(text);
 
-            _logger.LogInformation("Hello world!");
+            _logger.LogInformation("SyncNamespaceService Completed!");
             // return Task.CompletedTask;
         }
     }

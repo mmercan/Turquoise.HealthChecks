@@ -4,10 +4,10 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class HealthCheckSchedulerRepositoryExtension
     {
-        public static IServiceCollection AddHealthCheckSchedulerRepository(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddHealthCheckSchedulerRepository<T>(this IServiceCollection serviceCollection) where T : new()
         {
             // serviceCollection.Configure<MangoBaseRepoSettings<T>>(o => o = options);
-            serviceCollection.AddSingleton<Turquoise.Common.Scheduler.HealthCheckSchedulerRepository>();
+            serviceCollection.AddSingleton<Turquoise.Common.Scheduler.HealthCheckSchedulerRepository<T>>();
             return serviceCollection;
         }
 

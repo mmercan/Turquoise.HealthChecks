@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EasyNetQ;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Turquoise.Common.Scheduler;
@@ -12,13 +13,15 @@ namespace Turquoise.Scheduler.Services
 {
     public class AppHealthCheckScheduler : BackgroundService
     {
-        private HealthCheckSchedulerRepository healthCheckRepo;
+        private HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckRepo;
         private ILogger<AppHealthCheckScheduler> logger;
+        private IBus bus;
 
-        public AppHealthCheckScheduler(HealthCheckSchedulerRepository healthCheckRepo, ILogger<AppHealthCheckScheduler> logger)
+        public AppHealthCheckScheduler(HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckRepo, ILogger<AppHealthCheckScheduler> logger, EasyNetQ.IBus bus)
         {
             this.healthCheckRepo = healthCheckRepo;
             this.logger = logger;
+            this.bus = bus;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -34,12 +37,47 @@ namespace Turquoise.Scheduler.Services
         private Task ExecuteOnceAsync(CancellationToken cancellationToken)
         {
             var referenceTime = DateTime.UtcNow;
-            logger.LogCritical("Checking for ScheduledTasks");
+            logger.LogCritical("Checking for ScheduledTasks " + healthCheckRepo.ScheduledTasks.Count.ToString() + " Counted");
             var tasksThatShouldRun = healthCheckRepo.ScheduledTasks.Where(t => t.ShouldRun(referenceTime)).ToList();
             foreach (var taskThatShouldRun in tasksThatShouldRun)
             {
                 taskThatShouldRun.Increment();
-                logger.LogCritical("Task Added to RabbitMQ " + taskThatShouldRun.Task.Name);
+                logger.LogCritical("Task Adding to RabbitMQ " + taskThatShouldRun.Task.Name);
+
+
+                bus.PublishAsync(taskThatShouldRun.Item, "healthcheck.servicev1").ContinueWith(task =>
+                         {
+                             if (task.IsCompleted)
+                             {
+                                 //Console.Out.WriteLine("{0} Completed", count);
+                                 logger.LogInformation("Task Added to RabbitMQ " + taskThatShouldRun.Task.Name);
+                             }
+                             if (task.IsFaulted)
+                             {
+                                 logger.LogCritical("\n\n");
+                                 logger.LogCritical(task.Exception.Message);
+                                 logger.LogCritical("\n\n");
+                             }
+                         });
+
+
+
+                // bus.SendAsync("healthcheck.queue", taskThatShouldRun.Item).ContinueWith(task =>
+                //          {
+                //              if (task.IsCompleted)
+                //              {
+                //                 //Console.Out.WriteLine("{0} Completed", count);
+                //                 logger.LogInformation("Task Added to RabbitMQ " + taskThatShouldRun.Task.Name);
+                //              }
+                //              if (task.IsFaulted)
+                //              {
+                //                  logger.LogCritical("\n\n");
+                //                  logger.LogCritical(task.Exception.Message);
+                //                  logger.LogCritical("\n\n");
+                //              }
+                //          });
+
+                // easyntqBus.PublishAsync()
             }
             return Task.FromResult("");
         }
