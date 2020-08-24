@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Turquoise.Common.Scheduler;
@@ -16,12 +17,14 @@ namespace Turquoise.Scheduler.Services
         private HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckRepo;
         private ILogger<AppHealthCheckScheduler> logger;
         private IBus bus;
+        private IConfiguration configuration;
 
-        public AppHealthCheckScheduler(HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckRepo, ILogger<AppHealthCheckScheduler> logger, EasyNetQ.IBus bus)
+        public AppHealthCheckScheduler(HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckRepo, ILogger<AppHealthCheckScheduler> logger, EasyNetQ.IBus bus, IConfiguration configuration)
         {
             this.healthCheckRepo = healthCheckRepo;
             this.logger = logger;
             this.bus = bus;
+            this.configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -45,7 +48,7 @@ namespace Turquoise.Scheduler.Services
                 logger.LogCritical("Task Adding to RabbitMQ " + taskThatShouldRun.Task.Name);
 
 
-                bus.PublishAsync(taskThatShouldRun.Item, "healthcheck.servicev1").ContinueWith(task =>
+                bus.PublishAsync(taskThatShouldRun.Item, configuration["queue:servicev1"]).ContinueWith(task =>
                          {
                              if (task.IsCompleted)
                              {
