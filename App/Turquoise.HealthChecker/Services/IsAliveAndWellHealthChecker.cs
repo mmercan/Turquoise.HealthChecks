@@ -28,9 +28,9 @@ namespace Turquoise.HealthChecker.Services
         }
 
 
-        public async Task<List<string>> DownloadAsync(ServiceV1 service)
+        public async Task<List<IsAliveAndWellResult>> DownloadAsync(ServiceV1 service)
         {
-            var results = new List<string>();
+            var results = new List<IsAliveAndWellResult>();
 
             if (checkAuthentication(service))
             {
@@ -60,18 +60,18 @@ namespace Turquoise.HealthChecker.Services
             return results;
         }
 
-        public async Task<string> DownloadAsync(Uri url)
+        public async Task<IsAliveAndWellResult> DownloadAsync(Uri url)
         {
             var getitem = await client.GetAsync(url);
 
             if (!getitem.IsSuccessStatusCode)
             {
                 logger.LogCritical(getitem.StatusCode.ToString() + " ");
-                throw new HttpRequestException("Failed");
+                // throw new HttpRequestException("Failed");
             }
-
+            var status = getitem.StatusCode.ToString();
             var content = await getitem.Content.ReadAsStringAsync();
-            return content;
+            return new IsAliveAndWellResult { Result = content, Status = status };
 
         }
 
@@ -113,5 +113,10 @@ namespace Turquoise.HealthChecker.Services
             return service.Annotations.Any(p => p.Key == "healthcheck/clientid");
         }
 
+    }
+    public class IsAliveAndWellResult
+    {
+        public string Result { get; set; }
+        public string Status { get; set; }
     }
 }

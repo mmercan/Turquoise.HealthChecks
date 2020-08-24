@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -14,10 +15,12 @@ namespace Turquoise.Models.Mongo
             this.Id = ObjectId.GenerateNewId();
         }
 
-
+        public DateTime CreationTime { get; set; }
         public string ServiceUid { get; set; }
         public string ServiceName { get; set; }
         public string ServiceNamespace { get; set; }
+
+        public string Status { get; set; }
         public BsonDocument Result { get; set; }
     }
 }

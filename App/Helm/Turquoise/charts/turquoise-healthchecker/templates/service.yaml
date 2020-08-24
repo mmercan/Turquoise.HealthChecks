@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "turquoise-healthchecker.fullname" . }}
+  labels:
+    {{- include "turquoise-healthchecker.labels" . | nindent 4 }}
+  annotations:
+    {{- include "turquoise-healthchecker.service.annotations" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "turquoise-healthchecker.selectorLabels" . | nindent 4 }}

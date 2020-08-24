@@ -58,6 +58,9 @@ namespace Turquoise.HealthChecker
             else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
             services.AddSingleton<K8sService>();
 
+            services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
+            services.AddSingleton<AZAuthService>();
+
             services.AddSingleton<EasyNetQ.IBus>((ctx) =>
             {
                 return RabbitHutch.CreateBus(Configuration["RabbitMQConnection"]);
@@ -88,14 +91,7 @@ namespace Turquoise.HealthChecker
                 options.DefaultRequestHeaders.Add("OData-Version", "4.0");
                 options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            })
-            .ConfigurePrimaryHttpMessageHandler((ch) =>
-            {
-                var handler = new HttpClientHandler();
-                //handler.
-                return handler;
-            })
-
+            });
             // .ConfigurePrimaryHttpMessageHandler((ch) =>
             // {
             //     var handler = new HttpClientHandler();
@@ -105,8 +101,8 @@ namespace Turquoise.HealthChecker
             // })
             //.AddHttpMessageHandler()
             //  .AddHttpMessageHandler<OAuthTokenHandler>()
-            .AddPolicyHandler(HttpClientHelpers.GetRetryPolicy())
-            .AddPolicyHandler(HttpClientHelpers.GetCircuitBreakerPolicy());
+            // .AddPolicyHandler(HttpClientHelpers.GetRetryPolicy())
+            // .AddPolicyHandler(HttpClientHelpers.GetCircuitBreakerPolicy());
 
 
 

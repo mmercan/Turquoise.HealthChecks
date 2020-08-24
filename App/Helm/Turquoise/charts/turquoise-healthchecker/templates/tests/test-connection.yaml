@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "turquoise-healthchecker.fullname" . }}-test-connection"
+  labels:
+    {{- include "turquoise-healthchecker.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "turquoise-healthchecker.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
