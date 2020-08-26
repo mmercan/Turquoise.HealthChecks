@@ -36,7 +36,6 @@ namespace Turquoise.HealthChecker.Services
             {
                 logger.LogInformation("Auth is Started");
                 string bearerToken = await azAuthService.Authenticate();
-
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
             }
 
@@ -86,11 +85,10 @@ namespace Turquoise.HealthChecker.Services
             List<string> endpoints = new List<string>();
             if (configuration["RunOnCluster"] == "true")
             {
-                foreach (var item in endpoints)
+                foreach (var item in service.InternalEndpoints)
                 {
                     endpoints.Add("http://" + item);
                 }
-                //endpoints.AddRange(service.InternalEndpoints);
             }
             else
             {

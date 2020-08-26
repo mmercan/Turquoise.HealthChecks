@@ -37,6 +37,7 @@ namespace Turquoise.K8s.Services
             {
                 throw new ArgumentNullException("setting.Secret");
             }
+            logger.LogCritical(setting.Secret.Length + " Chars on Secret");
 
             var url = "https://login.microsoftonline.com/" + setting.TenantId + "/oauth2/token?resource=" + setting.ClientId;
 
@@ -60,7 +61,7 @@ namespace Turquoise.K8s.Services
 
             var expires_on = s.ExpiresOn as string;
             var date = convertDatetime(expires_on);
-            logger.LogCritical(date.ToString());
+            logger.LogCritical("Token expires on : " + date.ToString());
             return token;
         }
 
