@@ -12,6 +12,7 @@ using MongoDB.Bson.Serialization;
 using Turquoise.Common.Mongo;
 using Turquoise.HealthChecker.Services;
 using Turquoise.Models.Mongo;
+using Turquoise.Models.RabbitMQ;
 
 namespace Turquoise.HealthChecker
 {
@@ -105,7 +106,10 @@ namespace Turquoise.HealthChecker
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
-                await bus.PublishAsync(result, configuration["queue:nofity"]).ContinueWith(task =>
+
+                var notify = new NotifyServiceHealthCheckError { ID = result.Id.ToString(), ServiceName = service.Name, StatusCode = res.FirstOrDefault().Status };
+
+                await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
                         {
                             if (task.IsCompleted)
                             {
