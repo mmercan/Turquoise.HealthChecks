@@ -51,9 +51,13 @@ namespace Turquoise.K8s.Services
 
             var res = await client.SendAsync(req);
 
+            logger.LogCritical("Az Auth Status Code " + res.StatusCode.ToString());
 
-            var result = res.Content.ReadAsStringAsync().Result;
-            var s = Newtonsoft.Json.JsonConvert.DeserializeObject<AZToken>(result);
+            var result = res.Content.ReadAsStringAsync();
+            result.Wait();
+            logger.LogCritical("Az Result is");
+            logger.LogCritical(result.Result);
+            var s = Newtonsoft.Json.JsonConvert.DeserializeObject<AZToken>(result.Result);
             var token = s.AccessToken as string;
 
             logger.LogCritical(token);
