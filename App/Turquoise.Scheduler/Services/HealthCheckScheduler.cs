@@ -53,7 +53,7 @@ namespace Turquoise.Scheduler.Services
                              if (task.IsCompleted)
                              {
 
-                                 logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:servicev1"] + taskThatShouldRun.Task.Name);
+                                 logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:servicev1"] + " " + taskThatShouldRun.Task.Name);
                              }
                              if (task.IsFaulted)
                              {

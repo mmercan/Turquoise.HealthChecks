@@ -84,7 +84,11 @@ namespace Turquoise.HealthChecker.Services
             List<string> endpoints = new List<string>();
             if (configuration["RunOnCluster"] == "true")
             {
-                endpoints.AddRange(service.InternalEndpoints);
+                foreach (var item in endpoints)
+                {
+                    endpoints.Add("http://" + service.InternalEndpoints);
+                }
+                //endpoints.AddRange(service.InternalEndpoints);
             }
             else
             {
