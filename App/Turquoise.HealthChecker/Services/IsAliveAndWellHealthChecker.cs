@@ -42,13 +42,15 @@ namespace Turquoise.HealthChecker.Services
 
             var endpoints = extractUrlFromService(service);
             string isAliveAndWellSuffix = getIsAliveAndWellSuffix(service);
-            isAliveAndWellSuffix = "/Health/IsAliveAndWell";
+            // isAliveAndWellSuffix = "/Health/IsAliveAndWell";
             if (endpoints.Count > 0)
             {
                 foreach (string url in endpoints)
                 {
                     Uri baseUrl = new Uri(url);
                     Uri isaliveandwellUri = new Uri(baseUrl, isAliveAndWellSuffix);
+
+                    logger.LogInformation("Cheking " + isaliveandwellUri.ToString());
                     var result = await DownloadAsync(isaliveandwellUri);
                     results.Add(result);
                 }
@@ -86,7 +88,7 @@ namespace Turquoise.HealthChecker.Services
             {
                 foreach (var item in endpoints)
                 {
-                    endpoints.Add("http://" + service.InternalEndpoints);
+                    endpoints.Add("http://" + item);
                 }
                 //endpoints.AddRange(service.InternalEndpoints);
             }
