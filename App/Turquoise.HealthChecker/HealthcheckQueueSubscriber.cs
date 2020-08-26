@@ -103,22 +103,24 @@ namespace Turquoise.HealthChecker
             logger.LogCritical("ServiceV1 Sync message " + service.Name);
 
 
-
-            await bus.PublishAsync(result, configuration["queue:nofity"]).ContinueWith(task =>
-                    {
-                        if (task.IsCompleted)
+            if (!res.FirstOrDefault().IsSuccessStatusCode)
+            {
+                await bus.PublishAsync(result, configuration["queue:nofity"]).ContinueWith(task =>
                         {
+                            if (task.IsCompleted)
+                            {
 
-                            logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
-                        }
-                        if (task.IsFaulted)
-                        {
-                            logger.LogCritical("\n\n");
-                            logger.LogCritical(task.Exception.Message);
-                            logger.LogCritical("\n\n");
-                        }
-                    });
+                                logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
+                            }
+                            if (task.IsFaulted)
+                            {
+                                logger.LogCritical("\n\n");
+                                logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
+                                logger.LogCritical("\n\n");
+                            }
+                        });
 
+            }
         }
     }
 }
