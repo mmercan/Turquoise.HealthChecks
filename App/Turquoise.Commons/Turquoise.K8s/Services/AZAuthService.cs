@@ -46,6 +46,7 @@ namespace Turquoise.K8s.Services
             bool isExist = memoryCache.TryGetValue("token", out token);
             if (!isExist)
             {
+                logger.LogCritical("token is expired or missing download, getting token ...");
                 token = await downloadToken(setting);
             }
             return token;
@@ -78,8 +79,8 @@ namespace Turquoise.K8s.Services
 
             var result = res.Content.ReadAsStringAsync();
             result.Wait();
-            logger.LogCritical("Az Result is");
-            logger.LogCritical(result.Result);
+            // logger.LogCritical("Az Result is");
+            // logger.LogCritical(result.Result);
             var s = Newtonsoft.Json.JsonConvert.DeserializeObject<AZToken>(result.Result);
             var token = s.AccessToken as string;
 
@@ -90,6 +91,7 @@ namespace Turquoise.K8s.Services
             var date = convertDatetime(expires_on);
 
             logger.LogCritical("Token expires on : " + date.ToString());
+            cacheToken(date, token);
             return token;
         }
 
