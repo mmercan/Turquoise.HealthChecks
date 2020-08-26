@@ -95,11 +95,30 @@ namespace Turquoise.HealthChecker
                 Status = res.FirstOrDefault().Status,
                 StringResult = stringResult
             };
-
             await serviceRepo.AddAsync(result);
+
+
             logger.LogInformation("HTTP Status : " + res.FirstOrDefault().Status);
-            //state.IngressUrl
+
             logger.LogCritical("ServiceV1 Sync message " + service.Name);
+
+
+
+            await bus.PublishAsync(result, configuration["queue:nofity"]).ContinueWith(task =>
+                    {
+                        if (task.IsCompleted)
+                        {
+
+                            logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
+                        }
+                        if (task.IsFaulted)
+                        {
+                            logger.LogCritical("\n\n");
+                            logger.LogCritical(task.Exception.Message);
+                            logger.LogCritical("\n\n");
+                        }
+                    });
+
         }
     }
 }

@@ -64,15 +64,16 @@ namespace Turquoise.HealthChecker.Services
         public async Task<IsAliveAndWellResult> DownloadAsync(Uri url)
         {
             var getitem = await client.GetAsync(url);
-
+            var isSuccessStatusCode = true;
             if (!getitem.IsSuccessStatusCode)
             {
                 logger.LogCritical(getitem.StatusCode.ToString() + " ");
+                isSuccessStatusCode = false;
                 // throw new HttpRequestException("Failed");
             }
             var status = getitem.StatusCode.ToString();
             var content = await getitem.Content.ReadAsStringAsync();
-            return new IsAliveAndWellResult { Result = content, Status = status };
+            return new IsAliveAndWellResult { Result = content, Status = status, IsSuccessStatusCode = isSuccessStatusCode };
 
         }
 
@@ -122,5 +123,6 @@ namespace Turquoise.HealthChecker.Services
     {
         public string Result { get; set; }
         public string Status { get; set; }
+        public bool IsSuccessStatusCode { get; set; }
     }
 }
