@@ -74,8 +74,17 @@ namespace Turquoise.HealthChecker
 
             var res = await healthChecker.DownloadAsync(service);
 
-
-            var document = BsonSerializer.Deserialize<BsonDocument>(res.FirstOrDefault().Result);
+            string stringResult = "";
+            BsonDocument document = new BsonDocument();
+            try
+            {
+                document = BsonSerializer.Deserialize<BsonDocument>(res.FirstOrDefault().Result);
+            }
+            catch (Exception ex)
+            {
+                stringResult = res.FirstOrDefault().Result;
+                logger.LogCritical("Result BsonDocument Deserializion Failed : " + ex);
+            }
             var result = new AliveAndWellResult
             {
                 Result = document,
@@ -83,8 +92,8 @@ namespace Turquoise.HealthChecker
                 ServiceNamespace = service.Namespace,
                 ServiceUid = service.Uid,
                 CreationTime = DateTime.UtcNow,
-                Status = res.FirstOrDefault().Status
-
+                Status = res.FirstOrDefault().Status,
+                StringResult = stringResult
             };
 
             await serviceRepo.AddAsync(result);

@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -17,16 +18,18 @@ namespace Turquoise.K8s.Services
         private ILogger<AZAuthService> logger;
         private IOptions<AZAuthServiceSettings> settingsOptions;
 
+        private readonly IMemoryCache memoryCache;
+
         // private static readonly HttpClient client = new HttpClient();
-        public AZAuthService(ILogger<AZAuthService> logger, IOptions<AZAuthServiceSettings> settingsOptions)
+        public AZAuthService(ILogger<AZAuthService> logger, IOptions<AZAuthServiceSettings> settingsOptions, IMemoryCache memoryCache)
         {
             this.logger = logger;
             this.settingsOptions = settingsOptions;
+            this.memoryCache = memoryCache;
         }
 
         public async Task<string> Authenticate()
         {
-
             if (settingsOptions.Value == null)
             {
                 throw new ArgumentNullException("settingsOptions");
@@ -39,6 +42,26 @@ namespace Turquoise.K8s.Services
             }
             logger.LogCritical(setting.Secret.Length + " Chars on Secret");
 
+            string token;
+            bool isExist = memoryCache.TryGetValue("token", out token);
+            if (!isExist)
+            {
+                token = await downloadToken(setting);
+            }
+            return token;
+        }
+
+
+        private void cacheToken(DateTime expireson, string token)
+        {
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(15));
+
+            memoryCache.Set("token", token, cacheEntryOptions);
+        }
+
+        private async Task<string> downloadToken(AZAuthServiceSettings setting)
+        {
             var url = "https://login.microsoftonline.com/" + setting.TenantId + "/oauth2/token?resource=" + setting.ClientId;
 
             var nvc = new List<KeyValuePair<string, string>>();
@@ -65,6 +88,7 @@ namespace Turquoise.K8s.Services
 
             var expires_on = s.ExpiresOn as string;
             var date = convertDatetime(expires_on);
+
             logger.LogCritical("Token expires on : " + date.ToString());
             return token;
         }

@@ -22,5 +22,7 @@ namespace Turquoise.Models.Mongo
 
         public string Status { get; set; }
         public BsonDocument Result { get; set; }
+
+        public string StringResult { get; set; }
     }
 }
