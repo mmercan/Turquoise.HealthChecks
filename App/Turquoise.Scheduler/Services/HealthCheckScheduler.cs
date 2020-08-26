@@ -52,8 +52,8 @@ namespace Turquoise.Scheduler.Services
                          {
                              if (task.IsCompleted)
                              {
-                                 //Console.Out.WriteLine("{0} Completed", count);
-                                 logger.LogInformation("Task Added to RabbitMQ " + taskThatShouldRun.Task.Name);
+
+                                 logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:servicev1"] + taskThatShouldRun.Task.Name);
                              }
                              if (task.IsFaulted)
                              {

@@ -104,7 +104,7 @@ namespace Turquoise.HealthChecker
             // .AddPolicyHandler(HttpClientHelpers.GetRetryPolicy())
             // .AddPolicyHandler(HttpClientHelpers.GetCircuitBreakerPolicy());
 
-
+            services.AddMemoryCache();
 
             services.AddHostedService<HealthcheckQueueSubscriber>();
 

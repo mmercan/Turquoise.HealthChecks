@@ -32,6 +32,12 @@ namespace Turquoise.K8s.Services
                 throw new ArgumentNullException("settingsOptions");
             }
             var setting = settingsOptions.Value;
+
+            if (string.IsNullOrEmpty(setting.Secret))
+            {
+                throw new ArgumentNullException("setting.Secret");
+            }
+
             var url = "https://login.microsoftonline.com/" + setting.TenantId + "/oauth2/token?resource=" + setting.ClientId;
 
             var nvc = new List<KeyValuePair<string, string>>();

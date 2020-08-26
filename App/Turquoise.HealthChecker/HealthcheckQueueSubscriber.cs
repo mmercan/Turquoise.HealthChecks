@@ -60,7 +60,7 @@ namespace Turquoise.HealthChecker
             {
                 logger.LogCritical("Connected to bus");
                 bus.SubscribeAsync<Turquoise.Models.Mongo.ServiceV1>(configuration["queue:servicev1"], Handler); //, x => x.WithTopic("product.*"));
-                Console.WriteLine("Listening on topic healthcheck.servicev1");
+                Console.WriteLine("Listening on topic " + configuration["queue:servicev1"]);
                 _ResetEvent.Wait();
             }
             catch (Exception ex)
