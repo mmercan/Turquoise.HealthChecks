@@ -3,9 +3,10 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
+branch: unknown
 image:
-  repository: nginx
+  repository: mmercan/turquoise-api-healthmonitoring
+  tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -13,9 +14,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
@@ -37,7 +36,7 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -48,6 +47,9 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+istio:
+  enabled: false
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -66,3 +68,40 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+environment: dev
+hostdomain: myrcan.com
+env:
+  values:
+    - name: DOTNET_RUNNING_IN_CONTAINER
+      value: "true"
+
+secrets:
+  Mongodb__ConnectionString: "mongodb://root:hbMnztmZ4w9JJTGZ@turquoise-db-mongodb-dev:27017/admin?readPreference=primary"
+  RabbitMQConnection: "host=turquoise-rabbitmq-dev-tcp;username=rabbitmq;password=rabbitmq; timeout=10"
+  SMTP__Server: "sentinel-util-mailhog"
+  SMTP__Port: "1025"
+  SMTP__UserName: "mail@mail.com"
+  SMTP__Password: "password123"
+  ELASTICSEARCH_URL: "http://sentinel-db-elasticsearch.sentinel-helm:9200"
+
+
+configmap:
+    ASPNETCORE_ENVIRONMENT: "Production"
+    Mongodb__DatabaseName: "turquoise-dev"
+    DOTNET_RUNNING_IN_CONTAINER: "true"
+
+azurepipelines:
+  run: "run"
+  pipeline: "pipeline"
+  pipelineId: "pipelineId"
+  jobName: "jobName"
+  runuri: "runuri"
+  project: "project"
+  org: "org"
+
+env:
+  values:
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
+    - name: DOTNET_RUNNING_IN_CONTAINER
+      value: "true"

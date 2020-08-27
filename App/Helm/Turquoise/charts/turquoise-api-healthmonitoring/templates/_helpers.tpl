@@ -47,8 +47,28 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "Turquoise.Api.HealthMonitoring.selectorLabels" -}}
+app: {{ include "Turquoise.Api.HealthMonitoring.name" . }}
+version: {{ .Chart.AppVersion  | quote }}
 app.kubernetes.io/name: {{ include "Turquoise.Api.HealthMonitoring.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+branch:  {{ .Values.branch }}
+{{- end -}}
+
+{{- define "Turquoise.Api.HealthMonitoring.annotations" -}}
+azure-pipelines/run: {{ .Values.azurepipelines.run }}
+azure-pipelines/pipeline: {{ .Values.azurepipelines.pipeline }}
+azure-pipelines/pipelineId: {{ .Values.azurepipelines.pipelineId }}
+azure-pipelines/jobName: {{ .Values.azurepipelines.jobName }}
+azure-pipelines/runuri: {{ .Values.azurepipelines.runuri | replace " " "%20" | replace "(" "%28" | replace ")" "%29" | replace "*" "%2A"}}
+azure-pipelines/project: {{ .Values.azurepipelines.project | replace " " "%20" | replace "(" "%28" | replace ")" "%29" | replace "*" "%2A"}}
+azure-pipelines/org: {{ .Values.azurepipelines.org }}
+{{- end -}}
+
+{{- define "Turquoise.Api.HealthMonitoring.service.annotations" -}}
+healthcheck/isalive: "/Health/IsAlive"
+healthcheck/isaliveandwell: "/Health/IsAliveAndWell"
+healthcheck/crontab: "*/15 * * * *"
+healthcheck/clientid: "67d009b1-97fe-4963-84ff-3590b06df0da"
 {{- end -}}
 
 {{/*

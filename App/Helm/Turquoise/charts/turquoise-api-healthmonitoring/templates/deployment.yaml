@@ -1,11 +1,17 @@
-apiVersion: apps/v1
+{{- $name := include "Turquoise.Api.HealthMonitoring.fullname" . -}}
+{{- $cfgname := printf "%s-%s" $name "config" -}}
+{{- $secretname := printf "%s-%s" $name "secret" -}}
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ include "Turquoise.Api.HealthMonitoring.fullname" . }}
+  name:  {{ include "Turquoise.Api.HealthMonitoring.fullname" . }}
   labels:
     {{- include "Turquoise.Api.HealthMonitoring.labels" . | nindent 4 }}
+  annotations:
+    {{- include "Turquoise.Api.HealthMonitoring.annotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 1
   selector:
     matchLabels:
       {{- include "Turquoise.Api.HealthMonitoring.selectorLabels" . | nindent 6 }}
@@ -13,19 +19,13 @@ spec:
     metadata:
       labels:
         {{- include "Turquoise.Api.HealthMonitoring.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- include "Turquoise.Api.HealthMonitoring.annotations" . | nindent 8 }}
     spec:
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
       serviceAccountName: {{ include "Turquoise.Api.HealthMonitoring.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -38,18 +38,17 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+              port: http 
+          envFrom:
+            - configMapRef:
+                name: {{ $cfgname }}
+            - secretRef:
+                name: {{ $secretname }}
+          env:
+          {{- if .Values.env.values -}}
+          {{- range .Values.env.values }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end -}}
+          {{- end -}}
+

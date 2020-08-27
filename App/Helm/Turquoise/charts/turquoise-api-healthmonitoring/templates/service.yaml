@@ -4,6 +4,8 @@ metadata:
   name: {{ include "Turquoise.Api.HealthMonitoring.fullname" . }}
   labels:
     {{- include "Turquoise.Api.HealthMonitoring.labels" . | nindent 4 }}
+  annotations:
+    {{- include "Turquoise.Api.HealthMonitoring.service.annotations" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
