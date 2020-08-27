@@ -71,7 +71,7 @@ namespace Turquoise.Comms.BackgroundServices
             logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
             string body = notify.ServiceName + " " + notify.StatusCode;
             mailService.Send("test@test.com", "failure on HealthCheck", body);
-            logger.LogCritical("Email sent" + notify.ServiceName + " Code :" + notify.StatusCode);
+            logger.LogCritical("Email sent " + notify.ServiceName + " Code :" + notify.StatusCode);
         }
     }
 }
