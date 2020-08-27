@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Api.HealthMonitor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Api.HealthMonitoring.Tests", "..\Turquoise.Api.HealthMonitoring.Tests\Turquoise.Api.HealthMonitoring.Tests.csproj", "{F5ABCC90-6EF8-4AB3-B180-E740AAF94245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Common", "..\Turquoise.Common\Turquoise.Common.csproj", "{0762A94A-16A6-4438-828B-FA0FF1D954F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Common", "..\Turquoise.Commons\Turquoise.Common\Turquoise.Common.csproj", "{0762A94A-16A6-4438-828B-FA0FF1D954F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Models", "..\Turquoise.Models\Turquoise.Models.csproj", "{FD2D9E1B-3BC9-4B14-AA70-FF946AA9B4D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Models", "..\Turquoise.Commons\Turquoise.Models\Turquoise.Models.csproj", "{FD2D9E1B-3BC9-4B14-AA70-FF946AA9B4D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
