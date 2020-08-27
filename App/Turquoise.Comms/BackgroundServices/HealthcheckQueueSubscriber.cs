@@ -68,9 +68,10 @@ namespace Turquoise.Comms.BackgroundServices
 
         private void Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
         {
-            logger.LogCritical("TODO: first step  send email " + notify.ServiceName + " Code :" + notify.StatusCode);
+            logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
             string body = notify.ServiceName + " " + notify.StatusCode;
             mailService.Send("test@test.com", "failure on HealthCheck", body);
+            logger.LogCritical("Email sent" + notify.ServiceName + " Code :" + notify.StatusCode);
         }
     }
 }
