@@ -52,6 +52,7 @@ tolerations: []
 affinity: {}
 environment: dev
 hostdomain: myrcan.com
+istiohostdomain: api.sentinel.mercan.io
 env:
   values:
 
