@@ -69,7 +69,7 @@ tolerations: []
 
 affinity: {}
 environment: dev
-hostdomain: myrcan.com
+hostdomain: turk.mercan.io
 env:
   values:
     - name: DOTNET_RUNNING_IN_CONTAINER
