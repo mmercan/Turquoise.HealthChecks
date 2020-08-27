@@ -56,7 +56,7 @@ namespace Turquoise.Comms.BackgroundServices
             try
             {
                 logger.LogCritical("Connected to bus");
-                bus.SubscribeAsync<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
+                bus.Subscribe<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
                 Console.WriteLine("Listening on topic " + configuration["queue:nofity"]);
                 _ResetEvent.Wait();
             }
@@ -66,12 +66,11 @@ namespace Turquoise.Comms.BackgroundServices
             }
         }
 
-        private Task Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
+        private void Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
         {
             logger.LogCritical("TODO: first step  send email " + notify.ServiceName + " Code :" + notify.StatusCode);
             string body = notify.ServiceName + " " + notify.StatusCode;
             mailService.Send("test@test.com", "failure on HealthCheck", body);
-            return Task.CompletedTask;
         }
     }
 }
