@@ -110,7 +110,7 @@ namespace Turquoise.Comms
                 ResponseWriter = WriteResponses.WriteListResponse,
             });
 
-            app.Map("/Health/IsAlive", (ap) =>
+            app.Map("", (ap) =>
             {
                 ap.Run(async context =>
                 {
