@@ -42,26 +42,30 @@ namespace Turquoise.K8s.Services
             }
             logger.LogCritical(setting.Secret.Length + " Chars on Secret");
 
-            string token;
+            CacheToken token;
             bool isExist = memoryCache.TryGetValue("token", out token);
-            if (!isExist)
+            if (isExist)
+            {
+                logger.LogCritical("expitres : " + token.ExpiresOn.ToUniversalTime().ToString() + " Now : " + DateTime.UtcNow);
+            }
+
+            if (!isExist || DateTime.UtcNow.AddMinutes(1) > token.ExpiresOn.ToUniversalTime())
             {
                 logger.LogCritical("token is expired or missing download, getting token ...");
                 token = await downloadToken(setting);
             }
-            return token;
+            else
+            {
+                var totalmin = (DateTime.UtcNow - token.ExpiresOn).TotalMinutes;
+                logger.LogCritical("used cached token expires in " + totalmin.ToString() + " Minutes  at UTC " + token.ExpiresOn.ToString());
+            }
+            return token.Token;
         }
 
 
-        private void cacheToken(DateTime expireson, string token)
-        {
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(15));
 
-            memoryCache.Set("token", token, cacheEntryOptions);
-        }
 
-        private async Task<string> downloadToken(AZAuthServiceSettings setting)
+        private async Task<CacheToken> downloadToken(AZAuthServiceSettings setting)
         {
             var url = "https://login.microsoftonline.com/" + setting.TenantId + "/oauth2/token?resource=" + setting.ClientId;
 
@@ -90,9 +94,21 @@ namespace Turquoise.K8s.Services
             var expires_on = s.ExpiresOn as string;
             var date = convertDatetime(expires_on);
 
-            logger.LogCritical("Token expires on : " + date.ToString());
-            cacheToken(date, token);
-            return token;
+            logger.LogCritical("Token expires on (UTC) " + date.ToString());
+            var ctoken = new CacheToken { ExpiresOn = date, Token = token };
+            cacheToken(ctoken);
+            return ctoken;
+        }
+
+        private void cacheToken(CacheToken token)
+        {
+            // var cacheEntryOptions = new MemoryCacheEntryOptions()
+            //     .SetSlidingExpiration(TimeSpan.FromMinutes(15));
+            // memoryCache.Set("expireson", expireson);
+
+            var cachetoken = new CacheToken { Token = token.Token, ExpiresOn = token.ExpiresOn };
+            memoryCache.Set("token", cachetoken);
+
         }
 
         private DateTime convertDatetime(string unixdate)
@@ -101,7 +117,7 @@ namespace Turquoise.K8s.Services
             if (Int32.TryParse(unixdate, result: out unixdatenumber))
             {
                 System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                dtDateTime = dtDateTime.AddSeconds(unixdatenumber).ToLocalTime();
+                dtDateTime = dtDateTime.AddSeconds(unixdatenumber).ToUniversalTime();
                 return dtDateTime;
             }
             else
@@ -111,6 +127,11 @@ namespace Turquoise.K8s.Services
         }
     }
 
+    public class CacheToken
+    {
+        public string Token { get; set; }
+        public DateTime ExpiresOn { get; set; }
+    }
     public class AZAuthServiceSettings
     {
         public string ClientId { get; set; }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using EasyNetQ;
@@ -14,22 +15,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Quartz;
-using Quartz.Impl;
-using Quartz.Spi;
 using Serilog;
 using Serilog.Events;
-using Turquoise.Common.Scheduler.QuartzScheduler;
+using Turquoise.Comms.BackgroundServices;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.Checks;
-using Turquoise.K8s;
-using Turquoise.K8s.Services;
-using Turquoise.HealthChecker.Services;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using Turquoise.Common;
 
-namespace Turquoise.HealthChecker
+namespace Turquoise.Comms
 {
     public class Startup
     {
@@ -52,14 +44,7 @@ namespace Turquoise.HealthChecker
             .AddPrivateMemorySizeCheckKB(300000)
             .AddWorkingSetCheckKB(3000000);
 
-            services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
-
-            // if (Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
-            // else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
-            // services.AddSingleton<K8sService>();
-
-            services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
-            services.AddSingleton<AZAuthService>();
+            // services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
 
             services.AddSingleton<EasyNetQ.IBus>((ctx) =>
             {
@@ -82,34 +67,18 @@ namespace Turquoise.HealthChecker
                 p => p.Id
                 );
 
-
-            services.AddHttpClient<IsAliveAndWellHealthChecker>("HealthCheckReportDownloader", options =>
-            {
-                // options.BaseAddress = new Uri(Configuration["CrmConnection:ServiceUrl"] + "api/data/v8.2/");
-                options.Timeout = new TimeSpan(0, 2, 0);
-                options.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
-                options.DefaultRequestHeaders.Add("OData-Version", "4.0");
-                options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            });
-            // .ConfigurePrimaryHttpMessageHandler((ch) =>
+            // services.AddHttpClient<IsAliveAndWellHealthChecker>("HealthCheckReportDownloader", options =>
             // {
-            //     var handler = new HttpClientHandler();
-            //     handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            //     handler.ClientCertificates.Add(HttpClientHelpers.GetCert());
-            //     return handler;
-            // })
-            //.AddHttpMessageHandler()
-            //  .AddHttpMessageHandler<OAuthTokenHandler>()
-            // .AddPolicyHandler(HttpClientHelpers.GetRetryPolicy())
-            // .AddPolicyHandler(HttpClientHelpers.GetCircuitBreakerPolicy());
+            //     // options.BaseAddress = new Uri(Configuration["CrmConnection:ServiceUrl"] + "api/data/v8.2/");
+            //     options.Timeout = new TimeSpan(0, 2, 0);
+            //     options.DefaultRequestHeaders.Add("OData-MaxVersion", "4.0");
+            //     options.DefaultRequestHeaders.Add("OData-Version", "4.0");
+            //     options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // });
 
             services.AddMemoryCache();
 
-            services.AddHostedService<HealthcheckQueueSubscriber>();
-
-
-
+            services.AddHostedService<NotifyServiceHealthCheckQueueSubscriber>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,7 +93,7 @@ namespace Turquoise.HealthChecker
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Enviroment", env.EnvironmentName)
-                .Enrich.WithProperty("ApplicationName", "Turquoise.Scheduler")
+                .Enrich.WithProperty("ApplicationName", "Turquoise.Comms")
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .WriteTo.Console()
                 .WriteTo.File("Logs/logs.txt");
@@ -134,13 +103,6 @@ namespace Turquoise.HealthChecker
             Log.Logger = logger.CreateLogger();
             app.UseExceptionLogger();
 
-
-
-            // app.UseRouting();
-            // app.UseAuthorization();
-            // app.UseEndpoints(endpoints =>
-            // {
-            // });
 
 
             app.UseHealthChecks("/Health/IsAliveAndWell", new HealthCheckOptions()
@@ -156,7 +118,6 @@ namespace Turquoise.HealthChecker
                     await context.Response.WriteAsync("{\"IsAlive\":true}");
                 });
             });
-
         }
     }
 }

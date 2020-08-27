@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -28,16 +29,12 @@ namespace Turquoise.HealthChecker.Services
         }
 
 
+
         public async Task<List<IsAliveAndWellResult>> DownloadAsync(ServiceV1 service)
         {
             var results = new List<IsAliveAndWellResult>();
 
-            if (checkAuthentication(service))
-            {
-                logger.LogInformation("Auth is Started");
-                string bearerToken = await azAuthService.Authenticate();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-            }
+            await authenticate(false, service);
 
             var endpoints = extractUrlFromService(service);
             string isAliveAndWellSuffix = getIsAliveAndWellSuffix(service);
@@ -71,10 +68,26 @@ namespace Turquoise.HealthChecker.Services
                 isSuccessStatusCode = false;
                 // throw new HttpRequestException("Failed");
             }
+            else if (getitem.StatusCode == HttpStatusCode.Unauthorized)
+            {
+
+            }
             var status = getitem.StatusCode.ToString();
             var content = await getitem.Content.ReadAsStringAsync();
             return new IsAliveAndWellResult { Result = content, Status = status, IsSuccessStatusCode = isSuccessStatusCode };
 
+        }
+
+
+        private async Task authenticate(bool force, ServiceV1 service)
+        {
+
+            if (checkAuthentication(service))
+            {
+                logger.LogInformation("Auth is Started");
+                string bearerToken = await azAuthService.Authenticate();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+            }
         }
 
         private string getIsAliveAndWellSuffix(ServiceV1 service)

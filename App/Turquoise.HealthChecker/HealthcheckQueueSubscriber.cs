@@ -18,7 +18,6 @@ namespace Turquoise.HealthChecker
 {
     public class HealthcheckQueueSubscriber : BackgroundService
     {
-
         IBus bus;
         private IsAliveAndWellHealthChecker healthChecker;
         private MangoBaseRepo<AliveAndWellResult> serviceRepo;
@@ -106,23 +105,21 @@ namespace Turquoise.HealthChecker
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
-
                 var notify = new NotifyServiceHealthCheckError { ID = result.Id.ToString(), ServiceName = service.Name, StatusCode = res.FirstOrDefault().Status };
-
                 await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
+                    {
+                        if (task.IsCompleted)
                         {
-                            if (task.IsCompleted)
-                            {
 
-                                logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
-                            }
-                            if (task.IsFaulted)
-                            {
-                                logger.LogCritical("\n\n");
-                                logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
-                                logger.LogCritical("\n\n");
-                            }
-                        });
+                            logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
+                        }
+                        if (task.IsFaulted)
+                        {
+                            logger.LogCritical("\n\n");
+                            logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
+                            logger.LogCritical("\n\n");
+                        }
+                    });
 
             }
         }

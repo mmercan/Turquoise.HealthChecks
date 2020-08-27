@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Common.Scheduler"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.HealthChecker", "Turquoise.HealthChecker\Turquoise.HealthChecker.csproj", "{6DFA2C12-4ABF-43F5-BA4D-ACA1F6BFE0FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.Comms", "Turquoise.Comms\Turquoise.Comms.csproj", "{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +146,18 @@ Global
 		{6DFA2C12-4ABF-43F5-BA4D-ACA1F6BFE0FA}.Release|x64.Build.0 = Release|Any CPU
 		{6DFA2C12-4ABF-43F5-BA4D-ACA1F6BFE0FA}.Release|x86.ActiveCfg = Release|Any CPU
 		{6DFA2C12-4ABF-43F5-BA4D-ACA1F6BFE0FA}.Release|x86.Build.0 = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|x64.Build.0 = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Debug|x86.Build.0 = Debug|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|x64.ActiveCfg = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|x64.Build.0 = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|x86.ActiveCfg = Release|Any CPU
+		{869C3118-C660-4DCD-9900-B9BC0AD4C2F7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AD5FACC3-BB77-40D0-983E-CD987BA25500} = {FCF04851-11BA-473B-A821-A0E235F341C3}
