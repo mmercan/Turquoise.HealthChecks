@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using Turquoise.Common.Mail;
 using Turquoise.Common.Mongo;
 using Turquoise.Models.Mongo;
 using Turquoise.Models.RabbitMQ;
@@ -19,6 +20,7 @@ namespace Turquoise.Comms.BackgroundServices
     {
         IBus bus;
         private IConfiguration configuration;
+        private MailService mailService;
         private ManualResetEventSlim _ResetEvent = new ManualResetEventSlim(false);
         private readonly ILogger<NotifyServiceHealthCheckQueueSubscriber> logger;
 
@@ -28,12 +30,14 @@ namespace Turquoise.Comms.BackgroundServices
         public NotifyServiceHealthCheckQueueSubscriber(
             ILogger<NotifyServiceHealthCheckQueueSubscriber> logger,
             IBus bus,
-            IConfiguration configuration
+            IConfiguration configuration,
+            MailService mailService
             )
         {
             this.logger = logger;
             this.bus = bus;
             this.configuration = configuration;
+            this.mailService = mailService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -65,7 +69,8 @@ namespace Turquoise.Comms.BackgroundServices
         private Task Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
         {
             logger.LogCritical("TODO: first step  send email " + notify.ServiceName + " Code :" + notify.StatusCode);
-
+            string body = notify.ServiceName + " " + notify.StatusCode;
+            mailService.Send("test@test.com", "failure on HealthCheck", body);
             return Task.CompletedTask;
         }
     }

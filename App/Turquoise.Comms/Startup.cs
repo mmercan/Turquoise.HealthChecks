@@ -75,6 +75,7 @@ namespace Turquoise.Comms
             //     options.DefaultRequestHeaders.Add("OData-Version", "4.0");
             //     options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             // });
+            services.AddMailService(Configuration.GetSection("SMTP"));
 
             services.AddMemoryCache();
 

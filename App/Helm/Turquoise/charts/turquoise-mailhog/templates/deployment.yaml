@@ -1,0 +1,44 @@
+{{- $name := include "Turquoise.Util.Mailhog.fullname" . -}}
+{{- $cfgname := printf "%s-%s" $name "config" -}}
+{{- $secretname := printf "%s-%s" $name "secret" -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  {{ include "Turquoise.Util.Mailhog.fullname" . }}
+  labels:
+    {{- include "Turquoise.Util.Mailhog.labels" . | nindent 4 }}
+  annotations:
+    {{- include "Turquoise.Util.Mailhog.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      {{- include "Turquoise.Util.Mailhog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "Turquoise.Util.Mailhog.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- include "Turquoise.Util.Mailhog.annotations" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8025
+              protocol: TCP
+            - name: smtp
+              containerPort: 1025
+              protocol: TCP
+          {{- if .Values.env.values -}}
+          env:
+          {{- range .Values.env.values }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end -}}
+          {{- end }}
+
+

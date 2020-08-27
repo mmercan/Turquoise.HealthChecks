@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+{{- $host := printf "%s.%s.%s" "mail" .Values.environment .Values.hostdomain -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name:  {{ include "Turquoise.Util.Mailhog.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "Turquoise.Util.Mailhog.name" . }}
+    helm.sh/chart: {{ include "Turquoise.Util.Mailhog.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - {{ $host }}
+    secretName: "{{ $host }}-secret"
+  rules:
+  - host: {{ $host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "Turquoise.Util.Mailhog.fullname" . }}
+          servicePort: 80
+{{- end }}
