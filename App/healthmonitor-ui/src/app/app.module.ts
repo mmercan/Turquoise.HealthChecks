@@ -19,7 +19,7 @@ import { fuseConfig } from 'app/fuse-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
-import { AuthenticationModule } from './authentication/authentication.module';
+import { AuthenticationModule } from './shared/authentication/authentication.module';
 import { SharedModule } from './shared/shared.module';
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
-import { AuthService } from 'app/authentication/auth.service';
+import { AuthService } from 'app/shared/authentication/auth.service';
 
 import { grpc } from '@improbable-eng/grpc-web';
 import { DeploymentReply, NamespaceListReply, NamespaceReply } from '../../proto/K8sHealthcheck_pb';

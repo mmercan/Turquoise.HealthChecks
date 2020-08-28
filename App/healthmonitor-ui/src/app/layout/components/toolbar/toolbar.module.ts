@@ -9,7 +9,7 @@ import { FuseSearchBarModule, FuseShortcutsModule } from '@fuse/components';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.component';
-import { AuthenticationModule } from 'app/authentication/authentication.module';
+import { AuthenticationModule } from 'app/shared/authentication/authentication.module';
 
 @NgModule({
     declarations: [
