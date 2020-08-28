@@ -61,6 +61,6 @@ export const fuseConfig: FuseConfig = {
         bearerToken: ''
     },
     grpc: {
-        url: window.location.hostname === 'localhost' ? 'http://localhost:80' : 'https://auth.myrcan.com/',
+        url: window.location.hostname === 'localhost' ? 'http://localhost:80' : 'https://health-api.dev.turk.mercan.io',
     }
 };
