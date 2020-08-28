@@ -77,6 +77,7 @@ export class AuthService implements OnDestroy {
   logout() {
     if (this.config.authenticationType === 'Adal') {
       this.adalService.logOut();
+
     } else {
       this.localAuthService.logout();
     }

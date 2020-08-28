@@ -208,6 +208,7 @@ namespace Turquoise.Api.HealthMonitoring
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
             services.AddGrpc();
 
+             services.AddMemoryCache();
             services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
             services.AddSingleton<AZAuthService>();
 

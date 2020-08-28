@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Turquoise.K8s.Services;
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    // [Authorize]
+    [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
