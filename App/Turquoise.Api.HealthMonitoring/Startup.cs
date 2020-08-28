@@ -215,7 +215,9 @@ namespace Turquoise.Api.HealthMonitoring
             services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
             services.AddSingleton<AZAuthService>();
 
-            services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>();
+            if (Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
+            else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
+
             services.AddSingleton<K8sService>();
             services.AddSingleton<K8sMetricsService>();
 
