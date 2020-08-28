@@ -98,7 +98,10 @@ namespace Turquoise.Api.HealthMonitoring
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials()
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
-                        .WithOrigins("http://localhost:4201", "https://app-health-ui.dev.myrcan.com", "https://health.dev.ui.sentinel.mercan.io");
+                        .WithOrigins("http://localhost:4201",
+                        "https://app-health-ui.dev.myrcan.com",
+                        "https://health.dev.ui.sentinel.mercan.io",
+                        "https://turquoise-ui-healthmonitoring.dev.turk.mercan.io");
                     });
 
                     o.AddPolicy("GRPCPolicy", builder =>
@@ -208,7 +211,7 @@ namespace Turquoise.Api.HealthMonitoring
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
             services.AddGrpc();
 
-             services.AddMemoryCache();
+            services.AddMemoryCache();
             services.Configure<AZAuthServiceSettings>(Configuration.GetSection("AzureAd"));
             services.AddSingleton<AZAuthService>();
 
