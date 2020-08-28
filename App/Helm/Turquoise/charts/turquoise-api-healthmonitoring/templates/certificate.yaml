@@ -3,11 +3,11 @@
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
-  name: healthmonitoring-api-cert
+  name: "{{ $host }}-cert"
 spec:
-  secretName: healthmonitoring-api-secret
+  secretName: "{{ $host }}-secret"
   dnsNames:
-  -  {{ $host }}
+  - {{ $host }}
   acme:
     config:
     - http01:
