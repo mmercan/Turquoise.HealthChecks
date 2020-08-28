@@ -143,7 +143,7 @@ namespace Turquoise.Scheduler
                 ResponseWriter = WriteResponses.WriteListResponse,
             });
 
-            app.Map("/Health/IsAlive", (ap) =>
+            app.Map("", (ap) =>
             {
                 ap.Run(async context =>
                 {
