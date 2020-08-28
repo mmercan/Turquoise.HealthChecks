@@ -30,12 +30,17 @@ namespace Turquoise.Models.Mongo
         public List<string> InternalEndpoints { get; set; }
         public List<string> ExternalEndpoints { get; set; }
 
-
-
         public string IngressUrl { get; set; }
 
         public string VirtualServiceUrl { get; set; }
 
+        public DateTime LatestSyncDateUTC { get; set; }
+        public bool Deleted { get; set; }
+
+        public string HealthIsalive { get; set; }
+        public DateTime HealthIsaliveSyncDateUTC { get; set; }
+        public string HealthIsaliveAndWell { get; set; }
+        public DateTime HealthIsaliveAndWellSyncDateUTC { get; set; }
         //TODO: Add Endpoints
         // Endpoints
 

@@ -21,7 +21,7 @@ namespace Turquoise.Models.Mongo
         public DateTime CreationTime { get; set; }
         public string Status { get; set; }
 
-
+        public DateTime LatestSyncDateUTC { get; set; }
 
         public int DeploymentCount { get; set; }
         public int ServiceCount { get; set; }

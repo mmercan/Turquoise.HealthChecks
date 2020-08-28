@@ -8,6 +8,7 @@ using Turquoise.Common.Mongo;
 using k8s.Models;
 using AutoMapper;
 using System.Collections.Generic;
+using System;
 
 namespace Turquoise.Scheduler.JobSchedules
 {
@@ -29,13 +30,15 @@ namespace Turquoise.Scheduler.JobSchedules
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var ns = await k8sService.GetNamespaces();
 
+            var ns = await k8sService.GetNamespaces();
+            var syncTime = DateTime.UtcNow;
             var dtoitems = mapper.Map<IList<Turquoise.Models.Mongo.NamespaceV1>>(ns);
             _logger.LogCritical(dtoitems.ToJson());
 
             foreach (var item in dtoitems)
             {
+                item.LatestSyncDateUTC = syncTime;
                 await namespaceRepo.Upsert(item, p => p.Name == item.Name);
             }
 

@@ -8,6 +8,7 @@ using Turquoise.Common.Mongo;
 using k8s.Models;
 using AutoMapper;
 using System.Collections.Generic;
+using System;
 
 namespace Turquoise.Scheduler.JobSchedules
 {
@@ -30,12 +31,25 @@ namespace Turquoise.Scheduler.JobSchedules
         public async Task Execute(IJobExecutionContext context)
         {
             var services = await k8sService.GetAllServicesWithIngressAsync();
-
+            var syncTime = DateTime.UtcNow;
             //  _logger.LogCritical(services.ToJson());
 
             foreach (var item in services)
             {
+                item.LatestSyncDateUTC = syncTime;
                 await serviceRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
+            }
+
+
+
+            var mongodbservices = await serviceRepo.GetAllAsync();
+            foreach (var item in mongodbservices)
+            {
+                if (!services.Any(p => p.Uid == item.Uid))
+                {
+                    item.Deleted = true;
+                    await serviceRepo.UpdateAsync(item);
+                }
             }
 
             var textarr = services.Select(n => n.Name);

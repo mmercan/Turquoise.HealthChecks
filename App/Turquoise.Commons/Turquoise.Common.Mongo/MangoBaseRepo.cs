@@ -125,6 +125,15 @@ namespace Turquoise.Common.Mongo
             return Items.Find(FilterDefinition<T>.Empty).ToList();
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            var name = typeof(T).ToString();
+            logger.LogCritical(name + " collectionName " + collectionName);
+            var res = await Items.FindAsync(FilterDefinition<T>.Empty);
+            return res.ToList();
+
+        }
+
         public IEnumerable<T> Find(FilterDefinition<T> filter)
         {
             var name = typeof(T).ToString();

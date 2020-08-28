@@ -20,8 +20,9 @@ namespace Turquoise.HealthChecker
     {
         IBus bus;
         private IsAliveAndWellHealthChecker healthChecker;
-        private MangoBaseRepo<AliveAndWellResult> serviceRepo;
+        private MangoBaseRepo<AliveAndWellResult> healthresultRepo;
         private IConfiguration configuration;
+        private MangoBaseRepo<ServiceV1> serviceRepo;
         private ManualResetEventSlim _ResetEvent = new ManualResetEventSlim(false);
         private readonly ILogger<HealthcheckQueueSubscriber> logger;
 
@@ -32,15 +33,17 @@ namespace Turquoise.HealthChecker
             ILogger<HealthcheckQueueSubscriber> logger,
             IBus bus,
             IsAliveAndWellHealthChecker healthChecker,
-            MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> serviceRepo,
+            MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> healthresultRepo,
+             MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo,
             IConfiguration configuration
             )
         {
             this.logger = logger;
             this.bus = bus;
             this.healthChecker = healthChecker;
-            this.serviceRepo = serviceRepo;
+            this.healthresultRepo = healthresultRepo;
             this.configuration = configuration;
+            this.serviceRepo = serviceRepo;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -75,10 +78,28 @@ namespace Turquoise.HealthChecker
             var res = await healthChecker.DownloadAsync(service);
 
             string stringResult = "";
+            var itemstatus = "";
             BsonDocument document = new BsonDocument();
             try
             {
                 document = BsonSerializer.Deserialize<BsonDocument>(res.FirstOrDefault().Result);
+
+
+                if (document["status"].IsString)
+                {
+                    itemstatus = document["status"].ToString();
+                    logger.LogCritical("Status Found : " + itemstatus);
+
+                }
+                else
+                {
+                    logger.LogCritical("Status NOT Found ");
+                }
+                // BsonValue value;
+                // if (document.TryGetValue("Status", out value))
+                // {
+                //     itemstatus = value.ToString();
+                // }
             }
             catch (Exception ex)
             {
@@ -95,8 +116,32 @@ namespace Turquoise.HealthChecker
                 Status = res.FirstOrDefault().Status,
                 StringResult = stringResult
             };
-            await serviceRepo.AddAsync(result);
+            await healthresultRepo.AddAsync(result);
 
+
+            var mongoservice = serviceRepo.Find(p => p.Uid == service.Uid);
+            if (mongoservice.FirstOrDefault() != null)
+            {
+                if (itemstatus == "")
+                {
+                    if (res.FirstOrDefault().IsSuccessStatusCode)
+                    {
+                        itemstatus = "OK";
+                    }
+                    else if (res.FirstOrDefault().Status == "NotFound")
+                    {
+                        itemstatus = "NotFound";
+                    }
+                    else
+                    {
+                        itemstatus = "ServiceUnavailable";
+                    }
+                }
+
+                mongoservice.FirstOrDefault().HealthIsaliveAndWell = itemstatus;
+                mongoservice.FirstOrDefault().HealthIsaliveAndWellSyncDateUTC = DateTime.UtcNow;
+                await serviceRepo.UpdateAsync(mongoservice.FirstOrDefault());
+            }
 
             logger.LogInformation("HTTP Status : " + res.FirstOrDefault().Status);
 
