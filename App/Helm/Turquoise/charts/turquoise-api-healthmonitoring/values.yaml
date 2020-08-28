@@ -89,6 +89,7 @@ configmap:
     ASPNETCORE_ENVIRONMENT: "Production"
     Mongodb__DatabaseName: "turquoise-dev"
     DOTNET_RUNNING_IN_CONTAINER: "true"
+    RunOnCluster: true
 
 azurepipelines:
   run: "run"
@@ -103,5 +104,3 @@ env:
   values:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
-    - name: DOTNET_RUNNING_IN_CONTAINER
-      value: "true"
