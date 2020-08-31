@@ -100,6 +100,14 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             return list.Items;
         }
 
+
+        [HttpGet("k8services")]
+        public async Task<object> GetK8Services()
+        {
+            var items = await _k8sService.GetAllServicesAsync();
+            return items;
+        }
+
         [HttpGet("services")]
         public async Task<object> GetServices()
         {
@@ -265,6 +273,14 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         {
             _logger.LogCritical("GetDeployment called the service");
             return await _k8sService.GetVirtualServicesAsync("sentinel-dev");
+        }
+
+
+        [HttpGet("allevents")]
+        public async Task<object> GetAllevents()
+        {
+            _logger.LogCritical("GetDeployment called the service");
+            return await _k8sService.GetEventsAsync("sentinel-dev");
         }
     }
 }

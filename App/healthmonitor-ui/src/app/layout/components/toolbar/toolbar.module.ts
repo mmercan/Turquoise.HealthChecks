@@ -10,6 +10,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ToolbarComponent } from 'app/layout/components/toolbar/toolbar.component';
 import { AuthenticationModule } from 'app/shared/authentication/authentication.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -22,10 +23,11 @@ import { AuthenticationModule } from 'app/shared/authentication/authentication.m
         MatMenuModule,
         MatToolbarModule,
 
-        AuthenticationModule,
         FuseSharedModule,
         FuseSearchBarModule,
-        FuseShortcutsModule
+        FuseShortcutsModule,
+        AuthenticationModule,
+        SharedModule
     ],
     exports: [
         ToolbarComponent

@@ -1,4 +1,5 @@
-export interface FuseConfig {
+export interface FuseConfig
+{
     colorTheme: string;
     customScrollbars: boolean;
     layout: {
@@ -27,21 +28,6 @@ export interface FuseConfig {
         sidepanel: {
             hidden: boolean,
             position: 'left' | 'right'
-        };
+        }
     };
-    authenticationType: 'Adal' | 'local';
-    adalConfig: {
-        tenant: string,
-        clientId: string,
-        redirectUri: string,
-        postLogoutRedirectUri: string,
-        cacheLocation: string
-    };
-    login: {
-        loginUrl: string,
-        bearerToken: string
-    };
-    grpc: {
-        url: string,
-    }
 }

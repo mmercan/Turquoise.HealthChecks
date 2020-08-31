@@ -9,16 +9,14 @@ import { AdalInterceptor } from './adal/adal.interceptor';
 import { AdalService } from './adal/adal.service';
 import { IfAuthenticatedDirective } from './if-authenticated/if-authenticated.directive';
 
-//import { FuseSharedModule } from '@fuse/fuse-shared.module';
 import { UserAvatarComponent } from './user-avatar/user-avatar.component';
-import { FuseSharedModule } from '@fuse/shared.module';
+
 
 @NgModule({
   declarations: [IfAuthenticatedDirective, UserAvatarComponent],
   exports: [IfAuthenticatedDirective, UserAvatarComponent],
   imports: [
     CommonModule,
-    FuseSharedModule
   ],
   providers: [AuthService,
     JwtInterceptor,
@@ -29,7 +27,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 })
 export class AuthenticationModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<any> {
     return {
       ngModule: AuthenticationModule,
       providers: [AdalService, AuthService, AdalInterceptor, AdalGuard],

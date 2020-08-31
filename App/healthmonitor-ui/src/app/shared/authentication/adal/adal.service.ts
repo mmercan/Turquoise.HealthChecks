@@ -2,8 +2,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, bindCallback, BehaviorSubject } from 'rxjs';
 import * as lib from 'adal-angular';
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseConfig } from '@fuse/types/fuse-config';
+
+
+import { environment } from 'environments/environment';
+
 @Injectable()
 export class AdalService {
     public getUser: Observable<adal.User>;
@@ -19,16 +21,11 @@ export class AdalService {
         profile: {}
     };
 
-    constructor(private fuseConfigService: FuseConfigService) {
+    constructor() {
 
         this._getUser = new BehaviorSubject(this.user);
         this.getUser = this._getUser.asObservable();
-
-        this.fuseConfigService.config
-            .subscribe((config) => {
-                this.init(config.adalConfig);
-                // this.config = config;
-            });
+        this.init(environment.adalConfig);
     }
 
     public init(configOptions: adal.Config) {

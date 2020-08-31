@@ -27,13 +27,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     userStatusOptions: any[];
 
     // Private
-    private unsubscribeAll: Subject<any>;
-    userName: string;
+    private _unsubscribeAll: Subject<any>;
+
 
     constructor(
-        private fuseConfigService: FuseConfigService,
-        private fuseSidebarService: FuseSidebarService,
-        private translateService: TranslateService,
+        private _fuseConfigService: FuseConfigService,
+        private _fuseSidebarService: FuseSidebarService,
+        private _translateService: TranslateService,
         private authService: AuthService
     ) {
         // Set the defaults
@@ -81,7 +81,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         this.navigation = navigation;
 
         // Set the private defaults
-        this.unsubscribeAll = new Subject();
+        this._unsubscribeAll = new Subject();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -93,8 +93,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Subscribe to the config changes
-        this.fuseConfigService.config
-            .pipe(takeUntil(this.unsubscribeAll))
+        this._fuseConfigService.config
+            .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((settings) => {
                 this.horizontalNavbar = settings.layout.navbar.position === 'top';
                 this.rightNavbar = settings.layout.navbar.position === 'right';
@@ -102,13 +102,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             });
 
         // Set the selected language from default languages
-        this.selectedLanguage = _.find(this.languages, { id: this.translateService.currentLang });
-        this.authService.getUserInfo().subscribe((result) => {
-            if (result.userName) {
-                this.userName = result.userName;
-            }
-            console.log('authService.checkLogin updated');
-        });
+        this.selectedLanguage = _.find(this.languages, { id: this._translateService.currentLang });
     }
 
     /**
@@ -116,17 +110,16 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
-        this.unsubscribeAll.next();
-        this.unsubscribeAll.complete();
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-
     toggleSidebarOpen(key): void {
-        this.fuseSidebarService.getSidebar(key).toggleOpen();
+        this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
 
 
@@ -141,14 +134,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         this.selectedLanguage = lang;
 
         // Use the selected language for translations
-        this.translateService.use(lang.id);
+        this._translateService.use(lang.id);
     }
 
-    login() {
+
+    login(): void {
         this.authService.login();
     }
 
-    logout() {
+    logout(): void {
         this.authService.logout();
     }
 }

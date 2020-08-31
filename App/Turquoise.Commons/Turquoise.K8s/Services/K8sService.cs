@@ -169,7 +169,7 @@ namespace Turquoise.K8s.Services
                 }
 
                 var labels = new List<string>();
-                foreach (var key in service.Spec.Selector)
+                foreach (var key in service.Spec.Selector.OrderBy(p => p.Key))
                 {
                     labels.Add(key.Key + "=" + key.Value);
                 }
@@ -235,6 +235,12 @@ namespace Turquoise.K8s.Services
                 Items.AddRange(item.Result);
             }
             return Items;
+        }
+        public async Task<IList<V1Event>> GetEventsAsync(string namespaceParam)
+        {
+            var res = await client.ListNamespacedEventAsync(namespaceParam, fieldSelector: "type!=Normal");
+            logger.LogCritical("Event founds, Total: " + res.Items.Count);
+            return res.Items;
         }
 
     }

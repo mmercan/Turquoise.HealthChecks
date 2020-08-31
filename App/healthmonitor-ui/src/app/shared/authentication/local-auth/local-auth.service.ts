@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseConfig } from '@fuse/types/fuse-config';
 import { Subscription, Observable, Subject } from 'rxjs';
+
+import { environment } from '../../../../environments/environment';
 // import { Notification, NotificationService } from '../../notification/notification.service';
 
 @Injectable({
@@ -16,24 +16,20 @@ export class LocalAuthService implements OnDestroy {
   private status = new Subject<boolean>();
   public user: Observable<any>;
   loginSubscription: Subscription;
-  config: FuseConfig;
+
 
   constructor(
-    private fuseConfigService: FuseConfigService,
     private http: HttpClient
     // private notificationService: NotificationService
   ) {
-    this.fuseConfigService.config
-      .subscribe((config) => {
-        this.config = config;
-        if (this.checkLogin()) {
-          this.isLoggedinValue = true;
-          this.status.next(this.isLoggedinValue);
-        } else {
-          this.isLoggedinValue = false;
-          this.status.next(this.isLoggedinValue);
-        }
-      });
+
+    if (this.checkLogin()) {
+      this.isLoggedinValue = true;
+      this.status.next(this.isLoggedinValue);
+    } else {
+      this.isLoggedinValue = false;
+      this.status.next(this.isLoggedinValue);
+    }
     // setTimeout(() => { this.checkLogin(); }, 1000);
 
     this.internal = setInterval(() => {
@@ -55,14 +51,14 @@ export class LocalAuthService implements OnDestroy {
 
   login(userName: string, password: string): Observable<any> {
     const obs = Observable.create(observer => {
-      if (!this.config.login.loginUrl) {
+      if (!environment.login.loginUrl) {
         this.handleError(null, observer, 'Login url is empty');
       }
 
       const headers: HttpHeaders = new HttpHeaders;
       headers.set('Content-type', 'application/json');
 
-      this.loginSubscription = this.http.post(this.config.login.loginUrl,
+      this.loginSubscription = this.http.post(environment.login.loginUrl,
         { Username: userName, Password: password }, { headers: headers, observe: 'response' })
         .subscribe(response => {
           const result = response;

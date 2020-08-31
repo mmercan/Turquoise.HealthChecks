@@ -29,6 +29,8 @@ using Serilog.Events;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Turquoise.Api.HealthMonitoring.CustomFeatureFilter;
 using Turquoise.Api.HealthMonitoring.GRPCServices;
+using Turquoise.Api.HealthMonitoring.Helpers;
+using Turquoise.Api.HealthMonitoring.Hubs;
 using Turquoise.Common;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.CheckCaller;
@@ -98,7 +100,7 @@ namespace Turquoise.Api.HealthMonitoring
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials()
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
-                        .WithOrigins("http://localhost:4201",
+                        .WithOrigins("http://localhost:4201", "http://localhost:4200",
                         "https://app-health-ui.dev.myrcan.com",
                         "https://health.dev.ui.sentinel.mercan.io",
                         "https://turquoise-ui-healthmonitoring.dev.turk.mercan.io");
@@ -218,6 +220,8 @@ namespace Turquoise.Api.HealthMonitoring
             if (Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
             else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
 
+            services.AddSignalR();
+
             services.AddSingleton<K8sService>();
             services.AddSingleton<K8sMetricsService>();
 
@@ -266,6 +270,7 @@ namespace Turquoise.Api.HealthMonitoring
                 options.RoutePrefix = string.Empty;
             });
 
+            app.UseSignalRJwtAuthentication();
 
             app.UseRouting();
             app.UseCors("MyPolicy");
@@ -282,6 +287,8 @@ namespace Turquoise.Api.HealthMonitoring
                 endpoints.MapGrpcService<NamespaceGRPCService>();
                 endpoints.MapGrpcService<MetricGRPCService>();
                 // endpoints.MapGrpcService<MeterReaderService>();
+
+                endpoints.MapHub<K8sHub>("/K8sHub");
             });
 
 

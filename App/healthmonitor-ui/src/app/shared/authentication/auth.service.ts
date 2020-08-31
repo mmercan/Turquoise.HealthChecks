@@ -2,8 +2,9 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription, Observable, Subject } from 'rxjs';
 // import { Notification, NotificationService } from '../notification/notification.service';
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseConfig } from '@fuse/types/fuse-config';
+
+import { environment } from 'environments/environment';
+
 import { AdalService } from './adal/adal.service';
 import { LocalAuthService } from './local-auth/local-auth.service';
 
@@ -21,23 +22,19 @@ export class AuthService implements OnDestroy {
   httpDeleteSubscription: Subscription;
   httpPutSubscription: Subscription;
   httpPostSubscription: Subscription;
-  config: FuseConfig;
+
   // public user: Observable<any>;
 
 
 
   constructor(
-    private fuseConfigService: FuseConfigService,
+
     private http: HttpClient,
     // private notificationService: NotificationService,
     private adalService: AdalService,
     private localAuthService: LocalAuthService
   ) {
-    fuseConfigService.config.subscribe(
-      (config) => {
-        this.config = config;
-      }
-    );
+
   }
 
   private handleError(error: any, observer: any, errorMessage: string) {
@@ -50,7 +47,7 @@ export class AuthService implements OnDestroy {
   }
 
   checkLogin(): Observable<boolean> {
-    if (this.config.authenticationType === 'Adal') {
+    if (environment.authenticationType === 'Adal') {
       const obs = Observable.create(observer => {
         console.log('checkLogin : ' + this.adalService.userInfo.authenticated);
         observer.next(this.adalService.userInfo.authenticated);
@@ -63,7 +60,7 @@ export class AuthService implements OnDestroy {
 
 
   login(userName?: string, password?: string): Observable<any> {
-    if (this.config.authenticationType === 'Adal') {
+    if (environment.authenticationType === 'Adal') {
       this.adalService.login();
       const obs = Observable.create(observer => {
       });
@@ -75,7 +72,7 @@ export class AuthService implements OnDestroy {
 
 
   logout() {
-    if (this.config.authenticationType === 'Adal') {
+    if (environment.authenticationType === 'Adal') {
       this.adalService.logOut();
 
     } else {
@@ -84,7 +81,7 @@ export class AuthService implements OnDestroy {
   }
 
   authenticated(): boolean {
-    if (this.config.authenticationType === 'Adal') {
+    if (environment.authenticationType === 'Adal') {
       return this.adalService.userInfo.authenticated;
     } else {
       return this.localAuthService.checkLogin();
@@ -93,7 +90,7 @@ export class AuthService implements OnDestroy {
 
   getUserInfo(): Observable<adal.User> {
     const obs = Observable.create(observer => {
-      if (this.config.authenticationType === 'Adal') {
+      if (environment.authenticationType === 'Adal') {
         this.getUserSubscription = this.adalService.getUser.subscribe(
           data => { observer.next(data); },
           error => { observer.error(error); });
@@ -107,15 +104,15 @@ export class AuthService implements OnDestroy {
   }
 
   getLocalToken(): string {
-    if (this.config.authenticationType === 'Adal') {
-      return this.adalService.getCachedToken(this.config.adalConfig.clientId);
+    if (environment.authenticationType === 'Adal') {
+      return this.adalService.getCachedToken(environment.adalConfig.clientId);
     } else {
       return this.localAuthService.getLocalToken();
     }
   }
 
   handleWindowCallback() {
-    if (this.config.authenticationType === 'Adal') {
+    if (environment.authenticationType === 'Adal') {
       return this.adalService.handleWindowCallback();
     } else {
       console.log('authentication is local no need for handleWindowCallback');

@@ -41,6 +41,7 @@ namespace Turquoise.Models.Mongo
         public DateTime HealthIsaliveSyncDateUTC { get; set; }
         public string HealthIsaliveAndWell { get; set; }
         public DateTime HealthIsaliveAndWellSyncDateUTC { get; set; }
+
         //TODO: Add Endpoints
         // Endpoints
 

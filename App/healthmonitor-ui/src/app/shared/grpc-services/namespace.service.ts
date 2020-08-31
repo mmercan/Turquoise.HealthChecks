@@ -8,10 +8,9 @@ import { NamespaceServiceClient } from '../../proto/K8sHealthcheck_pb_service';
 import { NamespaceService } from '../../proto/K8sHealthcheck_pb_service';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 import { Observable, Subject } from 'rxjs';
-import { FuseConfigService } from '@fuse/services/config.service';
 import { takeUntil } from 'rxjs/operators';
-import { FuseConfig } from '@fuse/types';
 
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,23 +18,17 @@ import { FuseConfig } from '@fuse/types';
 export class NamespaceAppService {
   token: string;
   private unsubscribeAll: Subject<any>;
-  fuseConfig: FuseConfig;
 
   constructor(
     private authService: AuthService,
-    private fuseNavigation: FuseNavigationService,
-    private fuseConfigService: FuseConfigService) {
+    private fuseNavigation: FuseNavigationService
+  ) {
 
     authService.getUserInfo().subscribe(
       (user) => { this.token = authService.getLocalToken(); }
     );
 
-    this.fuseConfigService.config
-      .subscribe(
-        (config) => {
-          this.fuseConfig = config;
-        }
-      );
+
   }
 
   getNameSpaces(): Observable<NamespaceReply[]> {
@@ -51,7 +44,7 @@ export class NamespaceAppService {
 
         metadata: authmetadata,
         request: getNamespaceRequest,
-        host: this.fuseConfig.grpc.url,
+        host: environment.grpc.url,
 
         onEnd: res => {
           const message = res.message as NamespaceListReply;
@@ -70,7 +63,7 @@ export class NamespaceAppService {
     return obs;
   }
 
-  fillNamespaceNavigations() {
+  fillNamespaceNavigations(): void {
     this.fuseNavigation.getNavigationItem('namespace');
     const allokColor = '#09d261';
     const warningColor = '#FF6F00';
@@ -118,11 +111,7 @@ export class NamespaceAppService {
             item.badge = badge;
           }
           this.fuseNavigation.addNavigationItem(item, 'namespaces');
-
         });
-
-
-
       },
       (error) => {
 
@@ -131,7 +120,7 @@ export class NamespaceAppService {
 
   }
 
-  isit24hoursold(nsdate: Date) {
+  isit24hoursold(nsdate: Date): boolean {
     const OneDay = new Date().getTime() - (1 * 24 * 60 * 60 * 1000);
     const saveddate = nsdate.getTime();
     if (saveddate > OneDay) {
@@ -140,7 +129,7 @@ export class NamespaceAppService {
 
   }
 
-  isit7daysold(nsdate: Date) {
+  isit7daysold(nsdate: Date): boolean {
 
     const SevenDays = new Date().getTime() - (30 * 24 * 60 * 60 * 1000);
     const saveddate = nsdate.getTime();
