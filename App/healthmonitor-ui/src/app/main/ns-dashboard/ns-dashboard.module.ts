@@ -27,9 +27,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
+import { NsDashboardService } from './ns-dashboard.service';
+import { OverviewComponent } from './overview/overview.component';
+import { DeploymentListComponent } from './deployment-list/deployment-list.component';
+import { ServiceListComponent } from './service-list/service-list.component';
 
 @NgModule({
-  declarations: [NsDashboardComponent],
+  declarations: [NsDashboardComponent, OverviewComponent, DeploymentListComponent, ServiceListComponent],
   imports: [
     CommonModule,
     NsDashboardRoutingModule,
@@ -51,6 +55,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatMenuModule,
     MatSelectModule,
     NgxChartsModule
-  ]
+  ],
+  providers: [NsDashboardService]
 })
 export class NsDashboardModule { }

@@ -1,0 +1,192 @@
+export class K8sEventsFakeDb {
+    public static data = [
+        {
+            'action': null,
+            'apiVersion': null,
+            'count': 265,
+            'eventTime': null,
+            'firstTimestamp': '2020-08-31T23:30:31Z',
+            'involvedObject': {
+                'apiVersion': 'v1',
+                'fieldPath': 'spec.containers{billing-api}',
+                'kind': 'Pod',
+                'name': 'sentinel-dev-billing-api-7468d4d879-l2qpx',
+                'namespaceProperty': 'sentinel-dev',
+                'resourceVersion': '28023568',
+                'uid': '40901ca9-0b38-4621-94a9-e09d63281d4d'
+            },
+            'kind': null,
+            'lastTimestamp': '2020-09-01T11:40:01Z',
+            'message': 'Liveness probe failed: Get http://10.244.16.11:15020/app-health/billing-api/livez: net/http: request canceled (Client.Timeout exceeded while awaiting headers)',
+            'metadata': {
+                'annotations': null,
+                'clusterName': null,
+                'creationTimestamp': '2020-08-31T23:30:31Z',
+                'deletionGracePeriodSeconds': null,
+                'deletionTimestamp': null,
+                'finalizers': null,
+                'generateName': null,
+                'generation': null,
+                'labels': null,
+                'managedFields': null,
+                'name': 'sentinel-dev-billing-api-7468d4d879-l2qpx.16307e3480b87d39',
+                'namespaceProperty': 'sentinel-dev',
+                'ownerReferences': null,
+                'resourceVersion': '28168494',
+                'selfLink': '/api/v1/namespaces/sentinel-dev/events/sentinel-dev-billing-api-7468d4d879-l2qpx.16307e3480b87d39',
+                'uid': '5917f5d9-7b2c-4dca-b911-a41ef2f2bc64'
+            },
+            'reason': 'Unhealthy',
+            'related': null,
+            'reportingComponent': '',
+            'reportingInstance': '',
+            'series': null,
+            'source': {
+                'component': 'kubelet',
+                'host': 'aks-agentpool-54824633-vmss000057'
+            },
+            'type': 'Warning'
+        },
+        {
+            'action': null,
+            'apiVersion': null,
+            'count': 251,
+            'eventTime': null,
+            'firstTimestamp': '2020-08-31T23:30:35Z',
+            'involvedObject': {
+                'apiVersion': 'v1',
+                'fieldPath': 'spec.containers{billing-api}',
+                'kind': 'Pod',
+                'name': 'sentinel-dev-billing-api-7468d4d879-l2qpx',
+                'namespaceProperty': 'sentinel-dev',
+                'resourceVersion': '28023568',
+                'uid': '40901ca9-0b38-4621-94a9-e09d63281d4d'
+            },
+            'kind': null,
+            'lastTimestamp': '2020-09-01T11:24:35Z',
+            'message': 'Readiness probe failed: Get http://10.244.16.11:15020/app-health/billing-api/readyz: net/http: request canceled (Client.Timeout exceeded while awaiting headers)',
+            'metadata': {
+                'annotations': null,
+                'clusterName': null,
+                'creationTimestamp': '2020-08-31T23:30:35Z',
+                'deletionGracePeriodSeconds': null,
+                'deletionTimestamp': null,
+                'finalizers': null,
+                'generateName': null,
+                'generation': null,
+                'labels': null,
+                'managedFields': null,
+                'name': 'sentinel-dev-billing-api-7468d4d879-l2qpx.16307e35763e740c',
+                'namespaceProperty': 'sentinel-dev',
+                'ownerReferences': null,
+                'resourceVersion': '28165499',
+                'selfLink': '/api/v1/namespaces/sentinel-dev/events/sentinel-dev-billing-api-7468d4d879-l2qpx.16307e35763e740c',
+                'uid': '67fe72b1-6ee3-43e6-8283-da2c1e71b214'
+            },
+            'reason': 'Unhealthy',
+            'related': null,
+            'reportingComponent': '',
+            'reportingInstance': '',
+            'series': null,
+            'source': {
+                'component': 'kubelet',
+                'host': 'aks-agentpool-54824633-vmss000057'
+            },
+            'type': 'Warning'
+        },
+        {
+            'action': null,
+            'apiVersion': null,
+            'count': 8,
+            'eventTime': null,
+            'firstTimestamp': '2020-08-31T23:20:05Z',
+            'involvedObject': {
+                'apiVersion': 'v1',
+                'fieldPath': 'spec.containers{healthmonitoring-api}',
+                'kind': 'Pod',
+                'name': 'sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc',
+                'namespaceProperty': 'sentinel-dev',
+                'resourceVersion': '28023577',
+                'uid': '4e006739-02fd-4698-a8d7-636f6c4f7103'
+            },
+            'kind': null,
+            'lastTimestamp': '2020-09-01T11:00:35Z',
+            'message': 'Liveness probe failed: Get http://10.244.16.12:15020/app-health/healthmonitoring-api/livez: net/http: request canceled (Client.Timeout exceeded while awaiting headers)',
+            'metadata': {
+                'annotations': null,
+                'clusterName': null,
+                'creationTimestamp': '2020-09-01T10:00:35Z',
+                'deletionGracePeriodSeconds': null,
+                'deletionTimestamp': null,
+                'finalizers': null,
+                'generateName': null,
+                'generation': null,
+                'labels': null,
+                'managedFields': null,
+                'name': 'sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc.16307da2a3c127f6',
+                'namespaceProperty': 'sentinel-dev',
+                'ownerReferences': null,
+                'resourceVersion': '28160834',
+                'selfLink': '/api/v1/namespaces/sentinel-dev/events/sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc.16307da2a3c127f6',
+                'uid': 'b5d7aebb-4e82-4fe1-9727-9e4d51b0a06c'
+            },
+            'reason': 'Unhealthy',
+            'related': null,
+            'reportingComponent': '',
+            'reportingInstance': '',
+            'series': null,
+            'source': {
+                'component': 'kubelet',
+                'host': 'aks-agentpool-54824633-vmss000057'
+            },
+            'type': 'Warning'
+        },
+        {
+            'action': null,
+            'apiVersion': null,
+            'count': 8,
+            'eventTime': null,
+            'firstTimestamp': '2020-09-01T04:15:42Z',
+            'involvedObject': {
+                'apiVersion': 'v1',
+                'fieldPath': 'spec.containers{healthmonitoring-api}',
+                'kind': 'Pod',
+                'name': 'sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc',
+                'namespaceProperty': 'sentinel-dev',
+                'resourceVersion': '28023577',
+                'uid': '4e006739-02fd-4698-a8d7-636f6c4f7103'
+            },
+            'kind': null,
+            'lastTimestamp': '2020-09-01T11:30:32Z',
+            'message': 'Readiness probe failed: Get http://10.244.16.12:15020/app-health/healthmonitoring-api/readyz: net/http: request canceled (Client.Timeout exceeded while awaiting headers)',
+            'metadata': {
+                'annotations': null,
+                'clusterName': null,
+                'creationTimestamp': '2020-09-01T11:30:32Z',
+                'deletionGracePeriodSeconds': null,
+                'deletionTimestamp': null,
+                'finalizers': null,
+                'generateName': null,
+                'generation': null,
+                'labels': null,
+                'managedFields': null,
+                'name': 'sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc.16308dc4648bc9e3',
+                'namespaceProperty': 'sentinel-dev',
+                'ownerReferences': null,
+                'resourceVersion': '28166655',
+                'selfLink': '/api/v1/namespaces/sentinel-dev/events/sentinel-dev-health-api-healthmonitoring-api-6d9fb66b7c-tjnlc.16308dc4648bc9e3',
+                'uid': '3a9795b9-6e79-42ce-99e1-7bac506cc236'
+            },
+            'reason': 'Unhealthy',
+            'related': null,
+            'reportingComponent': '',
+            'reportingInstance': '',
+            'series': null,
+            'source': {
+                'component': 'kubelet',
+                'host': 'aks-agentpool-54824633-vmss000057'
+            },
+            'type': 'Warning'
+        }
+    ]
+}

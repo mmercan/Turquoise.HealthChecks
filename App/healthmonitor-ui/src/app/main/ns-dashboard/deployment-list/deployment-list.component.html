@@ -1,0 +1,96 @@
+                    <!-- WIDGET GROUP -->
+                    <div class="widget-group" fxLayout="row wrap" fxFlex="100">
+
+                        <!-- WIDGET 11 -->
+                        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
+                                     fxFlex="100">
+
+                            <!-- Front -->
+                            <div class="fuse-widget-front">
+
+                                <div class="p-24 mb-8 border-bottom" fxLayout="row"
+                                     fxLayoutAlign="space-between center">
+                                    <div class="h2">{{widgets.widget11.title}}</div>
+                                    <div class="text-boxed accent m-0">
+                                        {{widgets.widget11.table.rows.length}}
+                                        members
+                                    </div>
+                                </div>
+
+                                <mat-table #table [dataSource]="widget11.dataSource">
+
+                                    <!-- Avatar Column -->
+                                    <ng-container matColumnDef="avatar">
+                                        <mat-header-cell fxFlex="96px" *matHeaderCellDef></mat-header-cell>
+                                        <mat-cell fxFlex="96px" *matCellDef="let contact">
+                                            <img class="avatar" *ngIf="contact.avatar" [alt]="contact.name"
+                                                 [src]="contact.avatar"/>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="name">
+                                        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                                        <mat-cell *matCellDef="let contact">
+                                            <p class="text-truncate font-weight-600">{{contact.name}}
+                                                {{contact.lastName}}</p>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- Position Column -->
+                                    <ng-container matColumnDef="position">
+                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Position
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-sm>
+                                            <p class="position text-truncate">
+                                                {{contact.position}}
+                                            </p>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- Office Column -->
+                                    <ng-container matColumnDef="office">
+                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Office
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-md>
+                                            <p class="office text-truncate">
+                                                {{contact.office}}
+                                            </p>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- Email Column -->
+                                    <ng-container matColumnDef="email">
+                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Email
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-sm>
+                                            <p class="email text-truncate">
+                                                {{contact.email}}
+                                            </p>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- Phone Column -->
+                                    <ng-container matColumnDef="phone">
+                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Phone
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-md>
+                                            <p class="phone text-truncate">
+                                                {{contact.phone}}
+                                            </p>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row
+                                        *matHeaderRowDef="widgets.widget11.table.columns"></mat-header-row>
+                                    <mat-row *matRowDef="let contact; columns: widgets.widget11.table.columns;">
+                                    </mat-row>
+                                </mat-table>
+                            </div>
+                            <!-- / Front -->
+
+                        </fuse-widget>
+                        <!-- / WIDGET 11 -->
+
+                    </div>
+                    <!-- / WIDGET GROUP -->
