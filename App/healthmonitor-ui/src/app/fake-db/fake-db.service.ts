@@ -20,7 +20,7 @@ import { IconsFakeDb } from 'app/fake-db/icons';
 import { ChatPanelFakeDb } from 'app/fake-db/chat-panel';
 import { QuickPanelFakeDb } from 'app/fake-db/quick-panel';
 
-import { K8sEventsFakeDb } from 'app/fake-db/k8sevents';
+import { K8sFakeDb } from 'app/fake-db/k8s-data';
 
 export class FakeDbService implements InMemoryDbService {
     createDb(): any {
@@ -97,8 +97,7 @@ export class FakeDbService implements InMemoryDbService {
             'quick-panel-notes': QuickPanelFakeDb.notes,
             'quick-panel-events': QuickPanelFakeDb.events,
 
-
-            'k8sevents': K8sEventsFakeDb.data
+            'k8sevents-events': K8sFakeDb.events
         };
     }
 }

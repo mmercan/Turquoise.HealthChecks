@@ -1,5 +1,5 @@
-export class K8sEventsFakeDb {
-    public static data = [
+export class K8sFakeDb {
+    public static events = [
         {
             'action': null,
             'apiVersion': null,

@@ -116,7 +116,7 @@ export class NsDashboardService implements Resolve<any> {
 
   getEvents(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.httpClient.get('api/k8sevents')
+      this.httpClient.get('api/k8sevents-events')
         .subscribe((response: any) => {
           this.events = response;
           resolve(response);
