@@ -51,8 +51,8 @@ namespace Turquoise.HealthChecker
             //Add Health Check
             services.AddHealthChecks()
             .AddSystemInfoCheck()
-            .AddPrivateMemorySizeCheckKB(300000)
-            .AddWorkingSetCheckKB(3000000)
+            // .AddPrivateMemorySizeCheckKB(800000)
+            // .AddWorkingSetCheckKB(8000000)
             .AddMongoHealthCheck(Configuration["Mongodb:ConnectionString"])
             .AddCheck<QueueSubscribeHealthCheck>("queue_health_check");
 
@@ -152,7 +152,7 @@ namespace Turquoise.HealthChecker
                 ResponseWriter = WriteResponses.WriteListResponse,
             });
 
-            app.Map("/Health/IsAlive", (ap) =>
+            app.Map("", (ap) =>
             {
                 ap.Run(async context =>
                 {
