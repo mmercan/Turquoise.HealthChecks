@@ -53,7 +53,7 @@ namespace Turquoise.HealthChecker
             .AddSystemInfoCheck()
             // .AddPrivateMemorySizeCheckKB(800000)
             // .AddWorkingSetCheckKB(8000000)
-            .AddMongoHealthCheck(Configuration["Mongodb:ConnectionString"])
+            // .AddMongoHealthCheck(Configuration["Mongodb:ConnectionString"])
             .AddCheck<QueueSubscribeHealthCheck>("queue_health_check");
 
             services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);

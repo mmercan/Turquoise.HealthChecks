@@ -176,7 +176,7 @@ namespace Turquoise.HealthChecker
 
     public static class HealthcheckQueueSubscriberStats
     {
-        private static bool _isqueueSubscriberStarted;
+        private static bool _isqueueSubscriberStarted = true;
         private static DateTime _lastProcessTime;
         private static readonly object _lockObject = new object();
 
