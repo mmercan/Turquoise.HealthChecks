@@ -28,6 +28,8 @@ using Turquoise.HealthChecker.Services;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Turquoise.Common;
+using Turquoise.HealthChecks.Mongo;
+using Turquoise.HealthChecker.InternalHealthCheck;
 
 namespace Turquoise.HealthChecker
 {
@@ -50,7 +52,9 @@ namespace Turquoise.HealthChecker
             services.AddHealthChecks()
             .AddSystemInfoCheck()
             .AddPrivateMemorySizeCheckKB(300000)
-            .AddWorkingSetCheckKB(3000000);
+            .AddWorkingSetCheckKB(3000000)
+            .AddMongoHealthCheck(Configuration["Mongodb:ConnectionString"])
+            .AddCheck<QueueSubscribeHealthCheck>("queue_health_check");
 
             services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
 
@@ -68,11 +72,11 @@ namespace Turquoise.HealthChecker
 
 
             services.AddMangoRepo<Turquoise.Models.Mongo.ServiceV1>(
-                              Configuration["Mongodb:ConnectionString"],
-                              Configuration["Mongodb:DatabaseName"],
-                              "ServiceSet",
-                              p => p.Name
-                              );
+                Configuration["Mongodb:ConnectionString"],
+                Configuration["Mongodb:DatabaseName"],
+                "ServiceSet",
+                p => p.Name
+            );
 
 
             services.AddMangoRepo<Turquoise.Models.Mongo.AliveAndWellResult>(
@@ -80,7 +84,7 @@ namespace Turquoise.HealthChecker
                 Configuration["Mongodb:DatabaseName"],
                 "AliveAndWellResult",
                 p => p.Id
-                );
+            );
 
 
             services.AddHttpClient<IsAliveAndWellHealthChecker>("HealthCheckReportDownloader", options =>

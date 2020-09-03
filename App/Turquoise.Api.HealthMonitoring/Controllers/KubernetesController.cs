@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 using k8s;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using Turquoise.Api.HealthMonitoring.Models;
+using Turquoise.Common.Mongo;
 using Turquoise.K8s.Services;
+using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.Controllers
 {
@@ -17,12 +21,22 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly K8sService _k8sService;
         private readonly AZAuthService _azservice;
+        private readonly IFeatureManager featureManager;
+        private readonly MangoBaseRepo<ServiceV1> serviceMongoRepo;
 
-        public KubernetesController(ILogger<WeatherForecastController> logger, K8sService k8sService, AZAuthService azservice)
+        public KubernetesController(
+            ILogger<WeatherForecastController> logger,
+            K8sService k8sService,
+            AZAuthService azservice,
+            IFeatureManager featureManager,
+            MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceMongoRepo
+            )
         {
             _logger = logger;
             _k8sService = k8sService;
             _azservice = azservice;
+            this.featureManager = featureManager;
+            this.serviceMongoRepo = serviceMongoRepo;
         }
 
 
@@ -281,6 +295,20 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         {
             _logger.LogCritical("GetDeployment called the service");
             return await _k8sService.GetEventsAsync("sentinel-dev");
+        }
+
+
+        [HttpGet("getmongoevent")]
+        public async Task<object> GetCollectedServices(string namespaceParam)
+        {
+            if (await featureManager.IsEnabledAsync(nameof(HealthMonitoringFeatureFlags.UseMongoData)))
+            {
+                return serviceMongoRepo.Find(p => p.Deleted == false && p.Namespace == namespaceParam).ToList();
+            }
+            else
+            {
+                return "Just Blah No Queue involved.";
+            }
         }
     }
 }

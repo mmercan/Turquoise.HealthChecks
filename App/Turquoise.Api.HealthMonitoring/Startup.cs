@@ -157,6 +157,21 @@ namespace Turquoise.Api.HealthMonitoring
             });
 
 
+            services.AddMangoRepo<Turquoise.Models.Mongo.ServiceV1>(
+                Configuration["Mongodb:ConnectionString"],
+                Configuration["Mongodb:DatabaseName"],
+                "ServiceSet",
+                p => p.Name
+            );
+
+
+            services.AddMangoRepo<Turquoise.Models.Mongo.AliveAndWellResult>(
+                Configuration["Mongodb:ConnectionString"],
+                Configuration["Mongodb:DatabaseName"],
+                "AliveAndWellResult",
+                p => p.Id
+            );
+
 
             // services.AddMangoRepo<PushNotificationModel>(Configuration.GetSection("Mongodb"));
 

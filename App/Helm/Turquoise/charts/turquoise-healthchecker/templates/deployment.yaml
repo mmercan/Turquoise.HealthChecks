@@ -33,8 +33,10 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /Health/IsAlive
+              path: /health/isaliveandwell
               port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /Health/IsAlive

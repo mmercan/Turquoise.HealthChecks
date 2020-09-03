@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Microsoft.Extensions.Configuration;
 
 namespace Turquoise.HealthChecks.Mongo
 {
@@ -17,6 +18,16 @@ namespace Turquoise.HealthChecks.Mongo
         {
             return builder.AddTypeActivatedCheck<MongoHealthCheck>($"MongoHealthCheck", null, null, connectionString);
         }
+
+
+        // public static IHealthChecksBuilder AddMongoHealthCheck(this IHealthChecksBuilder builder, IConfiguration connectionString)
+        // {
+        //     connectionString.ToString()
+        //     return builder.AddTypeActivatedCheck<MongoHealthCheck>($"MongoHealthCheck", null, null, connectionString);
+        // }
+
+
+
         // public static IHealthChecksBuilder AddMongoHealthCheck(this IHealthChecksBuilder builder, string connectionString, string databaseName)
         // {
         //     return builder.AddTypeActivatedCheck<MongoHealthCheck>($"MongoHealthCheck", null, null, connectionString, databaseName);

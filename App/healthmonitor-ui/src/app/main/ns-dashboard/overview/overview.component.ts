@@ -29,6 +29,16 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.events.rows = this.nsDashboardService.events;
+    // this.nsDashboardService.events;
+
+    this.nsDashboardService.dataset.subscribe(
+      data => {
+        this.events.rows = data.events;
+      },
+      error => {
+
+
+      }
+    );
   }
 }

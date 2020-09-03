@@ -20,10 +20,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
+
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatSortModule } from '@angular/material/sort';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -31,6 +32,17 @@ import { NsDashboardService } from './ns-dashboard.service';
 import { OverviewComponent } from './overview/overview.component';
 import { DeploymentListComponent } from './deployment-list/deployment-list.component';
 import { ServiceListComponent } from './service-list/service-list.component';
+
+
+
+import { MatChipsModule } from '@angular/material/chips';
+import { MatRippleModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AgmCoreModule } from '@agm/core';
+
+
 
 @NgModule({
   declarations: [NsDashboardComponent, OverviewComponent, DeploymentListComponent, ServiceListComponent],
@@ -44,6 +56,7 @@ import { ServiceListComponent } from './service-list/service-list.component';
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSortModule,
     FlexLayoutModule,
     SharedModule,
     FuseSharedModule,
@@ -54,7 +67,14 @@ import { ServiceListComponent } from './service-list/service-list.component';
     MatIconModule,
     MatMenuModule,
     MatSelectModule,
-    NgxChartsModule
+    NgxChartsModule,
+
+    MatChipsModule,
+    MatRippleModule,
+    MatExpansionModule,
+    MatInputModule,
+    MatSnackBarModule,
+    AgmCoreModule
   ],
   providers: [NsDashboardService]
 })

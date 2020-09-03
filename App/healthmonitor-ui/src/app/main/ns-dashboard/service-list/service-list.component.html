@@ -1,194 +1,100 @@
-                    <div class="widget-group" fxLayout="row wrap" fxFlex="100">
+        <!-- CONTENT CARD -->
+        <div class="content-card">
 
-                        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                                     fxFlex="100" fxFlex.gt-sm="50">
+            <mat-table class="products-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
 
-                            <!-- Front -->
-                            <div class="fuse-widget-front">
-                                <div class="h3 px-16 py-24">
-                                    {{widgets.widget8.title}}
-                                </div>
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.id}}</p>
+                    </mat-cell>
+                </ng-container>
 
-                                <mat-divider></mat-divider>
+                <!-- Image Column -->
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <img class="product-image"
+                             *ngIf="product.featuredImageId" [alt]="product.name"
+                             [src]="product.images[product.featuredImageId].url"/>
+                        <img *ngIf="!product.featuredImageId"
+                             [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    </mat-cell>
+                </ng-container>
 
-                                <div class="h-400">
-                                    <ngx-charts-pie-chart
-                                        *fuseIfOnDom
-                                        [scheme]="widget8.scheme"
-                                        [results]="widgets.widget8.mainChart"
-                                        [legend]="widget8.legend"
-                                        [explodeSlices]="widget8.explodeSlices"
-                                        [labels]="widget8.labels"
-                                        [doughnut]="widget8.doughnut"
-                                        [gradient]="widget8.gradient"
-                                        (select)="widget8.onSelect($event)">
-                                    </ngx-charts-pie-chart>
-                                </div>
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let product">
+                        <p class="text-truncate">{{product.name}}</p>
+                    </mat-cell>
+                </ng-container>
 
-                            </div>
-                            <!-- / Front -->
+                <!-- Category Column -->
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
+                        <p class="category text-truncate">
+                            {{product.categories[0]}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
 
-                        </fuse-widget>
-                        <!-- / WIDGET 8 -->
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                        <p class="price text-truncate">
+                            {{product.priceTaxIncl | currency:'USD':'symbol'}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
 
-                        <!-- WIDGET 9 -->
-                        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
-                                     fxFlex="100" fxFlex.gt-sm="50">
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
 
-                            <!-- Front -->
-                            <div class="fuse-widget-front">
-                                <div class="px-16 py-12 border-bottom" fxLayout="row"
-                                     fxLayoutAlign="space-between center">
-                                    <div class="h3">{{widgets.widget9.title}}</div>
-                                    <mat-form-field>
-                                        <mat-select [(ngModel)]="widget9.currentRange" aria-label="Change range">
-                                            <mat-option *ngFor="let range of widgets.widget9.ranges | keys"
-                                                        [value]="range.key">
-                                                {{range.value}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':product.quantity <= 5, 'amber-500':product.quantity > 5 && product.quantity <= 25,'green-600':product.quantity > 25}">
+                        </span>
+                        <span>
+                            {{product.quantity}}
+                        </span>
 
-                                <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
-                                     fxLayout.gt-xs="row"
-                                     fxLayoutAlign.gt-xs="space-between end">
-                                    <div fxFlex="0 1 auto">
-                                        <div class="h4 secondary-text">{{widgets.widget9.weeklySpent.title}}</div>
-                                        <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
-                                            <span class="secondary-text">$</span>
-                                            <span>{{widgets.widget9.weeklySpent.count[widget9.currentRange]}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="h-52" fxFlex>
-                                        <ngx-charts-area-chart
-                                            *fuseIfOnDom
-                                            [results]="widgets.widget9.weeklySpent.chart[widget9.currentRange]"
-                                            [scheme]="widget9.scheme"
-                                            [gradient]="widget9.gradient"
-                                            [xAxis]="widget9.xAxis"
-                                            [yAxis]="widget9.yAxis"
-                                            [legend]="widget9.legend"
-                                            [showXAxisLabel]="widget9.showXAxisLabel"
-                                            [showYAxisLabel]="widget9.showYAxisLabel"
-                                            [xAxisLabel]="widget9.xAxisLabel"
-                                            [yAxisLabel]="widget9.yAxisLabel"
-                                            [curve]="widget9.curve">
-                                        </ngx-charts-area-chart>
-                                    </div>
-                                </div>
+                    </mat-cell>
+                </ng-container>
 
-                                <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
-                                     fxLayout.gt-xs="row"
-                                     fxLayoutAlign.gt-xs="space-between end">
-                                    <div fxFlex="0 1 auto">
-                                        <div class="h4 secondary-text">{{widgets.widget9.totalSpent.title}}</div>
-                                        <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
-                                            <span class="secondary-text">$</span>
-                                            <span>{{widgets.widget9.totalSpent.count[widget9.currentRange]}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="h-52" fxFlex>
-                                        <ngx-charts-area-chart
-                                            *fuseIfOnDom
-                                            [results]="widgets.widget9.totalSpent.chart[widget9.currentRange]"
-                                            [scheme]="widget9.scheme"
-                                            [gradient]="widget9.gradient"
-                                            [xAxis]="widget9.xAxis"
-                                            [yAxis]="widget9.yAxis"
-                                            [legend]="widget9.legend"
-                                            [showXAxisLabel]="widget9.showXAxisLabel"
-                                            [showYAxisLabel]="widget9.showYAxisLabel"
-                                            [xAxisLabel]="widget9.xAxisLabel"
-                                            [yAxisLabel]="widget9.yAxisLabel"
-                                            [curve]="widget9.curve">
-                                        </ngx-charts-area-chart>
-                                    </div>
-                                </div>
+                <!-- Active Column -->
+                <ng-container matColumnDef="active">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="product.active" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="!product.active" class="active-icon red-500 s-16">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
 
-                                <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
-                                     fxLayout.gt-xs="row"
-                                     fxLayoutAlign.gt-xs="space-between end">
-                                    <div fxFlex="0 1 auto">
-                                        <div class="h4 secondary-text">{{widgets.widget9.remaining.title}}</div>
-                                        <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
-                                            <span class="secondary-text">$</span>
-                                            <span>{{widgets.widget9.remaining.count[widget9.currentRange]}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="h-52" fxFlex>
-                                        <ngx-charts-area-chart
-                                            *fuseIfOnDom
-                                            [results]="widgets.widget9.remaining.chart[widget9.currentRange]"
-                                            [scheme]="widget9.scheme"
-                                            [gradient]="widget9.gradient"
-                                            [xAxis]="widget9.xAxis"
-                                            [yAxis]="widget9.yAxis"
-                                            [legend]="widget9.legend"
-                                            [showXAxisLabel]="widget9.showXAxisLabel"
-                                            [showYAxisLabel]="widget9.showYAxisLabel"
-                                            [xAxisLabel]="widget9.xAxisLabel"
-                                            [yAxisLabel]="widget9.yAxisLabel"
-                                            [curve]="widget9.curve">
-                                        </ngx-charts-area-chart>
-                                    </div>
-                                </div>
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                                <div class="px-16 py-24 border-top">
-                                    <div class="h4 secondary-text">{{widgets.widget9.totalBudget.title}}</div>
-                                    <div class="pt-8 mat-display-1 m-0 font-weight-300">
-                                        <span class="secondary-text">$</span>
-                                        <span>{{widgets.widget9.totalBudget.count}}</span>
-                                    </div>
-                                </div>
+                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                         class="product"
+                         matRipple
+                         [routerLink]="'/apps/e-commerce/products/'+product.id+'/'+product.handle">
+                </mat-row>
 
-                            </div>
-                            <!-- / Front -->
+            </mat-table>
 
-                        </fuse-widget>
-                        <!-- / WIDGET 9 -->
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
 
-                        <!-- WIDGET 10 -->
-                        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
-                                     fxFlex="100">
+        </div>
 
-                            <!-- Front -->
-                            <div class="fuse-widget-front">
-
-                                <div class="simple-table-container" ms-responsive-table>
-                                    <div class=" table-title">
-                                        {{widgets.widget10.title}}
-                                    </div>
-
-                                    <table class="simple">
-
-                                        <thead>
-                                            <tr>
-                                                <th *ngFor="let column of widgets.widget10.table.columns">
-                                                    {{column.title}}
-                                                </th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr *ngFor="let row of widgets.widget10.table.rows">
-                                                <td *ngFor="let cell of row">
-                                                    <span class="p-4" [ngClass]="cell.classes">
-                                                        {{cell.value}}
-                                                    </span>
-                                                    <mat-icon *ngIf="cell.icon" class="s-16">{{cell.icon}}
-                                                    </mat-icon>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                            <!-- / Front -->
-
-                        </fuse-widget>
-                        <!-- / WIDGET 10 -->
-
-                    </div>
-                    <!-- / WIDGET GROUP -->

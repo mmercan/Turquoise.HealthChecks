@@ -25,6 +25,8 @@
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0"/>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Turquoise.HealthChecks.Common" Version="2.2.1-ci-20200721.2" />
+
+    <PackageReference Include="Turquoise.HealthChecks.Mongo" Version="2.2.1-ci-20200720.6" />
   </ItemGroup>
 
   <ItemGroup>

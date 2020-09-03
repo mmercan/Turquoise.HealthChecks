@@ -21,11 +21,11 @@ export class NsDashboardComponent implements OnInit {
   ngOnInit(): void {
 
     this.nsDashboardService.dataset.subscribe(
-      data => { },
+      data => {
+        this.currentNamespace = data.currentNamespace;
+      },
       error => { }
     );
-
-    this.currentNamespace = this.nsDashboardService.currentNamespace;
   }
 }
 

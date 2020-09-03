@@ -34,7 +34,7 @@ namespace Turquoise.HealthChecker
             IBus bus,
             IsAliveAndWellHealthChecker healthChecker,
             MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> healthresultRepo,
-             MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo,
+            MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo,
             IConfiguration configuration
             )
         {
@@ -68,12 +68,15 @@ namespace Turquoise.HealthChecker
             }
             catch (Exception ex)
             {
+                HealthcheckQueueSubscriberStats.SetIsqueueSubscriberStarted(false);
                 logger.LogError("Exception: " + ex.Message);
             }
         }
 
         private async Task Handler(Turquoise.Models.Mongo.ServiceV1 service)
         {
+            HealthcheckQueueSubscriberStats.SetIsqueueSubscriberStarted(true);
+            HealthcheckQueueSubscriberStats.SetProcessTime();
 
             var res = await healthChecker.DownloadAsync(service);
 
@@ -152,21 +155,61 @@ namespace Turquoise.HealthChecker
             {
                 var notify = new NotifyServiceHealthCheckError { ID = result.Id.ToString(), ServiceName = service.Name, StatusCode = res.FirstOrDefault().Status };
                 await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
                     {
-                        if (task.IsCompleted)
-                        {
 
-                            logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
-                        }
-                        if (task.IsFaulted)
-                        {
-                            logger.LogCritical("\n\n");
-                            logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
-                            logger.LogCritical("\n\n");
-                        }
-                    });
-
+                        logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
+                    }
+                    if (task.IsFaulted)
+                    {
+                        logger.LogCritical("\n\n");
+                        logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
+                        logger.LogCritical("\n\n");
+                    }
+                });
             }
         }
     }
+
+
+    public static class HealthcheckQueueSubscriberStats
+    {
+        private static bool _isqueueSubscriberStarted;
+        private static DateTime _lastProcessTime;
+        private static readonly object _lockObject = new object();
+
+        public static DateTime GetLastProcessTime()
+        {
+            lock (_lockObject)
+            {
+                return _lastProcessTime;
+            }
+        }
+        public static void SetProcessTime()
+        {
+            lock (_lockObject)
+            {
+                _lastProcessTime = DateTime.UtcNow;
+            }
+        }
+
+
+
+        public static bool GetIsqueueSubscriberStarted()
+        {
+            lock (_lockObject)
+            {
+                return _isqueueSubscriberStarted;
+            }
+        }
+        public static void SetIsqueueSubscriberStarted(bool status)
+        {
+            lock (_lockObject)
+            {
+                _isqueueSubscriberStarted = status;
+            }
+        }
+    }
+
 }
