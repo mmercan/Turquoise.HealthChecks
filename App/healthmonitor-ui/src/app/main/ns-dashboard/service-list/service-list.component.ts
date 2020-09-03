@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, mergeMap } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
@@ -20,7 +20,7 @@ import { NsDashboardService } from '../ns-dashboard.service';
 })
 export class ServiceListComponent implements OnInit {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['id', 'name', 'price', 'quantity', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -46,19 +46,19 @@ export class ServiceListComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new FilesDataSource(this.nsDashboardService, this.paginator, this.sort);
 
-    fromEvent(this.filter.nativeElement, 'keyup')
-      .pipe(
-        takeUntil(this.unsubscribeAll),
-        debounceTime(150),
-        distinctUntilChanged()
-      )
-      .subscribe(() => {
-        if (!this.dataSource) {
-          return;
-        }
+    // fromEvent(this.filter.nativeElement, 'keyup')
+    //   .pipe(
+    //     takeUntil(this.unsubscribeAll),
+    //     debounceTime(150),
+    //     distinctUntilChanged()
+    //   )
+    //   .subscribe(() => {
+    //     if (!this.dataSource) {
+    //       return;
+    //     }
 
-        this.dataSource.filter = this.filter.nativeElement.value;
-      });
+    //     this.dataSource.filter = this.filter.nativeElement.value;
+    //   });
   }
 
 }
@@ -69,6 +69,7 @@ export class FilesDataSource extends DataSource<any>
 {
   private filterChange = new BehaviorSubject('');
   private filteredDataChange = new BehaviorSubject('');
+  private services;
 
   constructor(
     private nsDashboardService: NsDashboardService,
@@ -77,11 +78,18 @@ export class FilesDataSource extends DataSource<any>
   ) {
     super();
 
-    this.filteredData = this.nsDashboardService.products;
+    // this.filteredData = this.nsDashboardService.products;
+
+    this.nsDashboardService.dataset.subscribe(
+      data => {
+        this.filteredData = data.services;
+        this.services = data.services;
+      });
   }
 
   connect(): Observable<any[]> {
     const displayDataChanges = [
+      this.nsDashboardService.dataset,
       this.nsDashboardService.onProductsChanged,
       this.matPaginator.page,
       this.filterChange,
@@ -90,9 +98,10 @@ export class FilesDataSource extends DataSource<any>
 
     return merge(...displayDataChanges)
       .pipe(
-        map(() => {
-          let data = this.nsDashboardService.products.slice();
+        map((x, y) => {
+          let data = this.nsDashboardService.services.slice();
 
+          debugger;
           data = this.filterData(data);
 
           this.filteredData = [...data];

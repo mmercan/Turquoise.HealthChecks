@@ -17,7 +17,7 @@ export class NsDashboardService implements Resolve<any> {
 
   public projects: any[];
   public widgets: any[];
-
+  public services: any[];
 
   public currentNamespace: string;
 
@@ -99,6 +99,7 @@ export class NsDashboardService implements Resolve<any> {
   private updateServices(ns: string): void {
     this.httpClient.get('api/k8sevents-services').subscribe(
       data => {
+        this.services = data as any[];
         this.dataStore.services = data as any[];
         this._dataset.next(Object.assign({}, this.dataStore));
       },

@@ -291,10 +291,10 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
 
 
         [HttpGet("allevents")]
-        public async Task<object> GetAllevents()
+        public async Task<object> GetAllevents(string namespaceparam)
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetEventsAsync("sentinel-dev");
+            return await _k8sService.GetEventsAsync(namespaceparam);
         }
 
 
