@@ -50,7 +50,7 @@ namespace Turquoise.HealthChecker
 
             //Add Health Check
             services.AddHealthChecks()
-            .AddSystemInfoCheck()
+            // .AddSystemInfoCheck()
             // .AddPrivateMemorySizeCheckKB(800000)
             // .AddWorkingSetCheckKB(8000000)
             // .AddMongoHealthCheck(Configuration["Mongodb:ConnectionString"])
