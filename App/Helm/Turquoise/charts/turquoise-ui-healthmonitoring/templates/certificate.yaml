@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $host := printf "%s.%s.%s" .Chart.Name .Values.environment .Values.hostdomain -}}
+{{- $host := printf "%s.%s.%s"  "health" .Values.environment .Values.hostdomain -}}
 apiVersion: certmanager.k8s.io/v1alpha2
 kind: Certificate
 metadata:
