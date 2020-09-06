@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $host := printf "%s.%s.%s" .Chart.Name .Values.environment .Values.hostdomain -}}
+{{- $host := printf "%s.%s.%s" "health" .Values.environment .Values.hostdomain -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
