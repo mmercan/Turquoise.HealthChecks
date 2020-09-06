@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
 {{- $host := printf "%s.%s.%s" "health" .Values.environment .Values.hostdomain -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name:  {{ include "Turquoise.UI.HealthMonitoring.fullname" . }}
   labels:
     {{- include "Turquoise.UI.HealthMonitoring.labels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: nginx
+     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:

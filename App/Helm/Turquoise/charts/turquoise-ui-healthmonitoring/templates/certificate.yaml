@@ -1,22 +1,22 @@
-{{- if .Values.ingress.enabled -}}
-{{- $host := printf "%s.%s.%s"  "health" .Values.environment .Values.hostdomain -}}
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  name: "{{ $host }}-cert"
-spec:
-  secretName: "{{ $host }}-secret"
-  dnsNames:
-  - {{ $host }}
-  acme:
-    config:
-    - http01:
-        ingressClass: nginx
-      domains:
-      -  {{ $host }}
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-{{- end }}
+# {{- if .Values.ingress.enabled -}}
+# {{- $host := printf "%s.%s.%s"  "health" .Values.environment .Values.hostdomain -}}
+# apiVersion: cert-manager.io/v1alpha2
+# kind: Certificate
+# metadata:
+#   name: "{{ $host }}-cert"
+# spec:
+#   secretName: "{{ $host }}-secret"
+#   dnsNames:
+#   - {{ $host }}
+#   acme:
+#     config:
+#     - http01:
+#         ingressClass: nginx
+#       domains:
+#       -  {{ $host }}
+#   issuerRef:
+#     name: letsencrypt-prod
+#     kind: ClusterIssuer
+# {{- end }}
 
 
