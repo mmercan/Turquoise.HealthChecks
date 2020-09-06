@@ -43,6 +43,7 @@ namespace Turquoise.K8s.Services
 
         public async Task<List<V1Namespace>> GetNamespaces()
         {
+
             var items = await namespacesClient.GetAsync();
             return items.ToList();//items.Select(ns => ns.Name()).ToList();
         }
