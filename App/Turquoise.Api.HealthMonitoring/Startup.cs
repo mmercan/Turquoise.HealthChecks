@@ -101,6 +101,7 @@ namespace Turquoise.Api.HealthMonitoring
                         .AllowCredentials()
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
                         .WithOrigins("http://localhost:4201", "http://localhost:4200",
+                        "https://health.dev.turk.mercan.io",
                         "https://app-health-ui.dev.myrcan.com",
                         "https://health.dev.ui.sentinel.mercan.io",
                         "https://turquoise-ui-healthmonitoring.dev.turk.mercan.io");
