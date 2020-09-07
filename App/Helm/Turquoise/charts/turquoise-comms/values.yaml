@@ -67,3 +67,30 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+azurepipelines:
+  run: "run"
+  pipeline: "pipeline"
+  pipelineId: "pipelineId"
+  jobName: "jobName"
+  runuri: "runuri url url * (kk)-"
+  project: "project * (kk)-"
+  org: "org"
+
+secrets:
+  Mongodb__ConnectionString: "mongodb://root:hbMnztmZ4w9JJTGZ@turquoise-db-mongodb-dev:27017/admin?readPreference=primary"
+  RabbitMQConnection: "host=turquoise-rabbitmq-dev-tcp;username=rabbitmq;password=rabbitmq; timeout=10"
+  SMTP__Server: "sentinel-util-mailhog"
+  SMTP__Port: "1025"
+  SMTP__UserName: "mail@mail.com"
+  SMTP__Password: "password123"
+  AzureAd__Secret: ""
+  
+configmap:
+    ASPNETCORE_ENVIRONMENT: "Production"
+    Mongodb__DatabaseName: "turquoise-dev"
+    queue__servicev1: "healthcheck.service"
+    DOTNET_RUNNING_IN_CONTAINER: "true"
+
+envVariables:
+    RunOnCluster: true
