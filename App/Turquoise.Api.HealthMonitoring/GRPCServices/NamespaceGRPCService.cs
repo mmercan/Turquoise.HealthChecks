@@ -1,21 +1,36 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using Turquoise.Api.HealthMonitoring.Models;
+using Turquoise.Common.Mongo;
 using Turquoise.K8s.Services;
+using Turquoise.Models.Mongo;
+
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    [Authorize]
+    //  [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
         private K8sService k8sService;
+        private MangoBaseRepo<ServiceV1> serviceMongoRepo;
+        private IFeatureManager featureManager;
 
-        public NamespaceGRPCService(ILogger<NamespaceGRPCService> logger, K8sService k8sService)
+        public NamespaceGRPCService(
+            ILogger<NamespaceGRPCService> logger,
+            K8sService k8sService,
+            MangoBaseRepo<ServiceV1> serviceMongoRepo,
+            IFeatureManager featureManager
+            )
         {
             _logger = logger;
             this.k8sService = k8sService;
+            this.serviceMongoRepo = serviceMongoRepo;
+            this.featureManager = featureManager;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -50,6 +65,140 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             }
 
             return deploy;
+        }
+
+        public async override Task<ServiceListReply> GetServices(GetServicesRequest request, ServerCallContext context)
+        {
+
+            var ns = request.NamespaceParam;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+
+            if (await featureManager.IsEnabledAsync(nameof(HealthMonitoringFeatureFlags.UseMongoData)))
+            {
+                return await getMongoDbServices(ns);
+            }
+            else
+            {
+                return await getLiveServices(ns);
+            }
+
+            // DeploymentListReply deploy = new DeploymentListReply();
+            // foreach (var item in deployments)
+            // {
+            //     var dep = new DeploymentReply();
+            //     dep.Name = item.Metadata.Name;
+            //     dep.Image = item.Spec.Template.Spec.Containers.FirstOrDefault().Image;
+            //     dep.Status = item.Status.Conditions.FirstOrDefault().Status.ToString();
+            //     dep.Labels.AddRange(item.Metadata.Labels.Select(lab => { return new Pair { Key = lab.Key, Value = lab.Value }; }));
+            //     deploy.Deployments.Add(dep);
+            // }
+            // return deploy;
+
+            // return base.GetServices(request, context);   
+        }
+
+
+        private async Task<ServiceListReply> getMongoDbServices(string namespaceParam)
+        {
+            ServiceListReply servicelist = new ServiceListReply();
+            var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam);
+            foreach (var item in services)
+            {
+                var srv = new ServiceReply();
+                servicelist.Services.Add(srv);
+
+
+
+                srv.NameandNamespace = item.NameandNamespace;
+                srv.Uid = item.Uid;
+                srv.Name = item.Name;
+                srv.Namespace = item.Namespace;
+
+                if (item.Labels != null && item.Labels.Count > 0)
+                {
+                    srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                }
+                srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
+
+
+                if (item.LabelSelector != null && item.LabelSelector.Count > 0)
+                {
+                    srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                }
+
+
+                if (item.Annotations != null && item.Annotations.Count > 0)
+                {
+                    srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                }
+
+                // srv.ServiceType = item.Type;
+                // srv.SessionAffinity = item.SessionAffinity;
+                // srv.ClusterIP = item.ClusterIP;
+                // srv.InternalEndpoints.AddRange( item.InternalEndpoints);
+                // srv.ExternalEndpoints = item.ExternalEndpoints;
+                // srv.IngressUrl = item;
+                // srv.VirtualServiceUrl = item.VirtualServiceUrl;
+                // srv.LatestSyncDateUTC = item.LatestSyncDateUTC;
+                // srv.Deleted = item.Deleted;
+                // srv.HealthIsalive = item.HealthIsalive;
+                // srv.HealthIsaliveSyncDateUTC = item.HealthIsaliveSyncDateUTC;
+                // srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
+                // srv.HealthIsaliveAndWellSyncDateUTC = item.HealthIsaliveAndWellSyncDateUTC;
+
+
+            }
+            return servicelist;
+        }
+
+        private async Task<ServiceListReply> getLiveServices(string namespaceParam)
+        {
+            var services = await k8sService.GetServices(namespaceParam);
+            ServiceListReply servicelist = new ServiceListReply();
+
+            foreach (var item in services)
+            {
+                var srv = new ServiceReply();
+                servicelist.Services.Add(srv);
+                srv.Name = item.Metadata.Name;
+                srv.Uid = item.Metadata.Uid;
+                srv.Namespace = item.Metadata.NamespaceProperty;
+
+                if (item.Metadata.CreationTimestamp.HasValue)
+                {
+                    srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.Metadata.CreationTimestamp.Value);
+                }
+
+
+                if (item.Metadata.Annotations != null && item.Metadata.Annotations.Count > 0)
+                {
+                    srv.Annotations.AddRange(
+                        item.Metadata.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+                if (item.Metadata.Labels != null && item.Metadata.Labels.Count > 0)
+                {
+                    srv.Labels.AddRange(
+                        item.Metadata.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+                if (item.Spec.Selector != null && item.Spec.Selector.Count > 0)
+                {
+                    srv.LabelSelector.AddRange(
+                        item.Spec.Selector.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+            }
+
+
+
+            return servicelist;
         }
     }
 }

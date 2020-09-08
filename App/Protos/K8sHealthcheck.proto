@@ -8,7 +8,13 @@ import "google/protobuf/empty.proto";
 
 service NamespaceService {
   rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
+  rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
+}
+
+message GetServicesRequest
+{
+  string NamespaceParam=1;
 }
 
 message GetDeploymentsRequest
@@ -42,4 +48,38 @@ message DeploymentReply{
 message Pair {
   string key = 1;
   string value = 2;
+}
+
+message StringMessage{
+  string value=1;
+}
+
+message ServiceListReply
+{
+  repeated ServiceReply Services=1;
+}
+
+message ServiceReply {
+  string NameandNamespace = 1;
+  string Uid = 2;
+  string Name = 33;
+  string Namespace = 4;
+  repeated Pair Labels = 5;
+  google.protobuf.Timestamp CreationTime = 6;
+  repeated Pair LabelSelector = 7;
+  repeated Pair Annotations = 8;
+  string ServiceType = 9;
+  string SessionAffinity = 10;
+  string clusterIP = 11;
+  repeated StringMessage  internalEndpoints = 12;
+  repeated StringMessage  externalEndpoints = 13;
+  string IngressUrl = 14;
+  string VirtualServiceUrl = 15;
+  google.protobuf.Timestamp LatestSyncDateUTC = 16;
+  bool Deleted = 17;
+  string HealthIsalive = 18;
+  google.protobuf.Timestamp healthIsaliveSyncDateUTC = 20;
+  string healthIsaliveAndWell = 21;
+  google.protobuf.Timestamp healthIsaliveAndWellSyncDateUTC = 22;
+
 }

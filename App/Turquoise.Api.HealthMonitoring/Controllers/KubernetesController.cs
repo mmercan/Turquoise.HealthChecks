@@ -346,5 +346,29 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
                 return "Just Blah No Queue involved.";
             }
         }
+
+
+        [HttpGet("newevent")]
+        public async Task<object> CreateNewEvent()
+        {
+
+            var services = await _k8sService.GetServices("sentinel-dev");
+            var service = services.FirstOrDefault(p => p.Metadata.Name == "sentinel-dev-admin-ui");
+
+
+            if (service != null)
+            {
+
+                var message = service.Metadata.Name + " HealthCheck isAlive and Well Failed";
+                var returnedevent = await _k8sService.EventClient.CountUpOrCreateEvent("sentinel-dev", service, message);
+                return returnedevent;
+            }
+            else
+            {
+                return "service Not Found";
+            }
+
+        }
+
     }
 }

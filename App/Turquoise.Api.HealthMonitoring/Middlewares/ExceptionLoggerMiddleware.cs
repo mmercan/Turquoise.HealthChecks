@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Rest;
 
 namespace Turquoise.Api.HealthMonitoring
 {
@@ -36,8 +37,13 @@ namespace Turquoise.Api.HealthMonitoring
             {
 
                 var unhandledException = LoggerMessage.Define(LogLevel.Error, new EventId(1, "UnhandledException"), "An unhandled exception has occurred while executing the request.");
+                _logger.LogCritical(ex.Message);
                 unhandledException(_logger, ex);
-
+                if (ex is HttpOperationException)
+                {
+                    var opex = ex as HttpOperationException;
+                    _logger.LogCritical("Error Content : " + opex.Response.Content);
+                }
 
                 if (httpContext.Response.HasStarted)
                 {

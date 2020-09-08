@@ -28,6 +28,8 @@ namespace Turquoise.K8s.Services
         private K8sIngressClient ingressClient;
         private ILogger<K8sService> logger;
 
+        public K8sEventClient EventClient { get; set; }
+
         public K8sService(IKubernetesClient kubernetesClient, IMapper mapper, ILogger<K8sService> logger)
         {
             this.client = kubernetesClient.Client;
@@ -38,6 +40,7 @@ namespace Turquoise.K8s.Services
             podsClient = new K8sPodClient(this.client);
             serviceClient = new K8sServiceClient(this.client);
             ingressClient = new K8sIngressClient(this.client);
+            EventClient = new K8sEventClient(this.client, logger);
             this.logger = logger;
         }
 
@@ -77,6 +80,7 @@ namespace Turquoise.K8s.Services
             // var filtered = services.Where(p => p.Metadata != null && p.Metadata.Annotations != null && p.Metadata.Annotations.Keys.Contains("healthcheck/isalive"));
             return services.ToList();
         }
+
 
         public async Task<IList<V1Service>> GetAllServicesAsync()
         {
