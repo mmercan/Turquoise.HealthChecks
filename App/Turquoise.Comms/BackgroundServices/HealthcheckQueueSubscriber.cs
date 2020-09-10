@@ -66,7 +66,7 @@ namespace Turquoise.Comms.BackgroundServices
             try
             {
                 logger.LogCritical("Connected to bus");
-                bus.SubscribeAsync<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
+                bus.SubscribeAsync<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheck>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
                 Console.WriteLine("Listening on topic " + configuration["queue:nofity"]);
                 _ResetEvent.Wait();
             }
@@ -76,7 +76,7 @@ namespace Turquoise.Comms.BackgroundServices
             }
         }
 
-        private async Task Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
+        private async Task Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheck notify)
         {
 
             if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.SendEmail)))
@@ -101,18 +101,23 @@ namespace Turquoise.Comms.BackgroundServices
                 var serviceNamespace = notify.ServiceNamespace;
                 var serviceApiVersion = notify.ServiceApiVersion;
                 var serviceResourceVersion = notify.ServiceResourceVersion;
-                var message = notify.ServiceName + " HealthCheck isAlive and Well Failed";
+                var message = notify.Message;
 
-
-                await this.k8sService.EventClient.CountUpOrCreateEvent(
-                     namespaceParam,
-                             serviceName,
-                             serviceUid,
-                             serviceNamespace,
-                              serviceApiVersion,
+                if (notify.Status == NotifyServiceHealthCheckStatus.Warning)
+                {
+                    await this.k8sService.EventClient.CountUpOrCreateEvent(
+                         namespaceParam, serviceName, serviceUid,
+                        serviceNamespace, serviceApiVersion, serviceResourceVersion,
+                                  message);
+                }
+                else
+                {
+                    await this.k8sService.EventClient.CountUpOrCreateEvent(
+                     namespaceParam, serviceName, serviceUid,
+                             serviceNamespace, serviceApiVersion,
                               serviceResourceVersion,
-                              message);
-
+                              message, type: "Normal");
+                }
 
                 logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
             }

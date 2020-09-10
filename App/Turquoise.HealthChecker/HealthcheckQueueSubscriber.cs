@@ -154,7 +154,7 @@ namespace Turquoise.HealthChecker
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
-                var notify = new NotifyServiceHealthCheckError
+                var notify = new NotifyServiceHealthCheck
                 {
                     ID = result.Id.ToString(),
                     ServiceName = service.Name,
@@ -164,6 +164,8 @@ namespace Turquoise.HealthChecker
                     ServiceApiVersion = service.ServiceApiVersion,
                     ServiceResourceVersion = service.ServiceResourceVersion,
                     StatusCode = res.FirstOrDefault().Status,
+                    Status = NotifyServiceHealthCheckStatus.Warning,
+                    Message = service.Name + " HealthCheck isAlive and Well Failed"
                 };
                 await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
                 {
