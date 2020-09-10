@@ -25,7 +25,7 @@ namespace Turquoise.Models.Mongo
 
         public string StringResult { get; set; }
 
-
+        public string BsonException { get; set; }
         // public bool Equals(AliveAndWellResult other)
         // {
 

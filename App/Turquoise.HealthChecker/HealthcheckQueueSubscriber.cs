@@ -110,6 +110,8 @@ namespace Turquoise.HealthChecker
                 stringResult = res.FirstOrDefault().Result;
                 logger.LogCritical("Result BsonDocument Deserializion Failed : " + ex);
             }
+
+
             var result = new AliveAndWellResult
             {
                 Result = document,
@@ -120,8 +122,18 @@ namespace Turquoise.HealthChecker
                 Status = res.FirstOrDefault().Status,
                 StringResult = stringResult
             };
-            await healthresultRepo.AddAsync(result);
 
+            try
+            {
+                await healthresultRepo.AddAsync(result);
+            }
+            catch (Exception ex)
+            {
+                result.Result = null;
+                result.BsonException = ex.Message;
+
+                await healthresultRepo.AddAsync(result);
+            }
 
             var mongoservice = serviceRepo.Find(p => p.Uid == service.Uid);
             if (mongoservice.FirstOrDefault() != null)
