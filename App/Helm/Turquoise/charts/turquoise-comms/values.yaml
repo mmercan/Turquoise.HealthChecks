@@ -87,10 +87,11 @@ secrets:
   AzureAd__Secret: ""
   
 configmap:
-    ASPNETCORE_ENVIRONMENT: "Production"
-    Mongodb__DatabaseName: "turquoise-dev"
-    queue__servicev1: "healthcheck.service"
-    DOTNET_RUNNING_IN_CONTAINER: "true"
+  ASPNETCORE_ENVIRONMENT: "Production"
+  Mongodb__DatabaseName: "turquoise-dev"
+  queue__servicev1: "healthcheck.service"
+  DOTNET_RUNNING_IN_CONTAINER: "true"
+  RunOnCluster: true
 
 envVariables:
-    RunOnCluster: true
+  RunOnCluster: true

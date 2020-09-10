@@ -47,6 +47,11 @@ spec:
                 name: {{ $cfgname }}
             - secretRef:
                 name: {{ $secretname }}
+          env:
+            - name: buildnumber
+              value: {{ .Values.buildnumber | quote }}
+            - name: branch
+              value: {{  .Values.branch | quote }}          
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
