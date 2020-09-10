@@ -1,7 +1,9 @@
 namespace Turquoise.Models.RabbitMQ
 {
-    public class NotifyServiceHealthCheckError
+    public class NotifyServiceHealthCheck
     {
+
+
         public string ID { get; set; }
 
         public string ServiceName { get; set; }
@@ -11,5 +13,10 @@ namespace Turquoise.Models.RabbitMQ
         public string ServiceResourceVersion { get; set; }
 
         public string StatusCode { get; set; }
+    }
+
+    public enum NotifyServiceHealthCheckStatus
+    {
+
     }
 }

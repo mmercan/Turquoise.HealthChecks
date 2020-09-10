@@ -22,6 +22,8 @@ using Serilog.Events;
 using Turquoise.Comms.BackgroundServices;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.Checks;
+using Turquoise.K8s;
+using Turquoise.K8s.Services;
 
 namespace Turquoise.Comms
 {
@@ -51,7 +53,11 @@ namespace Turquoise.Comms
             .AddPrivateMemorySizeCheckKB(300000)
             .AddWorkingSetCheckKB(3000000);
 
-            // services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+            services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+
+            if (Configuration["RunOnCluster"] == "true") { services.AddSingleton<IKubernetesClient, KubernetesClientInClusterConfig>(); }
+            else { services.AddSingleton<IKubernetesClient, KubernetesClientFromConfigFile>(); }
+            services.AddSingleton<K8sService>();
 
             services.AddSingleton<EasyNetQ.IBus>((ctx) =>
             {
