@@ -42,16 +42,24 @@ spec:
             httpGet:
               path: /
               port: http
+
+          {{- if or .Values.configmap .Values.secrets }}
           envFrom:
+          {{- end }}
+          {{- if .Values.configmap }}
             - configMapRef:
                 name: {{ $cfgname }}
+          {{- end }}
+          {{- if .Values.secrets }}   
             - secretRef:
                 name: {{ $secretname }}
+           {{- end }}
           env:
             - name: buildnumber
               value: {{ .Values.buildnumber | quote }}
             - name: branch
-              value: {{  .Values.branch | quote }}          
+              value: {{  .Values.branch | quote }}
+       
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
