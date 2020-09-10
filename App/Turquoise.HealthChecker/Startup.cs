@@ -30,6 +30,8 @@ using System.Net.Http.Headers;
 using Turquoise.Common;
 using Turquoise.HealthChecks.Mongo;
 using Turquoise.HealthChecker.InternalHealthCheck;
+using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
 
 namespace Turquoise.HealthChecker
 {
@@ -47,6 +49,11 @@ namespace Turquoise.HealthChecker
         {
             services.AddSingleton<IServiceCollection>(services);
             services.AddSingleton<IConfiguration>(Configuration);
+
+
+            services.AddFeatureManagement()
+            .AddFeatureFilter<PercentageFilter>();
+            // .AddFeatureFilter<HeadersFeatureFilter>();
 
             //Add Health Check
             services.AddHealthChecks()

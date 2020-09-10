@@ -85,7 +85,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> GetDeployment()
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetDeploymentsAsync("sentinel-dev");
+            return await _k8sService.GetAllDeploymentsAsync();
         }
 
 
@@ -369,6 +369,16 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             }
 
         }
+
+
+        [HttpGet("getmongodeployment")]
+        public async Task<object> GetMongoDeployment()
+        {
+            var deployments = await _k8sService.GetAllMongoDeploymentsAsync();
+            return deployments;
+        }
+
+
 
     }
 }

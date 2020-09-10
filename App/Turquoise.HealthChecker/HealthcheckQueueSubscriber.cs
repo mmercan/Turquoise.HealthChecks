@@ -154,7 +154,17 @@ namespace Turquoise.HealthChecker
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
-                var notify = new NotifyServiceHealthCheckError { ID = result.Id.ToString(), ServiceName = service.Name, StatusCode = res.FirstOrDefault().Status };
+                var notify = new NotifyServiceHealthCheckError
+                {
+                    ID = result.Id.ToString(),
+                    ServiceName = service.Name,
+
+                    ServiceUid = service.Name,
+                    ServiceNamespace = service.Namespace,
+                    ServiceApiVersion = service.ServiceApiVersion,
+                    ServiceResourceVersion = service.ServiceResourceVersion,
+                    StatusCode = res.FirstOrDefault().Status,
+                };
                 await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
                 {
                     if (task.IsCompleted)

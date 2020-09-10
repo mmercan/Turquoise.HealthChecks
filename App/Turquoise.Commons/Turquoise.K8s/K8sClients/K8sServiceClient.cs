@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
 
-namespace Turquoise.K8s
+namespace Turquoise.K8s.K8sClients
 {
     public class K8sServiceClient
     {

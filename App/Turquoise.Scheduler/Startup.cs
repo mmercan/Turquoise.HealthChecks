@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -50,7 +52,9 @@ namespace Turquoise.Scheduler
             .AddPrivateMemorySizeCheckKB(300000)
             .AddWorkingSetCheckKB(3000000);
 
-
+            services.AddFeatureManagement()
+            .AddFeatureFilter<PercentageFilter>();
+            // .AddFeatureFilter<HeadersFeatureFilter>();
 
             services.AddAutoMapper(typeof(Program).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
 

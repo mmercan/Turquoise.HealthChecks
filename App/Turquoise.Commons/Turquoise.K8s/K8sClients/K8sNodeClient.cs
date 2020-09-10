@@ -5,7 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Turquoise.K8s
+namespace Turquoise.K8s.K8sClients
 {
     public class K8sNodeClient
     {

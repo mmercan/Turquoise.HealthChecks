@@ -7,10 +7,13 @@ using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Turquoise.Common.Mail;
 using Turquoise.Common.Mongo;
+using Turquoise.Comms.Models;
+using Turquoise.K8s.Services;
 using Turquoise.Models.Mongo;
 using Turquoise.Models.RabbitMQ;
 
@@ -21,6 +24,8 @@ namespace Turquoise.Comms.BackgroundServices
         IBus bus;
         private IConfiguration configuration;
         private MailService mailService;
+        private IFeatureManager featureManager;
+        private K8sService k8sService;
         private ManualResetEventSlim _ResetEvent = new ManualResetEventSlim(false);
         private readonly ILogger<NotifyServiceHealthCheckQueueSubscriber> logger;
 
@@ -31,13 +36,18 @@ namespace Turquoise.Comms.BackgroundServices
             ILogger<NotifyServiceHealthCheckQueueSubscriber> logger,
             IBus bus,
             IConfiguration configuration,
-            MailService mailService
+            MailService mailService,
+            IFeatureManager featureManager,
+            K8sService k8sService
+
             )
         {
             this.logger = logger;
             this.bus = bus;
             this.configuration = configuration;
             this.mailService = mailService;
+            this.featureManager = featureManager;
+            this.k8sService = k8sService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -56,7 +66,7 @@ namespace Turquoise.Comms.BackgroundServices
             try
             {
                 logger.LogCritical("Connected to bus");
-                bus.Subscribe<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
+                bus.SubscribeAsync<Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError>(configuration["queue:nofity"], Handler); //, x => x.WithTopic("product.*"));
                 Console.WriteLine("Listening on topic " + configuration["queue:nofity"]);
                 _ResetEvent.Wait();
             }
@@ -66,12 +76,47 @@ namespace Turquoise.Comms.BackgroundServices
             }
         }
 
-        private void Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
+        private async Task Handler(Turquoise.Models.RabbitMQ.NotifyServiceHealthCheckError notify)
         {
-            logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
-            string body = notify.ServiceName + " " + notify.StatusCode;
-            mailService.Send("test@test.com", "failure on HealthCheck", body);
-            logger.LogCritical("Email sent " + notify.ServiceName + " Code :" + notify.StatusCode);
+
+            if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.SendEmail)))
+            {
+
+                logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
+                string body = notify.ServiceName + " " + notify.StatusCode;
+                mailService.Send("test@test.com", "failure on HealthCheck", body);
+                logger.LogCritical("Email sent " + notify.ServiceName + " Code :" + notify.StatusCode);
+            }
+
+
+
+            if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.AddEvent)))
+            {
+
+                logger.LogCritical("Adding event " + notify.ServiceName + " Code :" + notify.StatusCode);
+                // string body = notify.ServiceName + " " + notify.StatusCode;
+                var namespaceParam = notify.ServiceNamespace;
+                var serviceName = notify.ServiceName;
+                var serviceUid = notify.ServiceUid;
+                var serviceNamespace = notify.ServiceNamespace;
+                var serviceApiVersion = notify.ServiceApiVersion;
+                var serviceResourceVersion = notify.ServiceResourceVersion;
+                var message = notify.ServiceName + " HealthCheck isAlive and Well Failed";
+
+
+                await this.k8sService.EventClient.CountUpOrCreateEvent(
+                     namespaceParam,
+                             serviceName,
+                             serviceUid,
+                             serviceNamespace,
+                              serviceApiVersion,
+                              serviceResourceVersion,
+                              message);
+
+
+                logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
+            }
         }
     }
+
 }

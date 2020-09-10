@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
 using Serilog;
 using Serilog.Events;
 using Turquoise.Comms.BackgroundServices;
@@ -37,6 +39,11 @@ namespace Turquoise.Comms
         {
             services.AddSingleton<IServiceCollection>(services);
             services.AddSingleton<IConfiguration>(Configuration);
+
+
+            services.AddFeatureManagement()
+            .AddFeatureFilter<PercentageFilter>();
+            // .AddFeatureFilter<HeadersFeatureFilter>();
 
             //Add Health Check
             services.AddHealthChecks()

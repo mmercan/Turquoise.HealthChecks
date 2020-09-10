@@ -22,6 +22,8 @@ namespace Turquoise.Models.Mongo
         public DateTime CreationTime { get; set; }
         public List<Label> LabelSelector { get; set; }
 
+        public string LabelSelectorString { get; set; }
+
         public List<Label> Annotations { get; set; }
         public string Type { get; set; }
         public string SessionAffinity { get; set; }
@@ -41,6 +43,13 @@ namespace Turquoise.Models.Mongo
         public DateTime HealthIsaliveSyncDateUTC { get; set; }
         public string HealthIsaliveAndWell { get; set; }
         public DateTime HealthIsaliveAndWellSyncDateUTC { get; set; }
+
+        public string ServiceApiVersion { get; set; }
+        public string ServiceResourceVersion { get; set; }
+
+        public ProbeV1 LivenessProbe { get; set; }
+        public ProbeV1 ReadinessProbe { get; set; }
+        public ProbeV1 StartupProbe { get; set; }
 
         //TODO: Add Endpoints
         // Endpoints

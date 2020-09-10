@@ -32,15 +32,12 @@ namespace Turquoise.Scheduler.JobSchedules
         {
             var services = await k8sService.GetAllServicesWithIngressAsync();
             var syncTime = DateTime.UtcNow;
-            //  _logger.LogCritical(services.ToJson());
 
             foreach (var item in services)
             {
                 item.LatestSyncDateUTC = syncTime;
                 await serviceRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
             }
-
-
 
             var mongodbservices = await serviceRepo.GetAllAsync();
             foreach (var item in mongodbservices)

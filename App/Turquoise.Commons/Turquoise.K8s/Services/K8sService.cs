@@ -58,6 +58,22 @@ namespace Turquoise.K8s.Services
             return items;//items;
         }
 
+
+        public async Task<IList<Turquoise.Models.Mongo.DeploymentV1>> GetAllMongoDeploymentsAsync()
+        {
+            var items = await deploymentsClient.GetAllAsync();
+            var dtoitems = mapper.Map<IList<Turquoise.Models.Mongo.DeploymentV1>>(items);
+            return dtoitems;
+        }
+
+
+        public async Task<IList<V1Deployment>> GetAllDeploymentsAsync()
+        {
+            var items = await deploymentsClient.GetAllAsync();
+            // var dtoitems = mapper.Map<IList<Deployment>>(items);
+            return items;//items;
+        }
+
         public async Task<IList<V1Service>> GetServicesforCron()
         {
             var services = await this.serviceClient.GetAllAsync();
