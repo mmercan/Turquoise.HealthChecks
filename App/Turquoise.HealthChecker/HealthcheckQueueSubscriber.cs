@@ -172,17 +172,17 @@ namespace Turquoise.HealthChecker
                 ServiceNamespace = service.Namespace,
                 ServiceApiVersion = service.ServiceApiVersion,
                 ServiceResourceVersion = service.ServiceResourceVersion,
-                StatusCode = res.FirstOrDefault().Status,
-
-                Message = service.Name + " HealthCheck isAlive and Well Failed"
+                StatusCode = res.FirstOrDefault().Status
             };
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
+                notify.Message = "Failed HealthCheck " + service.Name;
                 notify.Status = NotifyServiceHealthCheckStatus.Warning;
             }
             else
             {
+                notify.Message = "Success HealthCheck " + service.Name;
                 notify.Status = NotifyServiceHealthCheckStatus.Normal;
             }
 
