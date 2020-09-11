@@ -4,6 +4,7 @@ namespace Turquoise.Comms.Models
     {
         SendEmail,
         AddEvent,
+        AddEventonSuccess,
         FeatureC,
         Beta
     }

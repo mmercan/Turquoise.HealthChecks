@@ -20,7 +20,8 @@ namespace Turquoise.Models.RabbitMQ
 
     public enum NotifyServiceHealthCheckStatus
     {
-        Warning,
-        Normal
+
+        Normal,
+        Warning
     }
 }

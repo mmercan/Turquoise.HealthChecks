@@ -163,37 +163,43 @@ namespace Turquoise.HealthChecker
 
             logger.LogCritical("ServiceV1 Sync message " + service.Name);
 
+            var notify = new NotifyServiceHealthCheck
+            {
+                ID = result.Id.ToString(),
+                ServiceName = service.Name,
+
+                ServiceUid = service.Name,
+                ServiceNamespace = service.Namespace,
+                ServiceApiVersion = service.ServiceApiVersion,
+                ServiceResourceVersion = service.ServiceResourceVersion,
+                StatusCode = res.FirstOrDefault().Status,
+
+                Message = service.Name + " HealthCheck isAlive and Well Failed"
+            };
 
             if (!res.FirstOrDefault().IsSuccessStatusCode)
             {
-                var notify = new NotifyServiceHealthCheck
-                {
-                    ID = result.Id.ToString(),
-                    ServiceName = service.Name,
-
-                    ServiceUid = service.Name,
-                    ServiceNamespace = service.Namespace,
-                    ServiceApiVersion = service.ServiceApiVersion,
-                    ServiceResourceVersion = service.ServiceResourceVersion,
-                    StatusCode = res.FirstOrDefault().Status,
-                    Status = NotifyServiceHealthCheckStatus.Warning,
-                    Message = service.Name + " HealthCheck isAlive and Well Failed"
-                };
-                await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
-                {
-                    if (task.IsCompleted)
-                    {
-
-                        logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
-                    }
-                    if (task.IsFaulted)
-                    {
-                        logger.LogCritical("\n\n");
-                        logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
-                        logger.LogCritical("\n\n");
-                    }
-                });
+                notify.Status = NotifyServiceHealthCheckStatus.Warning;
             }
+            else
+            {
+                notify.Status = NotifyServiceHealthCheckStatus.Normal;
+            }
+
+            await bus.PublishAsync(notify, configuration["queue:nofity"]).ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:nofity"] + " " + result.ServiceName);
+                }
+                if (task.IsFaulted)
+                {
+                    logger.LogCritical("\n\n");
+                    logger.LogCritical("Error on adding to Queue " + configuration["queue:nofity"] + " " + task.Exception.Message);
+                    logger.LogCritical("\n\n");
+                }
+            });
+
         }
     }
 

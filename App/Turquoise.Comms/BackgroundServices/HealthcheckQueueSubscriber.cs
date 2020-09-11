@@ -81,11 +81,13 @@ namespace Turquoise.Comms.BackgroundServices
 
             if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.SendEmail)))
             {
-
-                logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
-                string body = notify.ServiceName + " " + notify.StatusCode;
-                mailService.Send("test@test.com", "failure on HealthCheck", body);
-                logger.LogCritical("Email sent " + notify.ServiceName + " Code :" + notify.StatusCode);
+                if (notify.Status == NotifyServiceHealthCheckStatus.Warning)
+                {
+                    logger.LogCritical("Sending email " + notify.ServiceName + " Code :" + notify.StatusCode);
+                    string body = notify.ServiceName + " " + notify.StatusCode;
+                    mailService.Send("test@test.com", "failure on HealthCheck", body);
+                    logger.LogCritical("Email sent " + notify.ServiceName + " Code :" + notify.StatusCode);
+                }
             }
 
 
@@ -110,7 +112,7 @@ namespace Turquoise.Comms.BackgroundServices
                         serviceNamespace, serviceApiVersion, serviceResourceVersion,
                                   message);
                 }
-                else
+                else if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.AddEventonSuccess)))
                 {
                     await this.k8sService.EventClient.CountUpOrCreateEvent(
                      namespaceParam, serviceName, serviceUid,
@@ -121,6 +123,8 @@ namespace Turquoise.Comms.BackgroundServices
 
                 logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
             }
+
+
         }
     }
 
