@@ -108,20 +108,21 @@ namespace Turquoise.Comms.BackgroundServices
                 if (notify.Status == NotifyServiceHealthCheckStatus.Warning)
                 {
                     await this.k8sService.EventClient.CountUpOrCreateEvent(
-                         namespaceParam, serviceName, serviceUid,
-                        serviceNamespace, serviceApiVersion, serviceResourceVersion,
+                         namespaceParam, serviceName, serviceUid, serviceNamespace, serviceApiVersion, serviceResourceVersion,
                                   message);
+
+                    logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
                 }
                 else if (await featureManager.IsEnabledAsync(nameof(CommsFeatureFlags.AddEventonSuccess)))
                 {
                     await this.k8sService.EventClient.CountUpOrCreateEvent(
-                     namespaceParam, serviceName, serviceUid,
-                             serviceNamespace, serviceApiVersion,
-                              serviceResourceVersion,
-                              message, type: "Normal");
+                     namespaceParam, serviceName, serviceUid, serviceNamespace, serviceApiVersion,
+                              serviceResourceVersion, message, type: "Normal");
+
+                    logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
                 }
 
-                logger.LogCritical("Event Added " + notify.ServiceName + " Code :" + notify.StatusCode);
+
             }
 
 
