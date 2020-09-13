@@ -102,6 +102,13 @@ namespace Turquoise.Comms.BackgroundServices
                 var serviceUid = notify.ServiceUid;
                 var serviceNamespace = notify.ServiceNamespace;
                 var serviceApiVersion = notify.ServiceApiVersion;
+
+                if (serviceApiVersion == null)
+                {
+                    serviceApiVersion = "v1";
+                }
+
+
                 var serviceResourceVersion = notify.ServiceResourceVersion;
                 var message = notify.Message;
 

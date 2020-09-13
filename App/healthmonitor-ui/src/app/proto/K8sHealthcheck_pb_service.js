@@ -20,6 +20,15 @@ NamespaceService.GetNamespaces = {
   responseType: K8sHealthcheck_pb.NamespaceListReply
 };
 
+NamespaceService.GetServices = {
+  methodName: "GetServices",
+  service: NamespaceService,
+  requestStream: false,
+  responseStream: false,
+  requestType: K8sHealthcheck_pb.GetServicesRequest,
+  responseType: K8sHealthcheck_pb.ServiceListReply
+};
+
 NamespaceService.GetDeployments = {
   methodName: "GetDeployments",
   service: NamespaceService,
@@ -41,6 +50,37 @@ NamespaceServiceClient.prototype.getNamespaces = function getNamespaces(requestM
     callback = arguments[1];
   }
   var client = grpc.unary(NamespaceService.GetNamespaces, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+NamespaceServiceClient.prototype.getServices = function getServices(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(NamespaceService.GetServices, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

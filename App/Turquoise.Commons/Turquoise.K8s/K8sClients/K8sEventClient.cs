@@ -172,6 +172,7 @@ namespace Turquoise.K8s.K8sClients
             refer.NamespaceProperty = serviceNamespace;
             refer.Uid = serviceUid;
             refer.ResourceVersion = serviceResourceVersion;
+            refer.FieldPath = "metadata.annotations";
 
             V1Event newEvent = new V1Event { };
             //  newEvent.EventTime = DateTime.Now;

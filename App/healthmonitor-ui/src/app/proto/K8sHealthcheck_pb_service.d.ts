@@ -14,6 +14,15 @@ type NamespaceServiceGetNamespaces = {
   readonly responseType: typeof K8sHealthcheck_pb.NamespaceListReply;
 };
 
+type NamespaceServiceGetServices = {
+  readonly methodName: string;
+  readonly service: typeof NamespaceService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof K8sHealthcheck_pb.GetServicesRequest;
+  readonly responseType: typeof K8sHealthcheck_pb.ServiceListReply;
+};
+
 type NamespaceServiceGetDeployments = {
   readonly methodName: string;
   readonly service: typeof NamespaceService;
@@ -26,6 +35,7 @@ type NamespaceServiceGetDeployments = {
 export class NamespaceService {
   static readonly serviceName: string;
   static readonly GetNamespaces: NamespaceServiceGetNamespaces;
+  static readonly GetServices: NamespaceServiceGetServices;
   static readonly GetDeployments: NamespaceServiceGetDeployments;
 }
 
@@ -69,6 +79,15 @@ export class NamespaceServiceClient {
   getNamespaces(
     requestMessage: google_protobuf_empty_pb.Empty,
     callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.NamespaceListReply|null) => void
+  ): UnaryResponse;
+  getServices(
+    requestMessage: K8sHealthcheck_pb.GetServicesRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.ServiceListReply|null) => void
+  ): UnaryResponse;
+  getServices(
+    requestMessage: K8sHealthcheck_pb.GetServicesRequest,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.ServiceListReply|null) => void
   ): UnaryResponse;
   getDeployments(
     requestMessage: K8sHealthcheck_pb.GetDeploymentsRequest,

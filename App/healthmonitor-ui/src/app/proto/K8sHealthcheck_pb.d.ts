@@ -5,6 +5,26 @@ import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 
+export class GetServicesRequest extends jspb.Message {
+  getNamespaceparam(): string;
+  setNamespaceparam(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetServicesRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetServicesRequest): GetServicesRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetServicesRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetServicesRequest;
+  static deserializeBinaryFromReader(message: GetServicesRequest, reader: jspb.BinaryReader): GetServicesRequest;
+}
+
+export namespace GetServicesRequest {
+  export type AsObject = {
+    namespaceparam: string,
+  }
+}
+
 export class GetDeploymentsRequest extends jspb.Message {
   getNamespace(): string;
   setNamespace(value: string): void;
@@ -170,6 +190,166 @@ export namespace Pair {
   export type AsObject = {
     key: string,
     value: string,
+  }
+}
+
+export class StringMessage extends jspb.Message {
+  getValue(): string;
+  setValue(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StringMessage.AsObject;
+  static toObject(includeInstance: boolean, msg: StringMessage): StringMessage.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: StringMessage, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StringMessage;
+  static deserializeBinaryFromReader(message: StringMessage, reader: jspb.BinaryReader): StringMessage;
+}
+
+export namespace StringMessage {
+  export type AsObject = {
+    value: string,
+  }
+}
+
+export class ServiceListReply extends jspb.Message {
+  clearServicesList(): void;
+  getServicesList(): Array<ServiceReply>;
+  setServicesList(value: Array<ServiceReply>): void;
+  addServices(value?: ServiceReply, index?: number): ServiceReply;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ServiceListReply.AsObject;
+  static toObject(includeInstance: boolean, msg: ServiceListReply): ServiceListReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ServiceListReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ServiceListReply;
+  static deserializeBinaryFromReader(message: ServiceListReply, reader: jspb.BinaryReader): ServiceListReply;
+}
+
+export namespace ServiceListReply {
+  export type AsObject = {
+    servicesList: Array<ServiceReply.AsObject>,
+  }
+}
+
+export class ServiceReply extends jspb.Message {
+  getNameandnamespace(): string;
+  setNameandnamespace(value: string): void;
+
+  getUid(): string;
+  setUid(value: string): void;
+
+  getName(): string;
+  setName(value: string): void;
+
+  getNamespace(): string;
+  setNamespace(value: string): void;
+
+  clearLabelsList(): void;
+  getLabelsList(): Array<Pair>;
+  setLabelsList(value: Array<Pair>): void;
+  addLabels(value?: Pair, index?: number): Pair;
+
+  hasCreationtime(): boolean;
+  clearCreationtime(): void;
+  getCreationtime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setCreationtime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  clearLabelselectorList(): void;
+  getLabelselectorList(): Array<Pair>;
+  setLabelselectorList(value: Array<Pair>): void;
+  addLabelselector(value?: Pair, index?: number): Pair;
+
+  clearAnnotationsList(): void;
+  getAnnotationsList(): Array<Pair>;
+  setAnnotationsList(value: Array<Pair>): void;
+  addAnnotations(value?: Pair, index?: number): Pair;
+
+  getServicetype(): string;
+  setServicetype(value: string): void;
+
+  getSessionaffinity(): string;
+  setSessionaffinity(value: string): void;
+
+  getClusterip(): string;
+  setClusterip(value: string): void;
+
+  clearInternalendpointsList(): void;
+  getInternalendpointsList(): Array<StringMessage>;
+  setInternalendpointsList(value: Array<StringMessage>): void;
+  addInternalendpoints(value?: StringMessage, index?: number): StringMessage;
+
+  clearExternalendpointsList(): void;
+  getExternalendpointsList(): Array<StringMessage>;
+  setExternalendpointsList(value: Array<StringMessage>): void;
+  addExternalendpoints(value?: StringMessage, index?: number): StringMessage;
+
+  getIngressurl(): string;
+  setIngressurl(value: string): void;
+
+  getVirtualserviceurl(): string;
+  setVirtualserviceurl(value: string): void;
+
+  hasLatestsyncdateutc(): boolean;
+  clearLatestsyncdateutc(): void;
+  getLatestsyncdateutc(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLatestsyncdateutc(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getDeleted(): boolean;
+  setDeleted(value: boolean): void;
+
+  getHealthisalive(): string;
+  setHealthisalive(value: string): void;
+
+  hasHealthisalivesyncdateutc(): boolean;
+  clearHealthisalivesyncdateutc(): void;
+  getHealthisalivesyncdateutc(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setHealthisalivesyncdateutc(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getHealthisaliveandwell(): string;
+  setHealthisaliveandwell(value: string): void;
+
+  hasHealthisaliveandwellsyncdateutc(): boolean;
+  clearHealthisaliveandwellsyncdateutc(): void;
+  getHealthisaliveandwellsyncdateutc(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setHealthisaliveandwellsyncdateutc(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ServiceReply.AsObject;
+  static toObject(includeInstance: boolean, msg: ServiceReply): ServiceReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ServiceReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ServiceReply;
+  static deserializeBinaryFromReader(message: ServiceReply, reader: jspb.BinaryReader): ServiceReply;
+}
+
+export namespace ServiceReply {
+  export type AsObject = {
+    nameandnamespace: string,
+    uid: string,
+    name: string,
+    namespace: string,
+    labelsList: Array<Pair.AsObject>,
+    creationtime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    labelselectorList: Array<Pair.AsObject>,
+    annotationsList: Array<Pair.AsObject>,
+    servicetype: string,
+    sessionaffinity: string,
+    clusterip: string,
+    internalendpointsList: Array<StringMessage.AsObject>,
+    externalendpointsList: Array<StringMessage.AsObject>,
+    ingressurl: string,
+    virtualserviceurl: string,
+    latestsyncdateutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    deleted: boolean,
+    healthisalive: string,
+    healthisalivesyncdateutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    healthisaliveandwell: string,
+    healthisaliveandwellsyncdateutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
