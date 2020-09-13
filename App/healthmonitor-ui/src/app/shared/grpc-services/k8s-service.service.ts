@@ -3,7 +3,6 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 import { AuthService } from 'app/shared/authentication/auth.service';
 
 import { grpc } from '@improbable-eng/grpc-web';
-import { DeploymentReply, NamespaceListReply, NamespaceReply } from '../../proto/K8sHealthcheck_pb';
 import { NamespaceServiceClient } from '../../proto/K8sHealthcheck_pb_service';
 import { NamespaceService } from '../../proto/K8sHealthcheck_pb_service';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
@@ -11,6 +10,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'environments/environment';
+import { ServiceListReply, ServiceReply, GetServicesRequest } from 'app/proto/K8sHealthcheck_pb';
 
 @Injectable({
   providedIn: 'root'
@@ -32,28 +32,28 @@ export class K8sServiceService {
   }
 
 
-
-  getNameSpaces(): Observable<NamespaceReply[]> {
+  getServices(namespaceparam: string): Observable<ServiceReply[]> {
     // debugger;
     const obs = Observable.create(observer => {
 
-      const getNamespaceRequest = new Empty();
+      const getServicesRequest = new GetServicesRequest();
+      getServicesRequest.setNamespaceparam(namespaceparam);
 
       const authmetadata = new grpc.Metadata();
       authmetadata.append('authorization', `Bearer ${this.token}`);
 
-      grpc.unary(NamespaceService.GetNamespaces, {
+      grpc.unary(NamespaceService.GetServices, {
 
         metadata: authmetadata,
-        request: getNamespaceRequest,
+        request: getServicesRequest,
         host: environment.grpc.url,
 
         onEnd: res => {
-          const message = res.message as NamespaceListReply;
+          const message = res.message as ServiceListReply;
           const status = res.status;
 
           if (status === grpc.Code.OK && message) {
-            observer.next(message.getNamespacesList());
+            observer.next(message.getServicesList());
           } else if (status === grpc.Code.Unauthenticated) {
             this.authService.login();
           } else {
