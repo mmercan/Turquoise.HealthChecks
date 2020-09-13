@@ -1,3 +1,8 @@
+
+
+![diagram](taka.png)
+
+
 Adding grpc to Angular
 
 https://anthonygiretti.com/2020/03/29/grpc-asp-net-core-3-1-how-to-create-a-grpc-web-client-examples-with-angular-8-and-httpclient/
@@ -24,3 +29,4 @@ protoc --plugin=protoc-gen-ts="{ABSOLUTEPATH}\node_modules\.bin\protoc-gen-ts.cm
 
 ./node_modules/protoc/protoc/bin/protoc --plugin="protoc-gen-ts=.\node_modules\.bin\protoc-gen-ts.cmd" --js_out="import_style=commonjs,binary:src/app/proto" --ts_out="service=grpc-web:src/app/proto" -I ./../Protos ../Protos/*.proto
 
+taka
