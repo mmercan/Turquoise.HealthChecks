@@ -10,28 +10,28 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                        <p class="text-truncate">{{product.id}}</p>
+                    <mat-cell *matCellDef="let service">
+                        <p class="text-truncate">{{service.id}}</p>
                     </mat-cell>
                 </ng-container>
 
                 <!-- Image Column -->
                 <ng-container matColumnDef="image">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                        <img class="product-image"
-                             *ngIf="product.featuredImageId" [alt]="product.name"
-                             [src]="product.images[product.featuredImageId].url"/>
-                        <img *ngIf="!product.featuredImageId"
-                             [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    <mat-cell *matCellDef="let service">
+                        <img class="service-image"
+                             *ngIf="service.featuredImageId" [alt]="service.name"
+                             [src]="service.images[service.featuredImageId].url"/>
+                        <img *ngIf="!service.featuredImageId"
+                             [src]="'assets/images/ecommerce/service-image-placeholder.png'">
                     </mat-cell>
                 </ng-container>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                    <mat-cell *matCellDef="let product">
-                        <p class="text-truncate">{{product.name}}</p>
+                    <mat-cell *matCellDef="let service">
+                        <p class="text-truncate">{{service.name}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -48,9 +48,9 @@
                 <!-- Price Column -->
                 <ng-container matColumnDef="price">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
                         <p class="price text-truncate">
-                            {{product.priceTaxIncl | currency:'USD':'symbol'}}
+                            {{service.priceTaxIncl | currency:'USD':'symbol'}}
                         </p>
                     </mat-cell>
                 </ng-container>
@@ -58,13 +58,13 @@
                 <!-- Quantity Column -->
                 <ng-container matColumnDef="quantity">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
 
                         <span class="quantity-indicator text-truncate"
-                              [ngClass]="{'red-500':product.quantity <= 5, 'amber-500':product.quantity > 5 && product.quantity <= 25,'green-600':product.quantity > 25}">
+                              [ngClass]="{'red-500':service.quantity <= 5, 'amber-500':service.quantity > 5 && service.quantity <= 25,'green-600':service.quantity > 25}">
                         </span>
                         <span>
-                            {{product.quantity}}
+                            {{service.quantity}}
                         </span>
 
                     </mat-cell>
@@ -73,18 +73,18 @@
                 <!-- Active Column -->
                 <ng-container matColumnDef="active">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
-                        <mat-icon *ngIf="product.active" class="active-icon green-600 s-16">check</mat-icon>
-                        <mat-icon *ngIf="!product.active" class="active-icon red-500 s-16">close</mat-icon>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="service.active" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="!service.active" class="active-icon red-500 s-16">close</mat-icon>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let product; columns: displayedColumns;"
+                <mat-row *matRowDef="let service; columns: displayedColumns;"
                          class="product"
                          matRipple
-                         [routerLink]="'/apps/e-commerce/products/'+product.id+'/'+product.handle">
+                         [routerLink]="'/apps/e-commerce/products/'+service.id+'/'+service.handle">
                 </mat-row>
 
             </mat-table>

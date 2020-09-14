@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { NSDashboardResponse } from './ns-dashboard.model';
+import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class NsDashboardService implements Resolve<any> {
 
   public projects: any[];
   public widgets: any[];
-  public services: any[];
+  public services: any[] = [];
 
   public currentNamespace: string;
 
@@ -33,7 +34,7 @@ export class NsDashboardService implements Resolve<any> {
     services: any[]
   };
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private k8sService: K8sServiceService) {
 
     this.dataStore = {
       currentNamespace: '',
@@ -97,7 +98,8 @@ export class NsDashboardService implements Resolve<any> {
 
 
   private updateServices(ns: string): void {
-    this.httpClient.get('api/k8sevents-services').subscribe(
+
+    this.k8sService.getServices(ns).subscribe(
       data => {
         this.services = data as any[];
         this.dataStore.services = data as any[];
@@ -105,6 +107,16 @@ export class NsDashboardService implements Resolve<any> {
       },
       error => { }
     );
+
+
+    // this.httpClient.get('api/k8sevents-services').subscribe(
+    //   data => {
+    //     this.services = data as any[];
+    //     this.dataStore.services = data as any[];
+    //     this._dataset.next(Object.assign({}, this.dataStore));
+    //   },
+    //   error => { }
+    // );
   }
 
   getProjects(): Promise<any> {

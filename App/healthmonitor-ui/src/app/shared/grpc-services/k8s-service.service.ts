@@ -53,7 +53,7 @@ export class K8sServiceService {
           const status = res.status;
 
           if (status === grpc.Code.OK && message) {
-            observer.next(message.getServicesList());
+            observer.next(message.toObject().servicesList);
           } else if (status === grpc.Code.Unauthenticated) {
             this.authService.login();
           } else {

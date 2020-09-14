@@ -100,14 +100,9 @@ export class FilesDataSource extends DataSource<any>
       .pipe(
         map((x, y) => {
           let data = this.nsDashboardService.services.slice();
-
-          debugger;
           data = this.filterData(data);
-
           this.filteredData = [...data];
-
           data = this.sortData(data);
-
           // Grab the page's slice of data.
           const startIndex = this.matPaginator.pageIndex * this.matPaginator.pageSize;
           return data.splice(startIndex, this.matPaginator.pageSize);
