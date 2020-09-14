@@ -1,6 +1,6 @@
 
 
-![diagram](taka.png)
+![diagram](taka1.png)
 
 
 Adding grpc to Angular
