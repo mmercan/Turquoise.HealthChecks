@@ -5,24 +5,25 @@ import { GetByIdPipe } from './getById.pipe';
 import { HtmlToPlaintextPipe } from './htmlToPlaintext.pipe';
 import { FilterPipe } from './filter.pipe';
 import { CamelCaseToDashPipe } from './camelCaseToDash.pipe';
-
+import { MomentAgePipe } from './moment-age.pipe';
 @NgModule({
     declarations: [
         KeysPipe,
         GetByIdPipe,
         HtmlToPlaintextPipe,
         FilterPipe,
-        CamelCaseToDashPipe
+        CamelCaseToDashPipe,
+        MomentAgePipe,
     ],
-    imports     : [],
-    exports     : [
+    imports: [],
+    exports: [
         KeysPipe,
         GetByIdPipe,
         HtmlToPlaintextPipe,
         FilterPipe,
-        CamelCaseToDashPipe
+        CamelCaseToDashPipe,
+        MomentAgePipe
     ]
 })
-export class FusePipesModule
-{
+export class FusePipesModule {
 }

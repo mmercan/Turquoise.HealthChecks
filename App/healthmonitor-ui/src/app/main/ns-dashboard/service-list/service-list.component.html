@@ -45,32 +45,50 @@
                     </mat-cell>
                 </ng-container>
 -->
-                <!-- Price Column -->
-                <ng-container matColumnDef="price">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
+            
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Status</mat-header-cell>
                     <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
                         <p class="price text-truncate">
-                            {{service.priceTaxIncl | currency:'USD':'symbol'}}
+                        {{service.healthisaliveandwell}} 
+                          <!--  {{service.priceTaxIncl | currency:'USD':'symbol'}} -->
                         </p>
                     </mat-cell>
                 </ng-container>
 
-                <!-- Quantity Column -->
-                <ng-container matColumnDef="quantity">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
-                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
 
-                        <span class="quantity-indicator text-truncate"
-                              [ngClass]="{'red-500':service.quantity <= 5, 'amber-500':service.quantity > 5 && service.quantity <= 25,'green-600':service.quantity > 25}">
-                        </span>
+
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="lasttest">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Last Test</mat-header-cell>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
                         <span>
-                            {{service.quantity}}
+                            {{service.healthisaliveandwellsyncdateutc  | momentAge }}
                         </span>
 
                     </mat-cell>
                 </ng-container>
 
                 <!-- Active Column -->
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="age">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Age</mat-header-cell>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
+
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':service.quantity <= 5, 'amber-500':service.quantity > 5 && service.quantity <= 25,'green-600':service.quantity > 25}">
+                        </span>
+                        <span>
+                            {{service.creationtime  | momentAge }}
+                        </span>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Active Column -->
+
                 <ng-container matColumnDef="active">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
                     <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
@@ -84,7 +102,13 @@
                 <mat-row *matRowDef="let service; columns: displayedColumns;"
                          class="product"
                          matRipple
-                         [routerLink]="'/apps/e-commerce/products/'+service.id+'/'+service.handle">
+                         [routerLink]="'/apps/e-commerce/products/'+service.id+'/'+service.handle"
+                         [ngClass]="{ 'unhealthy': service.healthisaliveandwell == 'Unhealthy',  
+                         'healthy': service.healthisaliveandwell == 'Healthy',
+                         'ok': service.healthisaliveandwell == 'OK',
+                         'degraded': service.healthisaliveandwell == 'Degraded'
+                           }"
+                         >
                 </mat-row>
 
             </mat-table>

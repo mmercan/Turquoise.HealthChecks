@@ -97,7 +97,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             // }
             // return deploy;
 
-            // return base.GetServices(request, context);   
+            // return base.GetServices(request, context);
         }
 
 
@@ -135,20 +135,48 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                     srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
                 }
 
-                // srv.ServiceType = item.Type;
-                // srv.SessionAffinity = item.SessionAffinity;
-                // srv.ClusterIP = item.ClusterIP;
-                // srv.InternalEndpoints.AddRange( item.InternalEndpoints);
-                // srv.ExternalEndpoints = item.ExternalEndpoints;
-                // srv.IngressUrl = item;
-                // srv.VirtualServiceUrl = item.VirtualServiceUrl;
-                // srv.LatestSyncDateUTC = item.LatestSyncDateUTC;
-                // srv.Deleted = item.Deleted;
-                // srv.HealthIsalive = item.HealthIsalive;
-                // srv.HealthIsaliveSyncDateUTC = item.HealthIsaliveSyncDateUTC;
-                // srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
-                // srv.HealthIsaliveAndWellSyncDateUTC = item.HealthIsaliveAndWellSyncDateUTC;
+                srv.ServiceType = item.Type;
+                srv.SessionAffinity = item.SessionAffinity;
+                srv.ClusterIP = item.ClusterIP;
+                if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
+                {
+                    srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
+                }
+                if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
+                {
+                    srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
+                }
+                if (item.IngressUrl != null)
+                {
+                    srv.IngressUrl = item.IngressUrl;
+                }
+                if (item.VirtualServiceUrl != null)
+                {
+                    srv.VirtualServiceUrl = item.VirtualServiceUrl;
+                }
+                if (item.LatestSyncDateUTC != DateTime.MinValue)
+                {
+                    srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
+                }
+                srv.Deleted = item.Deleted;
+                if (item.HealthIsalive != null)
+                {
+                    srv.HealthIsalive = item.HealthIsalive;
+                }
+                if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
+                {
+                    srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
+                }
+                if (item.HealthIsaliveAndWell != null)
+                {
+                    _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
+                    srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
+                }
 
+                if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
+                {
+                    srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
+                }
 
             }
             return servicelist;

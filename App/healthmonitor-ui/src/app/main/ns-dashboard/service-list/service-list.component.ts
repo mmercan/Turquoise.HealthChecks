@@ -20,7 +20,7 @@ import { NsDashboardService } from '../ns-dashboard.service';
 })
 export class ServiceListComponent implements OnInit {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'price', 'quantity', 'active'];
+  displayedColumns = ['name', 'status', 'lasttest', 'age', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -105,6 +105,7 @@ export class FilesDataSource extends DataSource<any>
           data = this.sortData(data);
           // Grab the page's slice of data.
           const startIndex = this.matPaginator.pageIndex * this.matPaginator.pageSize;
+          // debugger;
           return data.splice(startIndex, this.matPaginator.pageSize);
         }
         ));

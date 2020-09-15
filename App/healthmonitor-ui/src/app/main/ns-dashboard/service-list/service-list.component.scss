@@ -1,5 +1,80 @@
 @import "src/@fuse/scss/fuse";
 
+.theme-default {
+  .unhealthy {
+    background: #ffcdd2 !important
+  }
+
+  .ok {
+    background: #c8e6c9 !important;
+  }
+
+  .healthy {
+    background: #c8e6c9 !important;
+  }
+
+  .degraded {
+    background: #fff9c4 !important;
+  }
+}
+
+.theme-yellow-light {
+  .unhealthy {
+    background: #ffcdd2 !important
+  }
+
+  .ok {
+    background: #c8e6c9 !important;
+  }
+
+  .healthy {
+    background: #c8e6c9 !important;
+  }
+
+  .degraded {
+    background: #fff9c4 !important;
+  }
+}
+
+
+.theme-blue-gray-dark {
+  .unhealthy {
+    background: #b71c1c !important
+  }
+
+  .ok {
+    background: #1b5e20 !important;
+  }
+
+  .healthy {
+    background: #1b5e20 !important;
+  }
+
+  .degraded {
+    background: #827717 !important
+  }
+}
+
+
+.theme-pink-dark {
+  .unhealthy {
+    background: #b71c1c !important
+  }
+
+  .ok {
+    background: #1b5e20 !important;
+  }
+
+  .healthy {
+    background: #1b5e20 !important;
+  }
+
+  .degraded {
+    background: #827717 !important
+  }
+}
+
+
 e-commerce-products {
 
   .top-bg {
@@ -92,11 +167,15 @@ e-commerce-products {
     flex: 0 1 240px;
   }
 
-  .mat-column-price {
+  .mat-column-status {
     flex: 0 1 160px;
   }
 
-  .mat-column-quantity {
+  .mat-column-age {
+    flex: 0 1 160px;
+  }
+
+  .mat-column-lasttest {
     flex: 0 1 160px;
   }
 
