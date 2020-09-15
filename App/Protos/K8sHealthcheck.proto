@@ -10,6 +10,7 @@ service NamespaceService {
   rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
   rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
+  rpc GetEvents (GetEventListRequest) returns (EventListReply); 
 }
 
 message GetServicesRequest
@@ -83,3 +84,31 @@ message ServiceReply {
   google.protobuf.Timestamp healthIsaliveAndWellSyncDateUTC = 22;
 
 }
+
+message GetEventListRequest
+{
+  string NamespaceParam=1;
+}
+
+message EventListReply
+{
+  repeated EventReply Events =1;
+}
+
+message EventReply
+{
+  string Name = 1;
+  string Message = 2;
+  int32 Count = 3;
+  string Reason = 4;
+  string Type = 5;
+  google.protobuf.Timestamp FirstTimestamp = 6;
+  google.protobuf.Timestamp LastTimestamp = 7;
+  string InvolvedObjectName = 8;
+  string InvolvedObjectKind = 9;
+  string InvolvedObjectNamespace = 10;
+  string InvolvedObjectUid = 11;
+  repeated Pair Metadata = 12;
+
+}
+

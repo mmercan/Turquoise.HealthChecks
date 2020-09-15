@@ -228,5 +228,47 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
             return servicelist;
         }
+
+
+        public async override Task<EventListReply> GetEvents(GetEventListRequest request, ServerCallContext context)
+        {
+
+            var ns = request.NamespaceParam;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+            EventListReply events = new EventListReply();
+            var eventlist = await k8sService.GetEventsAsync(ns);
+            foreach (var item in eventlist)
+            {
+                var ev = new EventReply();
+                events.Events.Add(ev);
+
+                ev.Message = item.Message;
+
+                ev.Name = item.Metadata.Name;
+                ev.Message = item.Message;
+
+                if (item.Count.HasValue)
+                {
+                    ev.Count = item.Count.Value;
+                }
+                ev.Reason = item.Reason;
+                ev.Type = item.Type;
+                //                 ev.FirstTimestamp
+                //                 ev.LastTimestamp
+                //                 ev.InvolvedObjectName
+                //                 ev.InvolvedObjectKind
+                //                 ev.InvolvedObjectNamespace
+                //                 ev.InvolvedObjectUid
+                //                 ev.Metadata
+            }
+            return events;
+
+
+        }
+
+
     }
 }
