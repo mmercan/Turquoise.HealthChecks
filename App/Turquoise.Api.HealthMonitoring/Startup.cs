@@ -240,7 +240,7 @@ namespace Turquoise.Api.HealthMonitoring
 
             services.AddSingleton<K8sService>();
             services.AddSingleton<K8sMetricsService>();
-
+            services.AddSingleton<MongoAliveAndWellResultStats>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

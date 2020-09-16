@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 import { NSDashboardResponse } from './ns-dashboard.model';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
+import { K8sEventService } from 'app/shared/grpc-services/k8s-event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class NsDashboardService implements Resolve<any> {
   public projects: any[];
   public widgets: any[];
   public services: any[] = [];
+  public events: any[] = [];
 
   public currentNamespace: string;
 
@@ -34,7 +36,10 @@ export class NsDashboardService implements Resolve<any> {
     services: any[]
   };
 
-  constructor(private httpClient: HttpClient, private k8sService: K8sServiceService) {
+  constructor(
+    private httpClient: HttpClient,
+    private k8sService: K8sServiceService,
+    private k8sEventService: K8sEventService) {
 
     this.dataStore = {
       currentNamespace: '',
@@ -87,13 +92,24 @@ export class NsDashboardService implements Resolve<any> {
   }
 
   private updateevents(ns: string): void {
-    this.httpClient.get('api/k8sevents-events').subscribe(
+
+    this.k8sEventService.getEvents(ns).subscribe(
       data => {
+        this.events = data as any[];
         this.dataStore.events = data as any[];
         this._dataset.next(Object.assign({}, this.dataStore));
       },
       error => { }
     );
+
+
+    // this.httpClient.get('api/k8sevents-events').subscribe(
+    //   data => {
+    //     this.dataStore.events = data as any[];
+    //     this._dataset.next(Object.assign({}, this.dataStore));
+    //   },
+    //   error => { }
+    // );
   }
 
 
@@ -151,17 +167,5 @@ export class NsDashboardService implements Resolve<any> {
         }, reject);
     });
   }
-
-
-  // getEvents(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     this.httpClient.get('api/k8sevents-events')
-  //       .subscribe((response: any) => {
-  //         this.events = response;
-  //         resolve(response);
-  //       }, reject);
-  //   });
-  // }
-
 
 }

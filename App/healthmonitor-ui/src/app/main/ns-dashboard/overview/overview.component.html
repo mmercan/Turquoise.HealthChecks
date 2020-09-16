@@ -103,19 +103,24 @@
     <td mat-cell *matCellDef="let element"> {{element.message}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.involvedobjectname}} </td>
+  </ng-container>
+
   <ng-container matColumnDef="count">
     <th mat-header-cell *matHeaderCellDef> Count </th>
     <td mat-cell *matCellDef="let element"> {{element.count}} </td>
   </ng-container>
 
   <ng-container matColumnDef="lastTimestamp">
-    <th mat-header-cell *matHeaderCellDef> Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.lastTimestamp  | date:'short' }} </td>
+    <th mat-header-cell *matHeaderCellDef> Last Time </th>
+    <td mat-cell *matCellDef="let element"> {{element.lasttimestamp  |   momentAge  }} </td>
   </ng-container>
 
   <ng-container matColumnDef="kind">
     <th mat-header-cell *matHeaderCellDef> Kind </th>
-    <td mat-cell *matCellDef="let element"> {{element.involvedObject.kind}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.involvedobjectkind}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="events.columns"></tr>

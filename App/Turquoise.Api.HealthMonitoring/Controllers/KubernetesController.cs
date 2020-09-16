@@ -6,6 +6,7 @@ using k8s;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
 using Turquoise.K8s.Services;
@@ -24,6 +25,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         private readonly IFeatureManager featureManager;
         private readonly MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private readonly MangoBaseRepo<AliveAndWellResult> aliveAndWellResultRepo;
+        private readonly MongoAliveAndWellResultStats aliveAndWellstats;
 
         public KubernetesController(
             ILogger<WeatherForecastController> logger,
@@ -31,7 +33,8 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             AZAuthService azservice,
             IFeatureManager featureManager,
             MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceMongoRepo,
-            MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> aliveAndWellResultRepo
+            MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> aliveAndWellResultRepo,
+            MongoAliveAndWellResultStats aliveAndWellstats
             )
         {
             _logger = logger;
@@ -40,6 +43,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             this.featureManager = featureManager;
             this.serviceMongoRepo = serviceMongoRepo;
             this.aliveAndWellResultRepo = aliveAndWellResultRepo;
+            this.aliveAndWellstats = aliveAndWellstats;
         }
 
 
@@ -319,27 +323,21 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         {
             if (await featureManager.IsEnabledAsync(nameof(HealthMonitoringFeatureFlags.UseMongoData)))
             {
-
-                var stats = new AliveAndWellResultStat();
-
-
-                var totalservices = serviceMongoRepo.Find(p => p.Deleted == false && p.Namespace == namespaceParam).Count();
-
-                var unhealthystats = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status != "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Count();
-
-                var healthystats = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status == "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Count();
+                return aliveAndWellstats.GetResultStatWithCache(namespaceParam);
+                // var stats = new AliveAndWellResultStat();
 
 
-                var unhealthyserv = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status != "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Select(p => p.ServiceName).Distinct().ToList();
-
-                stats.AllRunsOnToday = unhealthystats + healthystats;
-                stats.HealthyRunsOnToday = healthystats;
-                stats.UnhealthyRunsOnToday = unhealthystats;
-                stats.UnhealthyServicesToday = unhealthyserv;
-
-                //var stats2 = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Distinct();
-
-                return stats;
+                // var totalservices = serviceMongoRepo.Find(p => p.Deleted == false && p.Namespace == namespaceParam).Count();
+                // var unhealthystats = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status != "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Count();
+                // var healthystats = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status == "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Count();
+                // var unhealthyserv = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.Status != "OK" && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Select(p => p.ServiceName).Distinct().ToList();
+                // stats.AllServices = totalservices;
+                // stats.AllRunsOnToday = unhealthystats + healthystats;
+                // stats.HealthyRunsOnToday = healthystats;
+                // stats.UnhealthyRunsOnToday = unhealthystats;
+                // stats.UnhealthyServicesToday = unhealthyserv;
+                // //var stats2 = aliveAndWellResultRepo.Find(p => p.ServiceNamespace == namespaceParam && p.CreationTime > DateTime.UtcNow.AddDays(-1)).Distinct();
+                // return stats;
             }
             else
             {

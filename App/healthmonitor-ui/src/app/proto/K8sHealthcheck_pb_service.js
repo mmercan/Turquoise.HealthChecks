@@ -38,6 +38,24 @@ NamespaceService.GetDeployments = {
   responseType: K8sHealthcheck_pb.DeploymentListReply
 };
 
+NamespaceService.GetEvents = {
+  methodName: "GetEvents",
+  service: NamespaceService,
+  requestStream: false,
+  responseStream: false,
+  requestType: K8sHealthcheck_pb.GetEventListRequest,
+  responseType: K8sHealthcheck_pb.EventListReply
+};
+
+NamespaceService.GetIsAliveAndWellStatsReply = {
+  methodName: "GetIsAliveAndWellStatsReply",
+  service: NamespaceService,
+  requestStream: false,
+  responseStream: false,
+  requestType: K8sHealthcheck_pb.IsAliveAndWellStatsRequest,
+  responseType: K8sHealthcheck_pb.IsAliveAndWellStatsReply
+};
+
 exports.NamespaceService = NamespaceService;
 
 function NamespaceServiceClient(serviceHost, options) {
@@ -112,6 +130,68 @@ NamespaceServiceClient.prototype.getDeployments = function getDeployments(reques
     callback = arguments[1];
   }
   var client = grpc.unary(NamespaceService.GetDeployments, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+NamespaceServiceClient.prototype.getEvents = function getEvents(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(NamespaceService.GetEvents, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+NamespaceServiceClient.prototype.getIsAliveAndWellStatsReply = function getIsAliveAndWellStatsReply(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(NamespaceService.GetIsAliveAndWellStatsReply, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

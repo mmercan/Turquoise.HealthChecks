@@ -147,6 +147,14 @@ namespace Turquoise.Common.Mongo
         }
 
 
+        public async Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter)
+        {
+            var name = typeof(T).ToString();
+            var res = await Items.FindAsync(filter);
+            return res.ToList();
+        }
+
+
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> filter)
         {
             var name = typeof(T).ToString();

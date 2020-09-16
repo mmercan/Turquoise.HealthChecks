@@ -5,6 +5,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
 using Turquoise.K8s.Services;
@@ -19,18 +20,21 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         private K8sService k8sService;
         private MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private IFeatureManager featureManager;
+        private MongoAliveAndWellResultStats aliveAndWellResultStats;
 
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
             K8sService k8sService,
             MangoBaseRepo<ServiceV1> serviceMongoRepo,
-            IFeatureManager featureManager
+            IFeatureManager featureManager,
+            MongoAliveAndWellResultStats aliveAndWellResultStats
             )
         {
             _logger = logger;
             this.k8sService = k8sService;
             this.serviceMongoRepo = serviceMongoRepo;
             this.featureManager = featureManager;
+            this.aliveAndWellResultStats = aliveAndWellResultStats;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -256,12 +260,38 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 }
                 ev.Reason = item.Reason;
                 ev.Type = item.Type;
-                //                 ev.FirstTimestamp
-                //                 ev.LastTimestamp
-                //                 ev.InvolvedObjectName
-                //                 ev.InvolvedObjectKind
-                //                 ev.InvolvedObjectNamespace
-                //                 ev.InvolvedObjectUid
+                if (item.FirstTimestamp.HasValue && item.FirstTimestamp.Value != DateTime.MinValue)
+                {
+                    ev.FirstTimestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.FirstTimestamp.Value);
+                }
+
+
+                if (item.LastTimestamp.HasValue && item.LastTimestamp.Value != DateTime.MinValue)
+                {
+                    ev.LastTimestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LastTimestamp.Value);
+                }
+
+                if (item.InvolvedObject != null)
+                {
+                    if (item.InvolvedObject.Name != null)
+                    {
+                        ev.InvolvedObjectName = item.InvolvedObject.Name;
+                    }
+
+                    if (item.InvolvedObject.Kind != null)
+                    {
+                        ev.InvolvedObjectKind = item.InvolvedObject.Kind;
+                    }
+                    if (item.InvolvedObject.NamespaceProperty != null)
+                    {
+                        ev.InvolvedObjectNamespace = item.InvolvedObject.NamespaceProperty;
+                    }
+                    if (item.InvolvedObject.Uid != null)
+                    {
+                        ev.InvolvedObjectUid = item.InvolvedObject.Uid;
+                    }
+                }
+
                 //                 ev.Metadata
             }
             return events;
@@ -269,6 +299,33 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         }
 
+
+        public override Task<IsAliveAndWellStatsReply> GetIsAliveAndWellStatsReply(IsAliveAndWellStatsRequest request, ServerCallContext context)
+        {
+            var ns = request.NamespaceParam;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+
+            IsAliveAndWellStatsReply stats = new IsAliveAndWellStatsReply();
+            var res = aliveAndWellResultStats.GetResultStatWithCache(ns);
+
+
+            stats.AllRunsOnToday = res.AllRunsOnToday;
+            stats.AllServices = res.AllServices;
+            stats.HealthyRunsOnToday = res.HealthyRunsOnToday;
+            stats.SyncDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(res.syncDate);
+            stats.UnhealthyRunsOnToday = res.UnhealthyRunsOnToday;
+
+            if (res.UnhealthyServicesToday != null && res.UnhealthyServicesToday.Count > 0)
+            {
+                stats.UnhealthyServicesToday.AddRange(res.UnhealthyServicesToday.Select(p => new StringMessage { Value = p }));
+            }
+
+            return Task.FromResult(stats);
+            //return base.GetIsAliveAndWellStatsReply(request, context);
+        }
 
     }
 }

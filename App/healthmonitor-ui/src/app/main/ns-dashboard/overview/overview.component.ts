@@ -15,7 +15,7 @@ import { fuseAnimations } from '@fuse/animations';
 })
 export class OverviewComponent implements OnInit {
   events = {
-    columns: ['message', 'count', 'lastTimestamp', 'kind'],
+    columns: ['message', 'name', 'count', 'kind', 'lastTimestamp'],
     rows: []
   };
 
@@ -34,6 +34,7 @@ export class OverviewComponent implements OnInit {
     this.nsDashboardService.dataset.subscribe(
       data => {
         this.events.rows = data.events;
+        //  debugger;
       },
       error => {
 

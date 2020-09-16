@@ -353,3 +353,179 @@ export namespace ServiceReply {
   }
 }
 
+export class GetEventListRequest extends jspb.Message {
+  getNamespaceparam(): string;
+  setNamespaceparam(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetEventListRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetEventListRequest): GetEventListRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetEventListRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetEventListRequest;
+  static deserializeBinaryFromReader(message: GetEventListRequest, reader: jspb.BinaryReader): GetEventListRequest;
+}
+
+export namespace GetEventListRequest {
+  export type AsObject = {
+    namespaceparam: string,
+  }
+}
+
+export class EventListReply extends jspb.Message {
+  clearEventsList(): void;
+  getEventsList(): Array<EventReply>;
+  setEventsList(value: Array<EventReply>): void;
+  addEvents(value?: EventReply, index?: number): EventReply;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): EventListReply.AsObject;
+  static toObject(includeInstance: boolean, msg: EventListReply): EventListReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: EventListReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): EventListReply;
+  static deserializeBinaryFromReader(message: EventListReply, reader: jspb.BinaryReader): EventListReply;
+}
+
+export namespace EventListReply {
+  export type AsObject = {
+    eventsList: Array<EventReply.AsObject>,
+  }
+}
+
+export class EventReply extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  getMessage(): string;
+  setMessage(value: string): void;
+
+  getCount(): number;
+  setCount(value: number): void;
+
+  getReason(): string;
+  setReason(value: string): void;
+
+  getType(): string;
+  setType(value: string): void;
+
+  hasFirsttimestamp(): boolean;
+  clearFirsttimestamp(): void;
+  getFirsttimestamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setFirsttimestamp(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  hasLasttimestamp(): boolean;
+  clearLasttimestamp(): void;
+  getLasttimestamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLasttimestamp(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getInvolvedobjectname(): string;
+  setInvolvedobjectname(value: string): void;
+
+  getInvolvedobjectkind(): string;
+  setInvolvedobjectkind(value: string): void;
+
+  getInvolvedobjectnamespace(): string;
+  setInvolvedobjectnamespace(value: string): void;
+
+  getInvolvedobjectuid(): string;
+  setInvolvedobjectuid(value: string): void;
+
+  clearMetadataList(): void;
+  getMetadataList(): Array<Pair>;
+  setMetadataList(value: Array<Pair>): void;
+  addMetadata(value?: Pair, index?: number): Pair;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): EventReply.AsObject;
+  static toObject(includeInstance: boolean, msg: EventReply): EventReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: EventReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): EventReply;
+  static deserializeBinaryFromReader(message: EventReply, reader: jspb.BinaryReader): EventReply;
+}
+
+export namespace EventReply {
+  export type AsObject = {
+    name: string,
+    message: string,
+    count: number,
+    reason: string,
+    type: string,
+    firsttimestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    lasttimestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    involvedobjectname: string,
+    involvedobjectkind: string,
+    involvedobjectnamespace: string,
+    involvedobjectuid: string,
+    metadataList: Array<Pair.AsObject>,
+  }
+}
+
+export class IsAliveAndWellStatsRequest extends jspb.Message {
+  getNamespaceparam(): string;
+  setNamespaceparam(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): IsAliveAndWellStatsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: IsAliveAndWellStatsRequest): IsAliveAndWellStatsRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: IsAliveAndWellStatsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): IsAliveAndWellStatsRequest;
+  static deserializeBinaryFromReader(message: IsAliveAndWellStatsRequest, reader: jspb.BinaryReader): IsAliveAndWellStatsRequest;
+}
+
+export namespace IsAliveAndWellStatsRequest {
+  export type AsObject = {
+    namespaceparam: string,
+  }
+}
+
+export class IsAliveAndWellStatsReply extends jspb.Message {
+  hasSyncdate(): boolean;
+  clearSyncdate(): void;
+  getSyncdate(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setSyncdate(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getAllservices(): number;
+  setAllservices(value: number): void;
+
+  getAllrunsontoday(): number;
+  setAllrunsontoday(value: number): void;
+
+  getHealthyrunsontoday(): number;
+  setHealthyrunsontoday(value: number): void;
+
+  getUnhealthyrunsontoday(): number;
+  setUnhealthyrunsontoday(value: number): void;
+
+  clearUnhealthyservicestodayList(): void;
+  getUnhealthyservicestodayList(): Array<StringMessage>;
+  setUnhealthyservicestodayList(value: Array<StringMessage>): void;
+  addUnhealthyservicestoday(value?: StringMessage, index?: number): StringMessage;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): IsAliveAndWellStatsReply.AsObject;
+  static toObject(includeInstance: boolean, msg: IsAliveAndWellStatsReply): IsAliveAndWellStatsReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: IsAliveAndWellStatsReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): IsAliveAndWellStatsReply;
+  static deserializeBinaryFromReader(message: IsAliveAndWellStatsReply, reader: jspb.BinaryReader): IsAliveAndWellStatsReply;
+}
+
+export namespace IsAliveAndWellStatsReply {
+  export type AsObject = {
+    syncdate?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    allservices: number,
+    allrunsontoday: number,
+    healthyrunsontoday: number,
+    unhealthyrunsontoday: number,
+    unhealthyservicestodayList: Array<StringMessage.AsObject>,
+  }
+}
+

@@ -11,6 +11,7 @@ service NamespaceService {
   rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
+  rpc GetIsAliveAndWellStatsReply (IsAliveAndWellStatsRequest) returns (IsAliveAndWellStatsReply);
 }
 
 message GetServicesRequest
@@ -110,5 +111,21 @@ message EventReply
   string InvolvedObjectUid = 11;
   repeated Pair Metadata = 12;
 
+}
+
+
+message IsAliveAndWellStatsRequest
+{
+  string NamespaceParam=1;
+}
+
+message IsAliveAndWellStatsReply
+{
+  google.protobuf.Timestamp SyncDate = 1;
+  int64 AllServices = 2;
+  int64 AllRunsOnToday = 3;
+  int64 HealthyRunsOnToday = 4;
+  int64 UnhealthyRunsOnToday = 5;
+  repeated StringMessage UnhealthyServicesToday = 6;
 }
 
