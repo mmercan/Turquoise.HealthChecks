@@ -13,7 +13,7 @@ export class ServiceDashboardComponent implements OnInit {
   dataStore: { dataset: any; };
   currentServiceName: any;
   currentNamespace: any;
-
+  panelOpenState = true;
   constructor(private serviceDashboardService: ServiceDashboardService) {
 
 

@@ -1,13 +1,7 @@
 <div id="profile" class="page-layout simple tabbed">
-
     <!-- HEADER -->
-    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-         fxLayoutAlign.gt-sm="space-between end">
-
-        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-             fxLayoutAlign.gt-sm="start center">
-      <!--          <img class="profile-image avatar huge" src="assets/images/avatars/Velazquez.jpg"
-                 [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"> -->
+    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
+        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/ns/'+currentNamespace">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
@@ -17,10 +11,7 @@
         </div>
 
         <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
-<!--            <button mat-raised-button color="accent" aria-label="Follow">Follow</button>
-            <button mat-raised-button color="primary" aria-label="Send Message">Send Message</button> -->
         </div>
-
     </div>
     <!-- / HEADER -->
 
@@ -28,7 +19,6 @@
     <div class="content">
 
         <mat-tab-group dynamicHeight="true">
-
             <mat-tab label="Timeline">
             <app-service-detail></app-service-detail>
               <!--  <profile-timeline></profile-timeline> -->
@@ -37,11 +27,6 @@
             <mat-tab label="About">
                 <!-- <profile-about></profile-about>-->
             </mat-tab>
-
-            <mat-tab label="Photos & Videos">
-               <!--  <profile-photos-videos></profile-photos-videos>-->
-            </mat-tab>
-
         </mat-tab-group>
 
     </div>
