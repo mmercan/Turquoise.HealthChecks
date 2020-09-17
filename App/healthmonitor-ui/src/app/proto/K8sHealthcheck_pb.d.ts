@@ -465,27 +465,27 @@ export namespace EventReply {
   }
 }
 
-export class IsAliveAndWellStatsRequest extends jspb.Message {
+export class HealthCheckStatsRequest extends jspb.Message {
   getNamespaceparam(): string;
   setNamespaceparam(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): IsAliveAndWellStatsRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: IsAliveAndWellStatsRequest): IsAliveAndWellStatsRequest.AsObject;
+  toObject(includeInstance?: boolean): HealthCheckStatsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: HealthCheckStatsRequest): HealthCheckStatsRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: IsAliveAndWellStatsRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): IsAliveAndWellStatsRequest;
-  static deserializeBinaryFromReader(message: IsAliveAndWellStatsRequest, reader: jspb.BinaryReader): IsAliveAndWellStatsRequest;
+  static serializeBinaryToWriter(message: HealthCheckStatsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HealthCheckStatsRequest;
+  static deserializeBinaryFromReader(message: HealthCheckStatsRequest, reader: jspb.BinaryReader): HealthCheckStatsRequest;
 }
 
-export namespace IsAliveAndWellStatsRequest {
+export namespace HealthCheckStatsRequest {
   export type AsObject = {
     namespaceparam: string,
   }
 }
 
-export class IsAliveAndWellStatsReply extends jspb.Message {
+export class HealthCheckStatsReply extends jspb.Message {
   hasSyncdate(): boolean;
   clearSyncdate(): void;
   getSyncdate(): google_protobuf_timestamp_pb.Timestamp | undefined;
@@ -509,16 +509,16 @@ export class IsAliveAndWellStatsReply extends jspb.Message {
   addUnhealthyservicestoday(value?: StringMessage, index?: number): StringMessage;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): IsAliveAndWellStatsReply.AsObject;
-  static toObject(includeInstance: boolean, msg: IsAliveAndWellStatsReply): IsAliveAndWellStatsReply.AsObject;
+  toObject(includeInstance?: boolean): HealthCheckStatsReply.AsObject;
+  static toObject(includeInstance: boolean, msg: HealthCheckStatsReply): HealthCheckStatsReply.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: IsAliveAndWellStatsReply, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): IsAliveAndWellStatsReply;
-  static deserializeBinaryFromReader(message: IsAliveAndWellStatsReply, reader: jspb.BinaryReader): IsAliveAndWellStatsReply;
+  static serializeBinaryToWriter(message: HealthCheckStatsReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HealthCheckStatsReply;
+  static deserializeBinaryFromReader(message: HealthCheckStatsReply, reader: jspb.BinaryReader): HealthCheckStatsReply;
 }
 
-export namespace IsAliveAndWellStatsReply {
+export namespace HealthCheckStatsReply {
   export type AsObject = {
     syncdate?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     allservices: number,

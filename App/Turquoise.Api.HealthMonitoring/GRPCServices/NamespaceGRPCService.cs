@@ -13,7 +13,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    //  [Authorize]
+    [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
@@ -299,8 +299,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         }
 
-
-        public override Task<IsAliveAndWellStatsReply> GetIsAliveAndWellStatsReply(IsAliveAndWellStatsRequest request, ServerCallContext context)
+         public override Task<HealthCheckStatsReply> GetHealthCheckStats(HealthCheckStatsRequest request, ServerCallContext context)
         {
             var ns = request.NamespaceParam;
             if (String.IsNullOrWhiteSpace(ns))
@@ -308,7 +307,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 throw new ArgumentException("Namespace is missing");
             }
 
-            IsAliveAndWellStatsReply stats = new IsAliveAndWellStatsReply();
+            HealthCheckStatsReply stats = new HealthCheckStatsReply();
             var res = aliveAndWellResultStats.GetResultStatWithCache(ns);
 
 

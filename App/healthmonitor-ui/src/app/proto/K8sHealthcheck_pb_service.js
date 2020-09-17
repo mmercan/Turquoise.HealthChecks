@@ -47,13 +47,13 @@ NamespaceService.GetEvents = {
   responseType: K8sHealthcheck_pb.EventListReply
 };
 
-NamespaceService.GetIsAliveAndWellStatsReply = {
-  methodName: "GetIsAliveAndWellStatsReply",
+NamespaceService.GetHealthCheckStats = {
+  methodName: "GetHealthCheckStats",
   service: NamespaceService,
   requestStream: false,
   responseStream: false,
-  requestType: K8sHealthcheck_pb.IsAliveAndWellStatsRequest,
-  responseType: K8sHealthcheck_pb.IsAliveAndWellStatsReply
+  requestType: K8sHealthcheck_pb.HealthCheckStatsRequest,
+  responseType: K8sHealthcheck_pb.HealthCheckStatsReply
 };
 
 exports.NamespaceService = NamespaceService;
@@ -187,11 +187,11 @@ NamespaceServiceClient.prototype.getEvents = function getEvents(requestMessage, 
   };
 };
 
-NamespaceServiceClient.prototype.getIsAliveAndWellStatsReply = function getIsAliveAndWellStatsReply(requestMessage, metadata, callback) {
+NamespaceServiceClient.prototype.getHealthCheckStats = function getHealthCheckStats(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(NamespaceService.GetIsAliveAndWellStatsReply, {
+  var client = grpc.unary(NamespaceService.GetHealthCheckStats, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

@@ -6,6 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { NSDashboardResponse } from './ns-dashboard.model';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 import { K8sEventService } from 'app/shared/grpc-services/k8s-event.service';
+import { K8sHealthcheckstatsService } from 'app/shared/grpc-services/k8s-healthcheckstats.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class NsDashboardService implements Resolve<any> {
   public widgets: any[];
   public services: any[] = [];
   public events: any[] = [];
-
+  public stats = {};
   public currentNamespace: string;
 
 
@@ -34,17 +35,20 @@ export class NsDashboardService implements Resolve<any> {
     currentNamespace: string,
     events: any[],
     services: any[]
+    stats: any
   };
 
   constructor(
     private httpClient: HttpClient,
     private k8sService: K8sServiceService,
-    private k8sEventService: K8sEventService) {
+    private k8sEventService: K8sEventService,
+    private k8sHealthcheckstatsService: K8sHealthcheckstatsService) {
 
     this.dataStore = {
       currentNamespace: '',
       events: [],
-      services: []
+      services: [],
+      stats: {},
     };
 
     this._dataset = new BehaviorSubject(
@@ -70,6 +74,7 @@ export class NsDashboardService implements Resolve<any> {
       this.updatens(route.params.nsname);
       this.updateevents(route.params.nsname);
       this.updateServices(route.params.nsname);
+      this.updateStats(route.params.nsname);
       Promise.all([
         this.getProjects(),
         this.getWidgets(),
@@ -88,6 +93,23 @@ export class NsDashboardService implements Resolve<any> {
   private updatens(ns: string): void {
     this.dataStore.currentNamespace = ns;
     this._dataset.next(Object.assign({}, this.dataStore));
+
+  }
+
+
+  private updateStats(ns: string): void {
+    this.stats = {};
+    this.dataStore.stats = {} as any;
+    this._dataset.next(Object.assign({}, this.dataStore));
+
+    this.k8sHealthcheckstatsService.getStats(ns).subscribe(
+      data => {
+        this.stats = data as any;
+        this.dataStore.stats = data as any;
+        this._dataset.next(Object.assign({}, this.dataStore));
+      },
+      error => { }
+    );
 
   }
 

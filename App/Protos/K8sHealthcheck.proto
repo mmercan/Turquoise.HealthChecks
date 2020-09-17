@@ -11,7 +11,7 @@ service NamespaceService {
   rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
-  rpc GetIsAliveAndWellStatsReply (IsAliveAndWellStatsRequest) returns (IsAliveAndWellStatsReply);
+  rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
 }
 
 message GetServicesRequest
@@ -114,12 +114,12 @@ message EventReply
 }
 
 
-message IsAliveAndWellStatsRequest
+message HealthCheckStatsRequest
 {
   string NamespaceParam=1;
 }
 
-message IsAliveAndWellStatsReply
+message HealthCheckStatsReply
 {
   google.protobuf.Timestamp SyncDate = 1;
   int64 AllServices = 2;

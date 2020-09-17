@@ -4,6 +4,9 @@ import { NamespaceAppService } from './grpc-services/namespace.service';
 import { DeploymentAppService } from './grpc-services/deployment-app.service';
 import { K8sServiceService } from './grpc-services/k8s-service.service';
 import { K8sEventService } from './grpc-services/k8s-event.service';
+import { K8sHealthcheckstatsService } from './grpc-services/k8s-healthcheckstats.service';
+
+
 import { IfOnlineDirective } from './offline/if-online.directive';
 import { IfSignalrDirective } from './offline/if-signalr.directive';
 
@@ -18,14 +21,15 @@ import { OfflineNotificationService } from './offline/offline-notification.servi
     IfOnlineDirective,
     IfSignalrDirective
   ],
-  providers: [NamespaceAppService, DeploymentAppService, K8sServiceService, K8sEventService, SignalRService, OfflineNotificationService],
+  providers: [NamespaceAppService, DeploymentAppService, K8sServiceService, K8sEventService,
+    K8sHealthcheckstatsService, SignalRService, OfflineNotificationService],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<any> {
     return {
       ngModule: SharedModule,
       providers: [NamespaceAppService, DeploymentAppService, K8sServiceService, K8sEventService,
-        SignalRService, OfflineNotificationService],
+        K8sHealthcheckstatsService, SignalRService, OfflineNotificationService],
     };
   }
 }

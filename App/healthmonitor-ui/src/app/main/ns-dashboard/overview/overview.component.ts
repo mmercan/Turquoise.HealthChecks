@@ -20,6 +20,7 @@ export class OverviewComponent implements OnInit {
   };
 
   projects: any[];
+  stats: any = {};
 
   constructor(
     private fuseSidebarService: FuseSidebarService,
@@ -34,7 +35,8 @@ export class OverviewComponent implements OnInit {
     this.nsDashboardService.dataset.subscribe(
       data => {
         this.events.rows = data.events;
-        //  debugger;
+        this.stats = data.stats;
+        // debugger;
       },
       error => {
 

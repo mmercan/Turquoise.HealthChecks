@@ -41,13 +41,13 @@ type NamespaceServiceGetEvents = {
   readonly responseType: typeof K8sHealthcheck_pb.EventListReply;
 };
 
-type NamespaceServiceGetIsAliveAndWellStatsReply = {
+type NamespaceServiceGetHealthCheckStats = {
   readonly methodName: string;
   readonly service: typeof NamespaceService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof K8sHealthcheck_pb.IsAliveAndWellStatsRequest;
-  readonly responseType: typeof K8sHealthcheck_pb.IsAliveAndWellStatsReply;
+  readonly requestType: typeof K8sHealthcheck_pb.HealthCheckStatsRequest;
+  readonly responseType: typeof K8sHealthcheck_pb.HealthCheckStatsReply;
 };
 
 export class NamespaceService {
@@ -56,7 +56,7 @@ export class NamespaceService {
   static readonly GetServices: NamespaceServiceGetServices;
   static readonly GetDeployments: NamespaceServiceGetDeployments;
   static readonly GetEvents: NamespaceServiceGetEvents;
-  static readonly GetIsAliveAndWellStatsReply: NamespaceServiceGetIsAliveAndWellStatsReply;
+  static readonly GetHealthCheckStats: NamespaceServiceGetHealthCheckStats;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -127,14 +127,14 @@ export class NamespaceServiceClient {
     requestMessage: K8sHealthcheck_pb.GetEventListRequest,
     callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.EventListReply|null) => void
   ): UnaryResponse;
-  getIsAliveAndWellStatsReply(
-    requestMessage: K8sHealthcheck_pb.IsAliveAndWellStatsRequest,
+  getHealthCheckStats(
+    requestMessage: K8sHealthcheck_pb.HealthCheckStatsRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.IsAliveAndWellStatsReply|null) => void
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.HealthCheckStatsReply|null) => void
   ): UnaryResponse;
-  getIsAliveAndWellStatsReply(
-    requestMessage: K8sHealthcheck_pb.IsAliveAndWellStatsRequest,
-    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.IsAliveAndWellStatsReply|null) => void
+  getHealthCheckStats(
+    requestMessage: K8sHealthcheck_pb.HealthCheckStatsRequest,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.HealthCheckStatsReply|null) => void
   ): UnaryResponse;
 }
 
