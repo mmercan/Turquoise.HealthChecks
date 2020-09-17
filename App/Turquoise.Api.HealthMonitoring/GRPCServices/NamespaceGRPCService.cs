@@ -13,7 +13,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    [Authorize]
+   [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
@@ -69,6 +69,22 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             }
 
             return deploy;
+        }
+
+
+        public async override Task<ServiceReply> GetService(GetServiceRequest request, ServerCallContext context)
+        {
+            var ns = request.NamespaceParam;
+            var servicename = request.ServiceName;
+            if (String.IsNullOrWhiteSpace(ns)) {
+                throw new ArgumentException("Namespace is missing");
+            }
+
+            if (String.IsNullOrWhiteSpace(servicename)) {
+                throw new ArgumentException("ServiceName is missing");
+            }
+
+            return await getMongoDbService(ns,servicename);
         }
 
         public async override Task<ServiceListReply> GetServices(GetServicesRequest request, ServerCallContext context)
@@ -186,6 +202,87 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             return servicelist;
         }
 
+
+        private async Task<ServiceReply> getMongoDbService(string namespaceParam, string serviceName)
+        {
+            
+            var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam && p.Name == serviceName);
+            var item = services.FirstOrDefault();
+
+            var srv = new ServiceReply();
+            
+
+            srv.NameandNamespace = item.NameandNamespace;
+            srv.Uid = item.Uid;
+            srv.Name = item.Name;
+            srv.Namespace = item.Namespace;
+
+            if (item.Labels != null && item.Labels.Count > 0)
+            {
+                srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+            }
+            srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
+
+
+            if (item.LabelSelector != null && item.LabelSelector.Count > 0)
+            {
+                srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+            }
+
+
+            if (item.Annotations != null && item.Annotations.Count > 0)
+            {
+                srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+            }
+
+            srv.ServiceType = item.Type;
+            srv.SessionAffinity = item.SessionAffinity;
+            srv.ClusterIP = item.ClusterIP;
+            if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
+            {
+                srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
+            }
+            if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
+            {
+                srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
+            }
+            if (item.IngressUrl != null)
+            {
+                srv.IngressUrl = item.IngressUrl;
+            }
+            if (item.VirtualServiceUrl != null)
+            {
+                srv.VirtualServiceUrl = item.VirtualServiceUrl;
+            }
+            if (item.LatestSyncDateUTC != DateTime.MinValue)
+            {
+                srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
+            }
+            srv.Deleted = item.Deleted;
+            if (item.HealthIsalive != null)
+            {
+                srv.HealthIsalive = item.HealthIsalive;
+            }
+            if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
+            {
+                srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
+            }
+            if (item.HealthIsaliveAndWell != null)
+            {
+                _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
+                srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
+            }
+
+            if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
+            {
+                srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
+            }
+
+            return srv;
+        }
+
+
+
         private async Task<ServiceListReply> getLiveServices(string namespaceParam)
         {
             var services = await k8sService.GetServices(namespaceParam);
@@ -227,9 +324,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 }
 
             }
-
-
-
             return servicelist;
         }
 
@@ -325,6 +419,8 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             return Task.FromResult(stats);
             //return base.GetIsAliveAndWellStatsReply(request, context);
         }
+
+        
 
     }
 }

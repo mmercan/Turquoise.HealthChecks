@@ -9,6 +9,7 @@ import "google/protobuf/empty.proto";
 service NamespaceService {
   rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
   rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
+  rpc GetService  (GetServiceRequest) returns (ServiceReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
@@ -17,6 +18,13 @@ service NamespaceService {
 message GetServicesRequest
 {
   string NamespaceParam=1;
+}
+
+
+message GetServiceRequest
+{
+  string NamespaceParam=1;
+  string ServiceName=2;
 }
 
 message GetDeploymentsRequest

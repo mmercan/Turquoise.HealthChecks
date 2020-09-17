@@ -14,10 +14,16 @@ export class ServiceDashboardComponent implements OnInit {
   currentServiceName: any;
   currentNamespace: any;
 
-  constructor(private serviceDashboardService: ServiceDashboardService) { }
+  constructor(private serviceDashboardService: ServiceDashboardService) {
+
+
+
+
+
+  }
 
   ngOnInit(): void {
-    this.dataStore = this.serviceDashboardService.dataStore;
+    // this.dataStore = this.serviceDashboardService.dataStore;
     this.currentNamespace = this.serviceDashboardService.currentNamespace;
     this.currentServiceName = this.serviceDashboardService.currentServiceName;
   }

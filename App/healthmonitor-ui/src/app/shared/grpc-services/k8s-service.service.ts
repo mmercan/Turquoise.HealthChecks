@@ -65,4 +65,9 @@ export class K8sServiceService {
     return obs;
   }
 
+
+  getService(namespaceparam: string, servicename: string): Observable<ServiceReply> {
+
+  }
+
 }
