@@ -23,6 +23,15 @@ type NamespaceServiceGetServices = {
   readonly responseType: typeof K8sHealthcheck_pb.ServiceListReply;
 };
 
+type NamespaceServiceGetService = {
+  readonly methodName: string;
+  readonly service: typeof NamespaceService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof K8sHealthcheck_pb.GetServiceRequest;
+  readonly responseType: typeof K8sHealthcheck_pb.ServiceReply;
+};
+
 type NamespaceServiceGetDeployments = {
   readonly methodName: string;
   readonly service: typeof NamespaceService;
@@ -54,6 +63,7 @@ export class NamespaceService {
   static readonly serviceName: string;
   static readonly GetNamespaces: NamespaceServiceGetNamespaces;
   static readonly GetServices: NamespaceServiceGetServices;
+  static readonly GetService: NamespaceServiceGetService;
   static readonly GetDeployments: NamespaceServiceGetDeployments;
   static readonly GetEvents: NamespaceServiceGetEvents;
   static readonly GetHealthCheckStats: NamespaceServiceGetHealthCheckStats;
@@ -108,6 +118,15 @@ export class NamespaceServiceClient {
   getServices(
     requestMessage: K8sHealthcheck_pb.GetServicesRequest,
     callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.ServiceListReply|null) => void
+  ): UnaryResponse;
+  getService(
+    requestMessage: K8sHealthcheck_pb.GetServiceRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.ServiceReply|null) => void
+  ): UnaryResponse;
+  getService(
+    requestMessage: K8sHealthcheck_pb.GetServiceRequest,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.ServiceReply|null) => void
   ): UnaryResponse;
   getDeployments(
     requestMessage: K8sHealthcheck_pb.GetDeploymentsRequest,

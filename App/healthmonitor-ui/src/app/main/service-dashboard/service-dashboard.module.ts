@@ -13,9 +13,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ServiceDashboardService } from './service-dashboard.service';
+import { ServiceDetailComponent } from './tabs/service-detail/service-detail.component';
 
 @NgModule({
-  declarations: [ServiceDashboardComponent],
+  declarations: [ServiceDashboardComponent, ServiceDetailComponent],
   imports: [
     CommonModule,
     MatExpansionModule,

@@ -25,6 +25,30 @@ export namespace GetServicesRequest {
   }
 }
 
+export class GetServiceRequest extends jspb.Message {
+  getNamespaceparam(): string;
+  setNamespaceparam(value: string): void;
+
+  getServicename(): string;
+  setServicename(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetServiceRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetServiceRequest): GetServiceRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetServiceRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetServiceRequest;
+  static deserializeBinaryFromReader(message: GetServiceRequest, reader: jspb.BinaryReader): GetServiceRequest;
+}
+
+export namespace GetServiceRequest {
+  export type AsObject = {
+    namespaceparam: string,
+    servicename: string,
+  }
+}
+
 export class GetDeploymentsRequest extends jspb.Message {
   getNamespace(): string;
   setNamespace(value: string): void;

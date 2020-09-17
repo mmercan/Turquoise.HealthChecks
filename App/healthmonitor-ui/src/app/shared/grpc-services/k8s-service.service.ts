@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'environments/environment';
-import { ServiceListReply, ServiceReply, GetServicesRequest } from 'app/proto/K8sHealthcheck_pb';
+import { ServiceListReply, ServiceReply, GetServicesRequest, GetServiceRequest } from 'app/proto/K8sHealthcheck_pb';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +68,35 @@ export class K8sServiceService {
 
   getService(namespaceparam: string, servicename: string): Observable<ServiceReply> {
 
+    const obs = Observable.create(observer => {
+
+      const getServicesRequest = new GetServiceRequest();
+      getServicesRequest.setNamespaceparam(namespaceparam);
+      getServicesRequest.setServicename(servicename);
+      const authmetadata = new grpc.Metadata();
+      authmetadata.append('authorization', `Bearer ${this.token}`);
+
+      grpc.unary(NamespaceService.GetService, {
+
+        metadata: authmetadata,
+        request: getServicesRequest,
+        host: environment.grpc.url,
+
+        onEnd: res => {
+          const message = res.message as ServiceReply;
+          const status = res.status;
+
+          if (status === grpc.Code.OK && message) {
+            observer.next(message.toObject());
+          } else if (status === grpc.Code.Unauthenticated) {
+            this.authService.login();
+          } else {
+            observer.error(status);
+          }
+        }
+      });
+    });
+    return obs;
   }
 
 }

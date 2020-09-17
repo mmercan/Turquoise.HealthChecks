@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ServiceReply } from 'app/proto/K8sHealthcheck_pb';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -18,7 +19,7 @@ export class ServiceDashboardService implements Resolve<any> {
       currentNamespace: any,
       currentServiceName: any,
     },
-    services?: any
+    service?: any
   };
 
 
@@ -30,10 +31,11 @@ export class ServiceDashboardService implements Resolve<any> {
     dataset: any
   };
   services: any[];
+  service: ServiceReply;
 
   constructor(private k8sService: K8sServiceService) {
 
-    this.serviceDataStore = { dataset: { currentNamespace: undefined, currentServiceName: undefined }, services: [] };
+    this.serviceDataStore = { dataset: { currentNamespace: undefined, currentServiceName: undefined }, service: {} };
     this.service_dataset = new BehaviorSubject([]);
     this.serviceDataset = this.service_dataset.asObservable();
 
@@ -61,8 +63,8 @@ export class ServiceDashboardService implements Resolve<any> {
     };
 
     const obs = Observable.create(observer => {
-
-      observer.next(Object.assign({}, this.serviceDataStore).services);
+      this.updateService(this.currentNamespace, this.currentServiceName);
+      observer.next(Object.assign({}, this.serviceDataStore).service);
 
 
       observer.complete();
@@ -76,12 +78,12 @@ export class ServiceDashboardService implements Resolve<any> {
 
 
 
-  private updateServices(ns: string, servicename: string): void {
+  private updateService(ns: string, servicename: string): void {
 
-    this.k8sService.getServices(ns).subscribe(
+    this.k8sService.getService(ns, servicename).subscribe(
       data => {
-        this.services = data as any[];
-        this.serviceDataStore.services = data as any[];
+        this.service = data;
+        this.serviceDataStore.service = data as any;
         this.service_dataset.next(Object.assign({}, this.serviceDataStore));
         // debugger;
       },
