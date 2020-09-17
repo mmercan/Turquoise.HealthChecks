@@ -104,10 +104,12 @@ namespace Turquoise.HealthChecker
                 // {
                 //     itemstatus = value.ToString();
                 // }
+
+                 stringResult = res.FirstOrDefault().Result;
             }
             catch (Exception ex)
             {
-                stringResult = res.FirstOrDefault().Result;
+                // stringResult = res.FirstOrDefault().Result;
                 logger.LogCritical("Result BsonDocument Deserializion Failed : " + ex);
             }
 

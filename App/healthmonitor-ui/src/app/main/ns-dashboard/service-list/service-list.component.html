@@ -102,7 +102,7 @@
                 <mat-row *matRowDef="let service; columns: displayedColumns;"
                          class="product"
                          matRipple
-                         [routerLink]="'/apps/e-commerce/products/'+service.id+'/'+service.handle"
+                         [routerLink]="'/service/'+service.uid"
                          [ngClass]="{ 'unhealthy': service.healthisaliveandwell == 'Unhealthy',  
                          'healthy': service.healthisaliveandwell == 'Healthy',
                          'ok': service.healthisaliveandwell == 'OK',

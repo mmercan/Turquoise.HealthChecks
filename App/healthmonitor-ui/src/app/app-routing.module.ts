@@ -11,6 +11,15 @@ const appRoutes: Routes = [
     loadChildren: () => import('./main/ns-dashboard/ns-dashboard.module').then((m) => m.NsDashboardModule),
   },
   {
+    path: 'service/:servicename',
+    loadChildren: () => import('./main/service-dashboard/service-dashboard.module').then((m) => m.ServiceDashboardModule),
+  },
+  {
+    path: 'nodes',
+    loadChildren: () => import('./main/node-dashboard/node-dashboard.module').then((m) => m.NodeDashboardModule),
+  },
+
+  {
     path: 'apps',
     loadChildren: () => import('./main-fuse/apps/apps.module').then(m => m.AppsModule)
   },
@@ -26,9 +35,11 @@ const appRoutes: Routes = [
     path: 'documentation',
     loadChildren: () => import('./main-fuse/documentation/documentation.module').then(m => m.DocumentationModule)
   },
+
   {
     path: '**',
-    redirectTo: 'apps/dashboards/analytics'
+    redirectTo: 'nodes'
+    // redirectTo: 'apps/dashboards/analytics'
   }
 ];
 
