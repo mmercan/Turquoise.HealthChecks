@@ -11,7 +11,7 @@ const appRoutes: Routes = [
     loadChildren: () => import('./main/ns-dashboard/ns-dashboard.module').then((m) => m.NsDashboardModule),
   },
   {
-    path: 'service/:servicename',
+    path: 'service/:nsname/:servicename',
     loadChildren: () => import('./main/service-dashboard/service-dashboard.module').then((m) => m.ServiceDashboardModule),
   },
   {

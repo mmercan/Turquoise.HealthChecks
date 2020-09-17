@@ -55,7 +55,8 @@ export class NsDashboardService implements Resolve<any> {
       {
         currentNamespace: undefined,
         events: undefined,
-        services: undefined
+        services: undefined,
+        stats: undefined
       }
     );
 
@@ -142,6 +143,7 @@ export class NsDashboardService implements Resolve<any> {
         this.services = data as any[];
         this.dataStore.services = data as any[];
         this._dataset.next(Object.assign({}, this.dataStore));
+        // debugger;
       },
       error => { }
     );
