@@ -5,6 +5,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using MongoDB.Driver;
 using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
@@ -13,7 +14,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-   [Authorize]
+    [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
@@ -21,11 +22,13 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         private MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private IFeatureManager featureManager;
         private MongoAliveAndWellResultStats aliveAndWellResultStats;
+        private MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
 
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
             K8sService k8sService,
             MangoBaseRepo<ServiceV1> serviceMongoRepo,
+            MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo,
             IFeatureManager featureManager,
             MongoAliveAndWellResultStats aliveAndWellResultStats
             )
@@ -35,6 +38,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             this.serviceMongoRepo = serviceMongoRepo;
             this.featureManager = featureManager;
             this.aliveAndWellResultStats = aliveAndWellResultStats;
+            this.healthCheckMongoRepo = healthCheckMongoRepo;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -76,15 +80,17 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         {
             var ns = request.NamespaceParam;
             var servicename = request.ServiceName;
-            if (String.IsNullOrWhiteSpace(ns)) {
+            if (String.IsNullOrWhiteSpace(ns))
+            {
                 throw new ArgumentException("Namespace is missing");
             }
 
-            if (String.IsNullOrWhiteSpace(servicename)) {
+            if (String.IsNullOrWhiteSpace(servicename))
+            {
                 throw new ArgumentException("ServiceName is missing");
             }
 
-            return await getMongoDbService(ns,servicename);
+            return await getMongoDbService(ns, servicename);
         }
 
         public async override Task<ServiceListReply> GetServices(GetServicesRequest request, ServerCallContext context)
@@ -205,12 +211,12 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         private async Task<ServiceReply> getMongoDbService(string namespaceParam, string serviceName)
         {
-            
+
             var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam && p.Name == serviceName);
             var item = services.FirstOrDefault();
 
             var srv = new ServiceReply();
-            
+
 
             srv.NameandNamespace = item.NameandNamespace;
             srv.Uid = item.Uid;
@@ -280,8 +286,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
             return srv;
         }
-
-
 
         private async Task<ServiceListReply> getLiveServices(string namespaceParam)
         {
@@ -393,7 +397,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         }
 
-         public override Task<HealthCheckStatsReply> GetHealthCheckStats(HealthCheckStatsRequest request, ServerCallContext context)
+        public override Task<HealthCheckStatsReply> GetHealthCheckStats(HealthCheckStatsRequest request, ServerCallContext context)
         {
             var ns = request.NamespaceParam;
             if (String.IsNullOrWhiteSpace(ns))
@@ -420,7 +424,37 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             //return base.GetIsAliveAndWellStatsReply(request, context);
         }
 
-        
+        public override Task<HealthCheckResultReply> GetLastHealthCheckResult(HealthCheckResultRequest request, ServerCallContext context)
+        {
+            var ns = request.NamespaceParam;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+
+            var serviceName = request.ServiceName;
+            if (String.IsNullOrWhiteSpace(serviceName))
+            {
+                throw new ArgumentException("ServiceName is missing");
+            }
+            var result = new HealthCheckResultReply();
+
+            var builder = Builders<AliveAndWellResult>.Filter;
+            var filter = builder.Eq(x => x.ServiceNamespace, ns) & builder.Eq(x => x.ServiceName, serviceName) & builder.Gt(x => x.CreationTime, DateTime.UtcNow.AddDays(-1));
+
+            AliveAndWellResult mongores = healthCheckMongoRepo.Items.Find(filter).SortByDescending(p => p.CreationTime).FirstOrDefault(); //.OrderByDescending(p => p.CreationTime).FirstOrDefault();
+
+
+            result.Id = mongores.Id.ToString();
+            result.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(mongores.CreationTime);
+            result.ServiceUid = mongores.ServiceUid;
+            result.ServiceName = mongores.ServiceName;
+            result.ServiceNamespace = mongores.ServiceNamespace;
+            result.Status = mongores.Status;
+            result.StringResult = mongores.StringResult;
+
+            return Task.FromResult(result);
+        }
 
     }
 }

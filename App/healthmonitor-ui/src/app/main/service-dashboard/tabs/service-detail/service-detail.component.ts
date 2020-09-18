@@ -11,6 +11,7 @@ import { ServiceDashboardService } from '../../service-dashboard.service';
 })
 export class ServiceDetailComponent implements OnInit {
   service: any;
+  healthcheckresult: any;
 
   constructor(private serviceDashboardService: ServiceDashboardService) { }
 
@@ -23,7 +24,19 @@ export class ServiceDetailComponent implements OnInit {
       (error) => {
 
       }
-    )
+    );
+
+
+
+    this.serviceDashboardService.healthcheckDataset.subscribe(
+      (data) => {
+        this.healthcheckresult = data.healthCheckResult;
+        // debugger;
+      },
+      (error) => {
+
+      }
+    );
   }
 
 }

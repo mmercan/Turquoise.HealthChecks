@@ -10,12 +10,12 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'environments/environment';
-import { HealthCheckStatsReply, HealthCheckStatsRequest } from 'app/proto/K8sHealthcheck_pb';
+import { HealthCheckResultReply, HealthCheckResultRequest, HealthCheckStatsReply, HealthCheckStatsRequest } from 'app/proto/K8sHealthcheck_pb';
 
 @Injectable({
   providedIn: 'root'
 })
-export class K8sHealthcheckstatsService {
+export class K8sHealthcheckService {
 
   token: string;
   private unsubscribeAll: Subject<any>;
@@ -32,6 +32,41 @@ export class K8sHealthcheckstatsService {
 
   }
 
+
+  getLastHealthCheckResult(namespaceparam: string, serviceName: string): Observable<HealthCheckResultReply.AsObject> {
+
+    const obs = Observable.create(observer => {
+
+      const getRequest = new HealthCheckResultRequest();
+      getRequest.setNamespaceparam(namespaceparam);
+      getRequest.setServicename(serviceName);
+
+      const authmetadata = new grpc.Metadata();
+      authmetadata.append('authorization', `Bearer ${this.token}`);
+
+      grpc.unary(NamespaceService.GetLastHealthCheckResult, {
+
+        metadata: authmetadata,
+        request: getRequest,
+        host: environment.grpc.url,
+
+        onEnd: res => {
+          const message = res.message as HealthCheckResultReply;
+          const status = res.status;
+
+          if (status === grpc.Code.OK && message) {
+            observer.next(message.toObject());
+          } else if (status === grpc.Code.Unauthenticated) {
+            this.authService.login();
+          } else {
+            observer.error(status);
+          }
+        }
+      });
+    });
+    return obs;
+
+  }
 
   getStats(namespaceparam: string): Observable<HealthCheckStatsReply[]> {
     // debugger;

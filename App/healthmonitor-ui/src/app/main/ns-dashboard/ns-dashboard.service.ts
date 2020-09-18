@@ -6,7 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { NSDashboardResponse } from './ns-dashboard.model';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 import { K8sEventService } from 'app/shared/grpc-services/k8s-event.service';
-import { K8sHealthcheckstatsService } from 'app/shared/grpc-services/k8s-healthcheckstats.service';
+import { K8sHealthcheckService } from 'app/shared/grpc-services/k8s-healthcheck.service';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class NsDashboardService implements Resolve<any> {
     private httpClient: HttpClient,
     private k8sService: K8sServiceService,
     private k8sEventService: K8sEventService,
-    private k8sHealthcheckstatsService: K8sHealthcheckstatsService) {
+    private k8sHealthcheckService: K8sHealthcheckService) {
 
     this.dataStore = {
       currentNamespace: '',
@@ -103,7 +103,7 @@ export class NsDashboardService implements Resolve<any> {
     this.dataStore.stats = {} as any;
     this._dataset.next(Object.assign({}, this.dataStore));
 
-    this.k8sHealthcheckstatsService.getStats(ns).subscribe(
+    this.k8sHealthcheckService.getStats(ns).subscribe(
       data => {
         this.stats = data as any;
         this.dataStore.stats = data as any;

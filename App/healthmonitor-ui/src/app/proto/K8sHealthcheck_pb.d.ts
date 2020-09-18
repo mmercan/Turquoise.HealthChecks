@@ -553,3 +553,95 @@ export namespace HealthCheckStatsReply {
   }
 }
 
+export class HealthCheckResultRequest extends jspb.Message {
+  getNamespaceparam(): string;
+  setNamespaceparam(value: string): void;
+
+  getServicename(): string;
+  setServicename(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): HealthCheckResultRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: HealthCheckResultRequest): HealthCheckResultRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: HealthCheckResultRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HealthCheckResultRequest;
+  static deserializeBinaryFromReader(message: HealthCheckResultRequest, reader: jspb.BinaryReader): HealthCheckResultRequest;
+}
+
+export namespace HealthCheckResultRequest {
+  export type AsObject = {
+    namespaceparam: string,
+    servicename: string,
+  }
+}
+
+export class HealthCheckResultListReply extends jspb.Message {
+  clearResultsList(): void;
+  getResultsList(): Array<HealthCheckResultReply>;
+  setResultsList(value: Array<HealthCheckResultReply>): void;
+  addResults(value?: HealthCheckResultReply, index?: number): HealthCheckResultReply;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): HealthCheckResultListReply.AsObject;
+  static toObject(includeInstance: boolean, msg: HealthCheckResultListReply): HealthCheckResultListReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: HealthCheckResultListReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HealthCheckResultListReply;
+  static deserializeBinaryFromReader(message: HealthCheckResultListReply, reader: jspb.BinaryReader): HealthCheckResultListReply;
+}
+
+export namespace HealthCheckResultListReply {
+  export type AsObject = {
+    resultsList: Array<HealthCheckResultReply.AsObject>,
+  }
+}
+
+export class HealthCheckResultReply extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
+  hasCreationtime(): boolean;
+  clearCreationtime(): void;
+  getCreationtime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setCreationtime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getServiceuid(): string;
+  setServiceuid(value: string): void;
+
+  getServicename(): string;
+  setServicename(value: string): void;
+
+  getServicenamespace(): string;
+  setServicenamespace(value: string): void;
+
+  getStatus(): string;
+  setStatus(value: string): void;
+
+  getStringresult(): string;
+  setStringresult(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): HealthCheckResultReply.AsObject;
+  static toObject(includeInstance: boolean, msg: HealthCheckResultReply): HealthCheckResultReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: HealthCheckResultReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HealthCheckResultReply;
+  static deserializeBinaryFromReader(message: HealthCheckResultReply, reader: jspb.BinaryReader): HealthCheckResultReply;
+}
+
+export namespace HealthCheckResultReply {
+  export type AsObject = {
+    id: string,
+    creationtime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    serviceuid: string,
+    servicename: string,
+    servicenamespace: string,
+    status: string,
+    stringresult: string,
+  }
+}
+

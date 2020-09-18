@@ -13,6 +13,7 @@ service NamespaceService {
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
+  rpc GetLastHealthCheckResult (HealthCheckResultRequest) returns (HealthCheckResultReply);
 }
 
 message GetServicesRequest
@@ -137,3 +138,27 @@ message HealthCheckStatsReply
   repeated StringMessage UnhealthyServicesToday = 6;
 }
 
+
+message HealthCheckResultRequest
+{
+  string NamespaceParam = 1;
+  string ServiceName = 2;
+}
+
+message HealthCheckResultListReply
+{
+  repeated HealthCheckResultReply Results = 1;
+}
+
+message HealthCheckResultReply
+{
+
+ string Id = 1;
+ google.protobuf.Timestamp CreationTime = 2;
+ string ServiceUid = 3;
+ string ServiceName = 4;
+ string ServiceNamespace = 5;
+ string Status = 6;
+ string StringResult = 7;
+
+}
