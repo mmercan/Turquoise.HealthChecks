@@ -48,6 +48,7 @@ namespace Turquoise.HealthChecker.Services
 
                     logger.LogInformation("Cheking " + isaliveandwellUri.ToString());
                     var result = await DownloadAsync(isaliveandwellUri);
+
                     results.Add(result);
                 }
             }
@@ -74,7 +75,7 @@ namespace Turquoise.HealthChecker.Services
             }
             var status = getitem.StatusCode.ToString();
             var content = await getitem.Content.ReadAsStringAsync();
-            return new IsAliveAndWellResult { Result = content, Status = status, IsSuccessStatusCode = isSuccessStatusCode };
+            return new IsAliveAndWellResult { Result = content, Status = status, IsSuccessStatusCode = isSuccessStatusCode, CheckedUrl = url.AbsoluteUri };
 
         }
 
@@ -137,5 +138,6 @@ namespace Turquoise.HealthChecker.Services
         public string Result { get; set; }
         public string Status { get; set; }
         public bool IsSuccessStatusCode { get; set; }
+        public string CheckedUrl { get; set; }
     }
 }

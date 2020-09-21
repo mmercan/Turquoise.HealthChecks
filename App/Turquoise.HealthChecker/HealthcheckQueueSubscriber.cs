@@ -105,7 +105,7 @@ namespace Turquoise.HealthChecker
                 //     itemstatus = value.ToString();
                 // }
 
-                 stringResult = res.FirstOrDefault().Result;
+                stringResult = res.FirstOrDefault().Result;
             }
             catch (Exception ex)
             {
@@ -122,7 +122,8 @@ namespace Turquoise.HealthChecker
                 ServiceUid = service.Uid,
                 CreationTime = DateTime.UtcNow,
                 Status = res.FirstOrDefault().Status,
-                StringResult = stringResult
+                StringResult = stringResult,
+                CheckedUrl = res.FirstOrDefault().CheckedUrl
             };
 
             try
