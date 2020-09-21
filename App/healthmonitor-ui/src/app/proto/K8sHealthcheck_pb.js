@@ -2281,7 +2281,13 @@ proto.k8App.ServiceReply.toObject = function(includeInstance, msg) {
     healthisalive: jspb.Message.getFieldWithDefault(msg, 18, ""),
     healthisalivesyncdateutc: (f = msg.getHealthisalivesyncdateutc()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     healthisaliveandwell: jspb.Message.getFieldWithDefault(msg, 21, ""),
-    healthisaliveandwellsyncdateutc: (f = msg.getHealthisaliveandwellsyncdateutc()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
+    healthisaliveandwellsyncdateutc: (f = msg.getHealthisaliveandwellsyncdateutc()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+    livenessprobe: jspb.Message.getFieldWithDefault(msg, 23, ""),
+    readinessprobe: jspb.Message.getFieldWithDefault(msg, 24, ""),
+    startupprobe: jspb.Message.getFieldWithDefault(msg, 25, ""),
+    crondescription: jspb.Message.getFieldWithDefault(msg, 26, ""),
+    crontab: jspb.Message.getFieldWithDefault(msg, 27, ""),
+    crontabexception: jspb.Message.getFieldWithDefault(msg, 28, "")
   };
 
   if (includeInstance) {
@@ -2410,6 +2416,30 @@ proto.k8App.ServiceReply.deserializeBinaryFromReader = function(msg, reader) {
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setHealthisaliveandwellsyncdateutc(value);
+      break;
+    case 23:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLivenessprobe(value);
+      break;
+    case 24:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReadinessprobe(value);
+      break;
+    case 25:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setStartupprobe(value);
+      break;
+    case 26:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCrondescription(value);
+      break;
+    case 27:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCrontab(value);
+      break;
+    case 28:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCrontabexception(value);
       break;
     default:
       reader.skipField();
@@ -2594,6 +2624,48 @@ proto.k8App.ServiceReply.serializeBinaryToWriter = function(message, writer) {
       22,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getLivenessprobe();
+  if (f.length > 0) {
+    writer.writeString(
+      23,
+      f
+    );
+  }
+  f = message.getReadinessprobe();
+  if (f.length > 0) {
+    writer.writeString(
+      24,
+      f
+    );
+  }
+  f = message.getStartupprobe();
+  if (f.length > 0) {
+    writer.writeString(
+      25,
+      f
+    );
+  }
+  f = message.getCrondescription();
+  if (f.length > 0) {
+    writer.writeString(
+      26,
+      f
+    );
+  }
+  f = message.getCrontab();
+  if (f.length > 0) {
+    writer.writeString(
+      27,
+      f
+    );
+  }
+  f = message.getCrontabexception();
+  if (f.length > 0) {
+    writer.writeString(
+      28,
+      f
     );
   }
 };
@@ -3150,6 +3222,114 @@ proto.k8App.ServiceReply.prototype.clearHealthisaliveandwellsyncdateutc = functi
  */
 proto.k8App.ServiceReply.prototype.hasHealthisaliveandwellsyncdateutc = function() {
   return jspb.Message.getField(this, 22) != null;
+};
+
+
+/**
+ * optional string LivenessProbe = 23;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getLivenessprobe = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 23, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setLivenessprobe = function(value) {
+  return jspb.Message.setProto3StringField(this, 23, value);
+};
+
+
+/**
+ * optional string ReadinessProbe = 24;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getReadinessprobe = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 24, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setReadinessprobe = function(value) {
+  return jspb.Message.setProto3StringField(this, 24, value);
+};
+
+
+/**
+ * optional string StartupProbe = 25;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getStartupprobe = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 25, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setStartupprobe = function(value) {
+  return jspb.Message.setProto3StringField(this, 25, value);
+};
+
+
+/**
+ * optional string CronDescription = 26;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getCrondescription = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 26, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setCrondescription = function(value) {
+  return jspb.Message.setProto3StringField(this, 26, value);
+};
+
+
+/**
+ * optional string CronTab = 27;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getCrontab = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 27, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setCrontab = function(value) {
+  return jspb.Message.setProto3StringField(this, 27, value);
+};
+
+
+/**
+ * optional string CronTabException = 28;
+ * @return {string}
+ */
+proto.k8App.ServiceReply.prototype.getCrontabexception = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 28, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.ServiceReply} returns this
+ */
+proto.k8App.ServiceReply.prototype.setCrontabexception = function(value) {
+  return jspb.Message.setProto3StringField(this, 28, value);
 };
 
 
@@ -4794,7 +4974,8 @@ proto.k8App.HealthCheckResultReply.toObject = function(includeInstance, msg) {
     servicename: jspb.Message.getFieldWithDefault(msg, 4, ""),
     servicenamespace: jspb.Message.getFieldWithDefault(msg, 5, ""),
     status: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    stringresult: jspb.Message.getFieldWithDefault(msg, 7, "")
+    stringresult: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    checkedurl: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -4859,6 +5040,10 @@ proto.k8App.HealthCheckResultReply.deserializeBinaryFromReader = function(msg, r
     case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setStringresult(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCheckedurl(value);
       break;
     default:
       reader.skipField();
@@ -4936,6 +5121,13 @@ proto.k8App.HealthCheckResultReply.serializeBinaryToWriter = function(message, w
   if (f.length > 0) {
     writer.writeString(
       7,
+      f
+    );
+  }
+  f = message.getCheckedurl();
+  if (f.length > 0) {
+    writer.writeString(
+      8,
       f
     );
   }
@@ -5084,6 +5276,24 @@ proto.k8App.HealthCheckResultReply.prototype.getStringresult = function() {
  */
 proto.k8App.HealthCheckResultReply.prototype.setStringresult = function(value) {
   return jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * optional string CheckedUrl = 8;
+ * @return {string}
+ */
+proto.k8App.HealthCheckResultReply.prototype.getCheckedurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.k8App.HealthCheckResultReply} returns this
+ */
+proto.k8App.HealthCheckResultReply.prototype.setCheckedurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 

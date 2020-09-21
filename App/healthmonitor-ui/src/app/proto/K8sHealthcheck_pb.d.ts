@@ -341,6 +341,24 @@ export class ServiceReply extends jspb.Message {
   getHealthisaliveandwellsyncdateutc(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setHealthisaliveandwellsyncdateutc(value?: google_protobuf_timestamp_pb.Timestamp): void;
 
+  getLivenessprobe(): string;
+  setLivenessprobe(value: string): void;
+
+  getReadinessprobe(): string;
+  setReadinessprobe(value: string): void;
+
+  getStartupprobe(): string;
+  setStartupprobe(value: string): void;
+
+  getCrondescription(): string;
+  setCrondescription(value: string): void;
+
+  getCrontab(): string;
+  setCrontab(value: string): void;
+
+  getCrontabexception(): string;
+  setCrontabexception(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ServiceReply.AsObject;
   static toObject(includeInstance: boolean, msg: ServiceReply): ServiceReply.AsObject;
@@ -374,6 +392,12 @@ export namespace ServiceReply {
     healthisalivesyncdateutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
     healthisaliveandwell: string,
     healthisaliveandwellsyncdateutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    livenessprobe: string,
+    readinessprobe: string,
+    startupprobe: string,
+    crondescription: string,
+    crontab: string,
+    crontabexception: string,
   }
 }
 
@@ -623,6 +647,9 @@ export class HealthCheckResultReply extends jspb.Message {
   getStringresult(): string;
   setStringresult(value: string): void;
 
+  getCheckedurl(): string;
+  setCheckedurl(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): HealthCheckResultReply.AsObject;
   static toObject(includeInstance: boolean, msg: HealthCheckResultReply): HealthCheckResultReply.AsObject;
@@ -642,6 +669,7 @@ export namespace HealthCheckResultReply {
     servicenamespace: string,
     status: string,
     stringresult: string,
+    checkedurl: string,
   }
 }
 

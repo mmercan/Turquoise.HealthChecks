@@ -92,7 +92,12 @@ message ServiceReply {
   google.protobuf.Timestamp healthIsaliveSyncDateUTC = 20;
   string healthIsaliveAndWell = 21;
   google.protobuf.Timestamp healthIsaliveAndWellSyncDateUTC = 22;
-
+  string LivenessProbe = 23;
+  string ReadinessProbe = 24;
+  string StartupProbe = 25;
+  string CronDescription = 26;
+  string CronTab = 27;
+  string CronTabException = 28;
 }
 
 message GetEventListRequest
@@ -160,5 +165,5 @@ message HealthCheckResultReply
  string ServiceNamespace = 5;
  string Status = 6;
  string StringResult = 7;
-
+ string CheckedUrl = 8;
 }
