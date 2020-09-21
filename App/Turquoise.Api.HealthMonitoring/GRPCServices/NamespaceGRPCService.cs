@@ -133,76 +133,75 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam);
             foreach (var item in services)
             {
-                var srv = new ServiceReply();
+                // var srv = new ServiceReply();
+                var srv = ConvertMongoServiceToGRPCService(item);
                 servicelist.Services.Add(srv);
 
+                // srv.NameandNamespace = item.NameandNamespace;
+                // srv.Uid = item.Uid;
+                // srv.Name = item.Name;
+                // srv.Namespace = item.Namespace;
+
+                // if (item.Labels != null && item.Labels.Count > 0)
+                // {
+                //     srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                // }
+                // srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
 
 
-                srv.NameandNamespace = item.NameandNamespace;
-                srv.Uid = item.Uid;
-                srv.Name = item.Name;
-                srv.Namespace = item.Namespace;
-
-                if (item.Labels != null && item.Labels.Count > 0)
-                {
-                    srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                }
-                srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
+                // if (item.LabelSelector != null && item.LabelSelector.Count > 0)
+                // {
+                //     srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                // }
 
 
-                if (item.LabelSelector != null && item.LabelSelector.Count > 0)
-                {
-                    srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                }
+                // if (item.Annotations != null && item.Annotations.Count > 0)
+                // {
+                //     srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
+                // }
 
+                // srv.ServiceType = item.Type;
+                // srv.SessionAffinity = item.SessionAffinity;
+                // srv.ClusterIP = item.ClusterIP;
+                // if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
+                // {
+                //     srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
+                // }
+                // if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
+                // {
+                //     srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
+                // }
+                // if (item.IngressUrl != null)
+                // {
+                //     srv.IngressUrl = item.IngressUrl;
+                // }
+                // if (item.VirtualServiceUrl != null)
+                // {
+                //     srv.VirtualServiceUrl = item.VirtualServiceUrl;
+                // }
+                // if (item.LatestSyncDateUTC != DateTime.MinValue)
+                // {
+                //     srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
+                // }
+                // srv.Deleted = item.Deleted;
+                // if (item.HealthIsalive != null)
+                // {
+                //     srv.HealthIsalive = item.HealthIsalive;
+                // }
+                // if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
+                // {
+                //     srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
+                // }
+                // if (item.HealthIsaliveAndWell != null)
+                // {
+                //     _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
+                //     srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
+                // }
 
-                if (item.Annotations != null && item.Annotations.Count > 0)
-                {
-                    srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                }
-
-                srv.ServiceType = item.Type;
-                srv.SessionAffinity = item.SessionAffinity;
-                srv.ClusterIP = item.ClusterIP;
-                if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
-                {
-                    srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
-                }
-                if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
-                {
-                    srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
-                }
-                if (item.IngressUrl != null)
-                {
-                    srv.IngressUrl = item.IngressUrl;
-                }
-                if (item.VirtualServiceUrl != null)
-                {
-                    srv.VirtualServiceUrl = item.VirtualServiceUrl;
-                }
-                if (item.LatestSyncDateUTC != DateTime.MinValue)
-                {
-                    srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
-                }
-                srv.Deleted = item.Deleted;
-                if (item.HealthIsalive != null)
-                {
-                    srv.HealthIsalive = item.HealthIsalive;
-                }
-                if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
-                {
-                    srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
-                }
-                if (item.HealthIsaliveAndWell != null)
-                {
-                    _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
-                    srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
-                }
-
-                if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
-                {
-                    srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
-                }
+                // if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
+                // {
+                //     srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
+                // }
 
             }
             return servicelist;
@@ -215,6 +214,56 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam && p.Name == serviceName);
             var item = services.FirstOrDefault();
 
+            var srv = ConvertMongoServiceToGRPCService(item);
+            return srv;
+        }
+
+        private async Task<ServiceListReply> getLiveServices(string namespaceParam)
+        {
+            var services = await k8sService.GetServices(namespaceParam);
+            ServiceListReply servicelist = new ServiceListReply();
+
+            foreach (var item in services)
+            {
+                var srv = new ServiceReply();
+                servicelist.Services.Add(srv);
+                srv.Name = item.Metadata.Name;
+                srv.Uid = item.Metadata.Uid;
+                srv.Namespace = item.Metadata.NamespaceProperty;
+
+                if (item.Metadata.CreationTimestamp.HasValue)
+                {
+                    srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.Metadata.CreationTimestamp.Value);
+                }
+
+
+                if (item.Metadata.Annotations != null && item.Metadata.Annotations.Count > 0)
+                {
+                    srv.Annotations.AddRange(
+                        item.Metadata.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+                if (item.Metadata.Labels != null && item.Metadata.Labels.Count > 0)
+                {
+                    srv.Labels.AddRange(
+                        item.Metadata.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+                if (item.Spec.Selector != null && item.Spec.Selector.Count > 0)
+                {
+                    srv.LabelSelector.AddRange(
+                        item.Spec.Selector.Select(p => new Pair { Key = p.Key, Value = p.Value })
+                    );
+                }
+
+            }
+            return servicelist;
+        }
+
+        private ServiceReply ConvertMongoServiceToGRPCService(ServiceV1 item)
+        {
             var srv = new ServiceReply();
 
 
@@ -284,53 +333,37 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
             }
 
+
+            // if (item.LivenessProbe != null)
+            // {
+            //     srv.LivenessProbe = item.LivenessProbe;
+            // }
+            // if (item.ReadinessProbe != null)
+            // {
+            //     srv.ReadinessProbe = item.ReadinessProbe;
+            // }
+            // if (item.StartupProbe != null )
+            // {
+            //     srv.StartupProbe = item.StartupProbe;
+            // }
+            if (item.CronDescription != null)
+            {
+                srv.CronDescription = item.CronDescription;
+            }
+            if (item.CronTab != null)
+            {
+                srv.CronTab = item.CronTab;
+            }
+            if (item.CronTabException != null)
+            {
+                srv.CronTabException = item.CronTabException;
+            }
+
+
+
+
             return srv;
         }
-
-        private async Task<ServiceListReply> getLiveServices(string namespaceParam)
-        {
-            var services = await k8sService.GetServices(namespaceParam);
-            ServiceListReply servicelist = new ServiceListReply();
-
-            foreach (var item in services)
-            {
-                var srv = new ServiceReply();
-                servicelist.Services.Add(srv);
-                srv.Name = item.Metadata.Name;
-                srv.Uid = item.Metadata.Uid;
-                srv.Namespace = item.Metadata.NamespaceProperty;
-
-                if (item.Metadata.CreationTimestamp.HasValue)
-                {
-                    srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.Metadata.CreationTimestamp.Value);
-                }
-
-
-                if (item.Metadata.Annotations != null && item.Metadata.Annotations.Count > 0)
-                {
-                    srv.Annotations.AddRange(
-                        item.Metadata.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
-                if (item.Metadata.Labels != null && item.Metadata.Labels.Count > 0)
-                {
-                    srv.Labels.AddRange(
-                        item.Metadata.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
-                if (item.Spec.Selector != null && item.Spec.Selector.Count > 0)
-                {
-                    srv.LabelSelector.AddRange(
-                        item.Spec.Selector.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
-            }
-            return servicelist;
-        }
-
 
         public async override Task<EventListReply> GetEvents(GetEventListRequest request, ServerCallContext context)
         {
