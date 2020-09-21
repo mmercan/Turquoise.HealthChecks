@@ -51,6 +51,9 @@ namespace Turquoise.Models.Mongo
         public ProbeV1 ReadinessProbe { get; set; }
         public ProbeV1 StartupProbe { get; set; }
 
+        public string CronDescription { get; set; }
+        public string CronTab { get; set; }
+        public string CronTabException { get; set; }
         //TODO: Add Endpoints
         // Endpoints
 

@@ -13,6 +13,7 @@ using Turquoise.K8s.K8sClients;
 using System;
 using Newtonsoft.Json.Linq;
 
+
 namespace Turquoise.K8s.Services
 {
     public class K8sService
@@ -123,6 +124,25 @@ namespace Turquoise.K8s.Services
                 var serviceNamespace = service.Namespace();
 
                 var dtoitems = mapper.Map<Turquoise.Models.Mongo.ServiceV1>(service);
+
+                if (dtoitems.Annotations != null && dtoitems.Annotations.Count > 0 && dtoitems.Annotations.Any(p => p.Key == "healthcheck/crontab"))
+                {
+                    var crontab = dtoitems.Annotations.FirstOrDefault(p => p.Key == "healthcheck/crontab");
+                    if (crontab != null && crontab.Value != null)
+                    {
+                        dtoitems.CronTab = crontab.Value;
+                        try
+                        {
+                            var Schedule = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(crontab.Value);
+                            dtoitems.CronDescription = Schedule;
+                            logger.LogWarning("CronTab Found " + Schedule.ToString());
+                        }
+                        catch (Exception ex)
+                        {
+                            dtoitems.CronTabException = ex.Message;
+                        }
+                    }
+                }
                 returnservices.Add(dtoitems);
                 //            var ings = ingresses.Where(p => p.Metadata.Namespace() == serviceNamespace && p.Spec.Rules.FirstOrDefault()?.Http.Paths.FirstOrDefault()?.Backend.ServiceName == serviceName);
                 //  var ings =    ingresses.Where(p => p.Metadata.Namespace() == serviceNamespace && p.Spec.Rules.All(pp => pp.Http.Paths.All( ppp => ppp.Backend.ServiceName == serviceName)));
