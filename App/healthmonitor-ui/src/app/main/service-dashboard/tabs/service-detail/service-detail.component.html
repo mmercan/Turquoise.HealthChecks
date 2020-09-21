@@ -8,73 +8,84 @@
                 <div class="title">General Information</div>
             </header>
 
-            <div class="content">
-
-            {{service | json}}
+            <div class="content"  *ngIf="service">
+                
                 <div class="info-line">
-                    <div class="title">Gender</div>
-                    <div class="info"> about.general.gender </div>
+                    <div class="title">Service Created</div>
+                    <div *ngIf="service && service.creationtime" class="info"> {{service.creationtime | momentAge }} </div>
                 </div>
 
-                <div class="info-line">
-                    <div class="title">Birthday</div>
-                    <div class="info"> about.general.birthday </div>
-                </div>
+                <hr/>
 
                 <div class="info-line">
-                    <div class="title">Locations</div>
-               <!--     <div class="info location" fxLayout="row" fxLayoutAlign="start center"
-                         *ngFor="let location of about.general.locations">
-                        <span> location </span>
-                        <mat-icon class="s-16 ml-4">location_on</mat-icon>
-                    </div> -->
-                </div>
-
-                <div class="info-line">
-                    <div class="title">About Me</div>
-                    <div class="info"> about.general.about </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="profile-box info-box work" fxLayout="column">
-
-            <header class="accent">
-                <div class="title">Work</div>
-            </header>
-
-            <div class="content">
-                <div class="info-line">
-                    <div class="title">Occupation</div>
-                    <div class="info"> about.work.occupation </div>
-                </div>
-
-                <div class="info-line">
-                    <div class="title">Skills</div>
-                    <div class="info"> about.work.skills </div>
-                </div>
-
-                <div class="info-line">
-                    <div class="title">Jobs</div>
+                    <div class="title">Labels</div>
                     <table class="info jobs">
-                        <tr class="job" >
-                            <td class="company"> job.company </td>
-                            <td class="date"> job.date </td>
+                        <tr class="job"  *ngFor="let label of service.labelsList" >
+                            <td class="company"> {{label.key}} </td>
+                            <td class="date"> {{label.value}} </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <hr/>
+
+                <div class="info-line">
+                    <div class="title">Annotations</div>
+                    <table class="info jobs">
+                        <tr class="job"  *ngFor="let label of service.annotationsList" >
+                            <td class="company"> {{label.key}} </td>
+                            <td class="date"> {{label.value}} </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <hr/>
+
+                <div class="info-line">
+                    <div class="title">Selectors</div>
+                    <table class="info jobs">
+                        <tr class="job"  *ngFor="let label of service.labelselectorList" >
+                            <td class="company"> {{label.key}} </td>
+                            <td class="date"> {{label.value}} </td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
 
+        <div class="profile-box info-box work" fxLayout="column">
+
+            <header class="accent">
+                <div class="title">Health Check</div>
+            </header>
+
+            <div class="content"   *ngIf="service">
+                <div class="info-line"  [ngClass]="{'ok': service.healthisaliveandwell=='OK',  'healthy': service.healthisaliveandwell=='Healthy', 'degraded': service.healthisaliveandwell=='Degraded', 'unhealthy': service.healthisaliveandwell=='Unhealthy'}">
+                    <div class="title">HealthCheck Result</div>
+                    <div class="info"> {{service.healthisaliveandwell }} </div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">HealthCheck Age</div>
+                    <div class="info"> {{service.healthisaliveandwellsyncdateutc | momentAge }} </div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">CronTab</div>
+                    <div class="info"> {{service.crondescription }} </div>
+                </div>
+
+            </div>
+        </div>
+
         <div class="profile-box info-box contact" fxLayout="column">
 
             <header class="accent">
-                <div class="title">Contact</div>
+                <div class="title">Json</div>
             </header>
 
             <div class="content">
-                <div class="info-line">
+               <!-- <div class="info-line">
                     <div class="title">Address</div>
                     <div class="info"> about.contact.address </div>
                 </div>
@@ -95,7 +106,10 @@
                     <div class="info" >
                         <span> email </span>
                     </div>
-                </div>
+                </div>-->
+
+                {{service | json}}
+
             </div>
 
         </div>
@@ -104,47 +118,110 @@
 
     <div class="about-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="60">
 
-        <div class="profile-box friends" fxLayout="column">
 
+        <div class="profile-box info-box general" fxLayout="column">
             <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
                 <div class="title">HealthCheck Result</div>
-               <!-- <div class="more secondary-text">
-                    <span>See 454 more...</span>
-                    </div> -->
             </header>
+            
+            <div class="content" *ngIf="healthcheckresult && healthcheckresult.result" > 
+                <div  *ngIf="!healthcheckresult.result.noJson"  class="info-line"  [ngClass]="{'ok': healthcheckresult.result.status=='OK',  'healthy': healthcheckresult.result.status=='Healthy', 'degraded': healthcheckresult.result.status=='Degraded', 'unhealthy': healthcheckresult.result.status=='Unhealthy'}">
+                    <div class="title">HealthCheck Result</div>
+                    <div class="info"> {{ healthcheckresult.result.status }} </div>
+                </div>
 
-            <div class="content" fxLayout="row wrap">
+                <div  *ngIf="healthcheckresult.result.noJson"  class="info-line"  [ngClass]="{'ok': healthcheckresult.status=='OK',  'healthy': healthcheckresult.status=='Healthy', 'degraded': healthcheckresult.status=='Degraded', 'unhealthy': healthcheckresult.status=='Unhealthy',  'unhealthy': healthcheckresult.status=='ServiceUnavailable'}">
+                    <div class="title">HealthCheck Result</div>
+                    <div class="info"> {{ healthcheckresult.status }} </div>
+                </div>
 
+                <div class="info-line">
+                    <div class="title">HealthCheck Ran </div>
+                    <div *ngIf=" healthcheckresult.creationtime" class="info"> {{healthcheckresult.creationtime | momentAge }} </div>
+                </div>
 
-{{healthcheckresult | json}}
-
-               <mat-accordion>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        This is the expansion title
-      </mat-panel-title>
-      <mat-panel-description>
-        This is a summary of the content
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <p>This is the primary content of the panel.</p>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Self aware panel
-      </mat-panel-title>
-      <mat-panel-description>
-        Currently I am 
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <p>I'm visible because I am open</p>
-  </mat-expansion-panel>
-</mat-accordion>
+                <div class="info-line">
+                    <div class="title">Duration</div>
+                    <div class="info"> {{ healthcheckresult.result.duration }} </div>
+                </div>
             </div>
         </div>
-    </div>
 
+        <div class="profile-box friends" fxLayout="column">
+            <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="title">HealthCheck Details</div>
+            </header>
+
+
+            <div class="content" *ngIf="healthcheckresult && healthcheckresult.result" > 
+
+                <mat-accordion  *ngIf="healthcheckresult.result.results">
+                    <mat-expansion-panel *ngFor="let result of healthcheckresult.result.results">
+                        <mat-expansion-panel-header [ngClass]="{'ok': result.status=='OK',  'healthy':  result.status=='Healthy', 'degraded':  result.status=='Degraded', 'unhealthy':  result.status=='Unhealthy'}">
+                            <mat-panel-title>
+                                {{result.name}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                {{result.status}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <div class="title">Description :</div>
+                        <p> {{result.description}} </p>
+                        <hr/>
+                        <div class="title">Details :</div>
+                            <table class="info jobs">
+                                <tr class="job"  *ngFor="let item of result.data | keyvalue" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>
+                            </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+   
+
+
+        <div class="profile-box info-box contact" fxLayout="column">
+
+            <header class="accent">
+                <div class="title">Json</div>
+            </header>
+
+            <div class="content">
+       {{healthcheckresult | json}}
+
+
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                This is the expansion title
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                This is a summary of the content
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                            <p>This is the primary content of the panel.</p>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Self aware panel
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Currently I am 
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                                <p>I'm visible because I am open</p>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+
+            </div>
+
+        </div>
+    </div>
 </div>

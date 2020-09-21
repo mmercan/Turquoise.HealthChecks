@@ -82,10 +82,21 @@ export class ServiceDashboardService implements Resolve<any> {
   private updateHealthcheckResult(ns: string, servicename: string): void {
     this.k8sHealthcheckService.getLastHealthCheckResult(ns, servicename).subscribe(
       data => {
-        let result = {};
+        let result = {} as any;
         if (data.stringresult) {
           try {
             result = JSON.parse(data.stringresult);
+            data.stringresult = null;
+
+            if (Array.isArray(result.results)) {
+              result.results.forEach(p => {
+
+                if (p.data && typeof p.data === 'object' && p.data !== null) {
+                  p.dataisobject = true;
+                }
+              });
+            }
+
           } catch (e) {
             result = { jsonParseError: true };
           }
