@@ -18,7 +18,7 @@ namespace Turquoise.Scheduler.HostedServices
         private ILogger<DeploymentSyncService> logger;
         private IConfiguration configuration;
         private Task executingTask;
-
+        private DateTime lastrestart = DateTime.UtcNow;
         private readonly K8sService k8sService;
 
         private readonly IDistributedCache cache;
@@ -95,8 +95,12 @@ namespace Turquoise.Scheduler.HostedServices
 
         private void OnClosed()
         {
-            this.logger.LogError("===on watch Connection Closed : re-running ");
+            var utc = DateTime.UtcNow.ToString();
+            var howlongran = (DateTime.UtcNow - lastrestart);
 
+            this.logger.LogError("===on watch Connection  Closed after " + howlongran.TotalMinutes.ToString() + ":" + howlongran.Seconds.ToString() + " min:sec : re-running " + utc);
+
+            lastrestart = DateTime.UtcNow;
             executingTask = Task.Factory.StartNew(new Action(deployWatchStarter), TaskCreationOptions.LongRunning);
 
         }
