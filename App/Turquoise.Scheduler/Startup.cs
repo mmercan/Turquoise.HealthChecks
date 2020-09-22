@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EasyNetQ;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -67,6 +69,11 @@ namespace Turquoise.Scheduler
                 return RabbitHutch.CreateBus(Configuration["RabbitMQConnection"]);
             });
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["RedisConnection"];
+                options.InstanceName = "k8s";
+            });
 
             services.AddMangoRepo<Turquoise.Models.Mongo.NamespaceV1>(
                 Configuration["Mongodb:ConnectionString"],
@@ -112,8 +119,18 @@ namespace Turquoise.Scheduler
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IHostApplicationLifetime lifetime, IDistributedCache cache)
         {
+            lifetime.ApplicationStarted.Register(() =>
+          {
+              var currentTimeUTC = DateTime.UtcNow.ToString();
+              byte[] encodedCurrentTimeUTC = Encoding.UTF8.GetBytes(currentTimeUTC);
+              var options = new DistributedCacheEntryOptions()
+                  .SetSlidingExpiration(TimeSpan.FromSeconds(20));
+              cache.Set("cachedTimeUTC", encodedCurrentTimeUTC, options);
+          });
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

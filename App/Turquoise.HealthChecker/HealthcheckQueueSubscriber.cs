@@ -110,7 +110,7 @@ namespace Turquoise.HealthChecker
             catch (Exception ex)
             {
                 // stringResult = res.FirstOrDefault().Result;
-                logger.LogCritical("Result BsonDocument Deserializion Failed : " + ex);
+                logger.LogCritical("113 Line Result BsonDocument Deserializion Failed : " + ex);
             }
 
 
@@ -160,6 +160,10 @@ namespace Turquoise.HealthChecker
                 mongoservice.FirstOrDefault().HealthIsaliveAndWell = itemstatus;
                 mongoservice.FirstOrDefault().HealthIsaliveAndWellSyncDateUTC = DateTime.UtcNow;
                 await serviceRepo.UpdateAsync(mongoservice.FirstOrDefault());
+            }
+            else
+            {
+                logger.LogCritical("Line  166 : Mongo Service Not Found to Update" + service.Uid + service.Name);
             }
 
             logger.LogInformation("HTTP Status : " + res.FirstOrDefault().Status);
