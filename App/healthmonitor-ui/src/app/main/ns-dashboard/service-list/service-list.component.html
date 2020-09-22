@@ -103,7 +103,8 @@
                          class="product"
                          matRipple
                          [routerLink]="'/service/'+service.namespace+'/'+service.name"
-                         [ngClass]="{ 'unhealthy': service.healthisaliveandwell == 'Unhealthy',  
+                         [ngClass]="{ 
+                         'unhealthy': service.healthisaliveandwell == 'Unhealthy' || service.healthisaliveandwell == 'ServiceUnavailable',  
                          'healthy': service.healthisaliveandwell == 'Healthy',
                          'ok': service.healthisaliveandwell == 'OK',
                          'degraded': service.healthisaliveandwell == 'Degraded'
