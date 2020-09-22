@@ -38,7 +38,7 @@ namespace Turquoise.Scheduler.HostedServices
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            executingTask = Task.Factory.StartNew(new Action(SubscribeQueue), TaskCreationOptions.LongRunning);
+            executingTask = Task.Factory.StartNew(new Action(deployWatchStarter), TaskCreationOptions.LongRunning);
             if (executingTask.IsCompleted)
             {
                 return executingTask;
@@ -47,7 +47,7 @@ namespace Turquoise.Scheduler.HostedServices
         }
 
 
-        private void SubscribeQueue()
+        private void deployWatchStarter()
         {
             var deploylistResp = k8sService.client.ListNamespacedDeploymentWithHttpMessagesAsync("", watch: true);
             var podlistResp = k8sService.client.ListNamespacedPodWithHttpMessagesAsync("", watch: true);
@@ -95,7 +95,10 @@ namespace Turquoise.Scheduler.HostedServices
 
         private void OnClosed()
         {
-            this.logger.LogError("===on watch Connection Closed : ");
+            this.logger.LogError("===on watch Connection Closed : re-running ");
+
+            executingTask = Task.Factory.StartNew(new Action(deployWatchStarter), TaskCreationOptions.LongRunning);
+
         }
 
 
