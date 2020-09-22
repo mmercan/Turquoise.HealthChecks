@@ -19,7 +19,7 @@ namespace Turquoise.K8s.Services
     public class K8sService
     {
 
-        private Kubernetes client;
+        public Kubernetes client;
         private IMapper mapper;
         private K8sNamespaceClient namespacesClient;
         private K8sDeploymentClient deploymentsClient;

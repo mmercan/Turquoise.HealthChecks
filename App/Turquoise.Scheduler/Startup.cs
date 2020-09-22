@@ -28,6 +28,7 @@ using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.Checks;
 using Turquoise.K8s;
 using Turquoise.K8s.Services;
+using Turquoise.Scheduler.HostedServices;
 using Turquoise.Scheduler.JobSchedules;
 using Turquoise.Scheduler.Services;
 
@@ -114,7 +115,7 @@ namespace Turquoise.Scheduler
             services.AddHealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1>();
             services.AddHostedService<AppHealthCheckScheduler>();
 
-
+            services.AddHostedService<DeploymentSyncService>();
 
         }
 
