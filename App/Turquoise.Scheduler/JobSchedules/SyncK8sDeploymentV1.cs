@@ -1,63 +1,63 @@
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
-using Quartz;
-using Turquoise.K8s.Services;
-using System.Linq;
-using Turquoise.Common.Mongo;
-using k8s.Models;
-using AutoMapper;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Quartz;
+using Turquoise.Common.Mongo;
+using Turquoise.K8s.Services;
 
 namespace Turquoise.Scheduler.JobSchedules
 {
+
     [DisallowConcurrentExecution]
     public class SyncK8sDeploymentV1 : IJob
     {
-        private readonly ILogger<SyncK8sDeploymentV1> _logger;
+        private readonly ILogger<SyncK8sDeploymentV1> logger;
         private readonly K8sService k8sService;
-        private readonly MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo;
+        private readonly MangoBaseRepo<Turquoise.Models.Mongo.DeploymentV1> deploymentRepo;
         private readonly IMapper mapper;
 
-        public SyncK8sDeploymentV1(ILogger<SyncK8sDeploymentV1> logger, K8sService k8sService, MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo, IMapper mapper)
+        public SyncK8sDeploymentV1(ILogger<SyncK8sDeploymentV1> logger, K8sService k8sService, MangoBaseRepo<Turquoise.Models.Mongo.DeploymentV1> deploymentRepo, IMapper mapper)
         {
-            _logger = logger;
+            this.logger = logger;
             this.k8sService = k8sService;
-            this.serviceRepo = serviceRepo;
+            this.deploymentRepo = deploymentRepo;
             this.mapper = mapper;
         }
 
+
         public async Task Execute(IJobExecutionContext context)
         {
+            var deployments = await k8sService.GetAllDeploymentsAsync();
+            var syncTime = DateTime.UtcNow;
+
+            var dtoitems = mapper.Map<List<Turquoise.Models.Mongo.DeploymentV1>>(deployments);
+            foreach (var item in dtoitems)
+            {
+                item.Name = item.Metadata.Name;
+                item.Namespace = item.Metadata.Namespace;
+                item.SyncDate = syncTime;
 
 
-            var deplyoments = await k8sService.GetAllDeploymentsAsync();
-            // var services = await k8sService.GetAllServicesWithIngressAsync();
-            // var syncTime = DateTime.UtcNow;
+                await deploymentRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
+            }
 
-            // foreach (var item in services)
-            // {
-            //     item.LatestSyncDateUTC = syncTime;
-            //     await serviceRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
-            // }
 
-            // var mongodbservices = await serviceRepo.GetAllAsync();
-            // foreach (var item in mongodbservices)
-            // {
-            //     if (!services.Any(p => p.Uid == item.Uid))
-            //     {
-            //         item.Deleted = true;
-            //         await serviceRepo.UpdateAsync(item);
-            //     }
-            // }
-
-            // var textarr = services.Select(n => n.Name);
-            // var text = string.Join(".", textarr);
-            // _logger.LogCritical(text);
-
-            _logger.LogInformation("SyncK8sDeploymentV1 Completed");
-            //return Task.CompletedTask;
+            var mongodbservices = await deploymentRepo.GetAllAsync();
+            foreach (var item in mongodbservices)
+            {
+                if (!deployments.Any(p => p.Metadata.Name == item.Name && p.Metadata.NamespaceProperty == item.Namespace))
+                {
+                    item.Deleted = true;
+                    await deploymentRepo.UpdateAsync(item);
+                }
+            }
+            logger.LogCritical("Deployment Sync Completed ...!");
+            //  logger.LogCritical(dtoitems.ToJSON());
         }
+
+
     }
 }

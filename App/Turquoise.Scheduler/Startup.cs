@@ -90,6 +90,14 @@ namespace Turquoise.Scheduler
                 p => p.Name
                 );
 
+
+            services.AddMangoRepo<Turquoise.Models.Mongo.DeploymentV1>(
+                Configuration["Mongodb:ConnectionString"],
+                Configuration["Mongodb:DatabaseName"],
+                "DeploymentSet",
+                p => p.NameandNamespace
+                );
+
             services.AddHostedService<QuartzHostedService>();
             // // Add Quartz services
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
@@ -110,7 +118,12 @@ namespace Turquoise.Scheduler
             services.AddSingleton<SyncNamespaceService>();
             services.AddSingleton(new JobSchedule(
                jobType: typeof(SyncNamespaceService), cronExpression: "0 */15 * * * ?"));
-            // cronExpression: "0/5 * * * * ?"));
+
+
+            services.AddSingleton<SyncK8sDeploymentV1>();
+            services.AddSingleton(new JobSchedule(
+               jobType: typeof(SyncK8sDeploymentV1), cronExpression: "0 */15 * * * ?"));
+
 
             services.AddHealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1>();
             services.AddHostedService<AppHealthCheckScheduler>();

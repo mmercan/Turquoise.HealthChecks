@@ -10,6 +10,7 @@ using k8s;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
+using System.Linq;
 
 namespace Turquoise.Scheduler.HostedServices
 {
@@ -114,12 +115,13 @@ namespace Turquoise.Scheduler.HostedServices
             string key = item.Metadata.Namespace() + ":" + item.Name();
             await SavetoCache(key, item);
         }
-        private async Task SavetoCache(string key, object data)
+        private async Task SavetoCache(string key, V1Deployment data)
         {
-            byte[] encodedCurrentTimeUTC = Encoding.UTF8.GetBytes(key);
+            var datajson = data.ToJSON();
+            byte[] databyte = Encoding.UTF8.GetBytes(datajson);
             // var options = new DistributedCacheEntryOptions()
             //     .SetSlidingExpiration(TimeSpan.FromSeconds(20));
-            await cache.SetAsync(key, encodedCurrentTimeUTC);
+            await cache.SetAsync(key, databyte);
         }
 
     }
