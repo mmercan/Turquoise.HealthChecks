@@ -98,11 +98,13 @@ namespace Turquoise.Scheduler.HostedServices
             var utc = DateTime.UtcNow.ToString();
             var howlongran = (DateTime.UtcNow - lastrestart);
 
-            this.logger.LogError("===on watch Connection  Closed after " + howlongran.TotalMinutes.ToString() + ":" + howlongran.Seconds.ToString() + " min:sec : re-running " + utc);
+            this.logger.LogError("===on watch Connection  Closed after " + howlongran.TotalMinutes.ToString() + ":" + howlongran.Seconds.ToString() + " min:sec : re-running delay 30 seconds " + utc);
 
+
+            Task.Delay(TimeSpan.FromSeconds(30)).Wait();
             lastrestart = DateTime.UtcNow;
+            this.logger.LogError("=== on watch Restarting Now.... ===" + lastrestart.ToString());
             executingTask = Task.Factory.StartNew(new Action(deployWatchStarter), TaskCreationOptions.LongRunning);
-
         }
 
 
