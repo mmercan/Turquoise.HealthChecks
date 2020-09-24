@@ -19,7 +19,11 @@ namespace Turquoise.Scheduler.Services
         private IBus bus;
         private IConfiguration configuration;
 
-        public DeploymentScaleUpScheduler(DeploymentSchedulerScaleUpRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentscaleUpRepo, ILogger<DeploymentScaleUpScheduler> logger, EasyNetQ.IBus bus, IConfiguration configuration)
+        public DeploymentScaleUpScheduler(
+            DeploymentSchedulerScaleUpRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentscaleUpRepo,
+            ILogger<DeploymentScaleUpScheduler> logger,
+            EasyNetQ.IBus bus,
+            IConfiguration configuration)
         {
             this.deploymentscaleUpRepo = deploymentscaleUpRepo;
             this.logger = logger;
