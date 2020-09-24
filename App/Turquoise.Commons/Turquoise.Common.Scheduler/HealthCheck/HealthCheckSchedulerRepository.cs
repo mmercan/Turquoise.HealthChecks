@@ -13,20 +13,20 @@ namespace Turquoise.Common.Scheduler
 {
     public class HealthCheckSchedulerRepository<T> where T : new()
     {
-        public ObservableCollection<IHealthCheckScheduledTask<T>> Items { get => items; set => items = value; }
-        public List<HealthCheckSchedulerTaskWrapper<T>> ScheduledTasks { get; }
+        public ObservableCollection<IScheduledTask<T>> Items { get => items; set => items = value; }
+        public List<SchedulerTaskWrapper<T>> ScheduledTasks { get; }
 
         private ILogger<HealthCheckSchedulerRepository<T>> logger;
-        private ObservableCollection<IHealthCheckScheduledTask<T>> items;
+        private ObservableCollection<IScheduledTask<T>> items;
 
         public HealthCheckSchedulerRepository(ILogger<HealthCheckSchedulerRepository<T>> logger)
         {
             this.logger = logger;
-            Items = new ObservableCollection<IHealthCheckScheduledTask<T>>();
-            ScheduledTasks = new List<HealthCheckSchedulerTaskWrapper<T>>();
+            Items = new ObservableCollection<IScheduledTask<T>>();
+            ScheduledTasks = new List<SchedulerTaskWrapper<T>>();
 
             this.logger = logger;
-            foreach (IHealthCheckScheduledTask<T> item in Items)
+            foreach (IScheduledTask<T> item in Items)
             {
                 addItem(item);
             }
@@ -43,21 +43,21 @@ namespace Turquoise.Common.Scheduler
         {
             if (e.NewItems != null)
             {
-                foreach (IHealthCheckScheduledTask<T> x in e.NewItems) { addItem(x); };
+                foreach (IScheduledTask<T> x in e.NewItems) { addItem(x); };
             };
             if (e.OldItems != null)
             {
-                foreach (IHealthCheckScheduledTask<T> y in e.OldItems) { deleteItem(y); }
+                foreach (IScheduledTask<T> y in e.OldItems) { deleteItem(y); }
             }
             if (e.Action == NotifyCollectionChangedAction.Move) { }
         }
 
-        private void addItem(IHealthCheckScheduledTask<T> item)
+        private void addItem(IScheduledTask<T> item)
         {
             var referenceTime = DateTime.UtcNow;
             //   logger.LogCritical("scheduledTask Added " + item.Name);
 
-            var scheduledTask = new HealthCheckSchedulerTaskWrapper<T>
+            var scheduledTask = new SchedulerTaskWrapper<T>
             {
                 Uid = item.Uid,
                 Schedule = CrontabSchedule.Parse(item.Schedule),
@@ -70,12 +70,12 @@ namespace Turquoise.Common.Scheduler
             logger.LogCritical(scheduledTask.Task.Name + " : " + scheduledTask.Schedule.ToString() + " ===> " + scheduledTask.Schedule.GetNextOccurrence(referenceTime).ToString("MM/dd/yyyy H:mm"));
         }
 
-        private void editItem(IHealthCheckScheduledTask<T> item)
+        private void editItem(IScheduledTask<T> item)
         {
 
         }
 
-        private void deleteItem(IHealthCheckScheduledTask<T> item)
+        private void deleteItem(IScheduledTask<T> item)
         {
             var itemtodelete = ScheduledTasks.FirstOrDefault(e => e.Uid == item.Uid);
             if (itemtodelete != null)

@@ -4,11 +4,11 @@ using Turquoise.Common.Scheduler.Cron;
 
 namespace Turquoise.Common.Scheduler
 {
-    public class HealthCheckSchedulerTaskWrapper<T> where T : new()
+    public class SchedulerTaskWrapper<T> where T : new()
     {
         public string Uid { get; set; }
         public CrontabSchedule Schedule { get; set; }
-        public IHealthCheckScheduledTask<T> Task { get; set; }
+        public IScheduledTask<T> Task { get; set; }
 
         public DateTime LastRunTime { get; set; }
         public DateTime NextRunTime { get; set; }

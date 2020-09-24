@@ -115,6 +115,11 @@ namespace Turquoise.Scheduler
                 jobType: typeof(HealthCheckSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
 
 
+            services.AddSingleton<DeploymentSchedulerRepositoryFeeder>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(DeploymentSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
+
+
             services.AddSingleton<SyncNamespaceService>();
             services.AddSingleton(new JobSchedule(
                jobType: typeof(SyncNamespaceService), cronExpression: "0 */15 * * * ?"));
@@ -126,9 +131,14 @@ namespace Turquoise.Scheduler
 
 
             services.AddHealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1>();
+            services.AddDeploymentSchedulerRepository<Turquoise.Models.Mongo.DeploymentV1>();
+
             services.AddHostedService<AppHealthCheckScheduler>();
 
             services.AddHostedService<DeploymentSyncService>();
+
+            services.AddHostedService<DeploymentScaleDownScheduler>();
+            services.AddHostedService<DeploymentScaleUpScheduler>();
 
         }
 

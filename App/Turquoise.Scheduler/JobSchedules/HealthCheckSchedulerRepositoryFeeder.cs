@@ -47,7 +47,7 @@ namespace Turquoise.Scheduler.JobSchedules
                     {
                         healthCheckSchedulerRepository.Items.Remove(repoitem);
 
-                        var newitem = new HealthCheckScheduledTask<Models.Mongo.ServiceV1>
+                        var newitem = new ScheduledTask<Models.Mongo.ServiceV1>
                         {
                             Item = item,
                             Name = item.Name,
@@ -62,7 +62,7 @@ namespace Turquoise.Scheduler.JobSchedules
                 else
                 {
                     _logger.LogCritical("HealthCheckSchedulerRepositoryFeeder Item Added  " + item.Name);
-                    var newitem = new HealthCheckScheduledTask<Models.Mongo.ServiceV1>
+                    var newitem = new ScheduledTask<Models.Mongo.ServiceV1>
                     {
                         Item = item,
                         Name = item.Name,
@@ -74,7 +74,7 @@ namespace Turquoise.Scheduler.JobSchedules
 
                 }
             }
-            // var mapped = mapper.Map<List<IHealthCheckScheduledTask<Turquoise.Models.Mongo.ServiceV1>>>(cronitems);
+            // var mapped = mapper.Map<List<IScheduledTask<Turquoise.Models.Mongo.ServiceV1>>>(cronitems);
             // var diffs = healthCheckSchedulerRepository.Items.AsParallel().Except(mapped.AsParallel());
             // foreach (var item in diffs)
             // {
