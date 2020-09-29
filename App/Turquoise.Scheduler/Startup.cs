@@ -98,6 +98,16 @@ namespace Turquoise.Scheduler
                 p => p.NameandNamespace
                 );
 
+
+            services.AddMangoRepo<Turquoise.Models.Mongo.DeploymentScaleResult>(
+                Configuration["Mongodb:ConnectionString"],
+                Configuration["Mongodb:DatabaseName"],
+                "DeploymentScaleResultSet"
+                );
+
+
+
+
             services.AddHostedService<QuartzHostedService>();
             // // Add Quartz services
             services.AddSingleton<IJobFactory, SingletonJobFactory>();

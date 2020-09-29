@@ -18,6 +18,9 @@ namespace Turquoise.Models.Mongo
 
         public DateTime SyncDate { get; set; }
         public bool Deleted { get; set; }
+
+        public string Schedule { get; set; }
+        public string Uid { get; set; }
     }
 
     public class MetadataV1

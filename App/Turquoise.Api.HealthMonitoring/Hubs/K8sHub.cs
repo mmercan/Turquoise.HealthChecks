@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Turquoise.K8s.Services;
+using Turquoise.K8sServices;
 
 namespace Turquoise.Api.HealthMonitoring.Hubs
 {
@@ -12,9 +12,9 @@ namespace Turquoise.Api.HealthMonitoring.Hubs
     public class K8sHub : Hub
     {
         private readonly ILogger<K8sHub> logger;
-        private readonly K8sService k8sService;
+        private readonly K8sGeneralService k8sService;
 
-        public K8sHub(ILogger<K8sHub> logger, K8sService k8sService)
+        public K8sHub(ILogger<K8sHub> logger, K8sGeneralService k8sService)
         {
             this.logger = logger;
             this.k8sService = k8sService;

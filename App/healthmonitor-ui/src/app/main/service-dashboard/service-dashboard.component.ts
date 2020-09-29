@@ -14,6 +14,7 @@ export class ServiceDashboardComponent implements OnInit {
   currentServiceName: any;
   currentNamespace: any;
   panelOpenState = true;
+  service: any;
   constructor(private serviceDashboardService: ServiceDashboardService) {
 
 
@@ -26,6 +27,17 @@ export class ServiceDashboardComponent implements OnInit {
     // this.dataStore = this.serviceDashboardService.dataStore;
     this.currentNamespace = this.serviceDashboardService.currentNamespace;
     this.currentServiceName = this.serviceDashboardService.currentServiceName;
+
+
+    this.serviceDashboardService.serviceDataset.subscribe(
+      (data) => {
+        this.service = data.service;
+        // debugger;
+      },
+      (error) => {
+
+      }
+    );
   }
 
 }

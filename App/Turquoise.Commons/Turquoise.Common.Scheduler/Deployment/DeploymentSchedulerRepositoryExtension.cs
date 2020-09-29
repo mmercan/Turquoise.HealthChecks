@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Turquoise.Common.Scheduler.Deployment;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -6,21 +7,10 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDeploymentSchedulerRepository<T>(this IServiceCollection serviceCollection) where T : new()
         {
-            // serviceCollection.Configure<MangoBaseRepoSettings<T>>(o => o = options);
-            serviceCollection.AddSingleton<Turquoise.Common.Scheduler.DeploymentSchedulerScaleUpRepository<T>>();
-            serviceCollection.AddSingleton<Turquoise.Common.Scheduler.DeploymentSchedulerScaleDownRepository<T>>();
+            serviceCollection.AddSingleton<DeploymentSchedulerScaleUpRepository<T>>();
+            serviceCollection.AddSingleton<DeploymentSchedulerScaleDownRepository<T>>();
             return serviceCollection;
         }
 
-
-        //     public static IServiceCollection AddHealthCheckSchedulerRepository<T>(
-        //         this IServiceCollection serviceCollection,
-        //         IConfiguration options) where T : new()
-        //     {
-        //         serviceCollection.Configure<MangoBaseRepoSettings<T>>(options);
-        //         serviceCollection.AddSingleton<MangoBaseRepo<T>>();
-        //         return serviceCollection;
-        //     }
-        // }
     }
 }

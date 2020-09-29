@@ -7,6 +7,7 @@ using MongoDB.Driver;
 using Quartz;
 using Turquoise.Common.Mongo;
 using Turquoise.Common.Scheduler;
+using Turquoise.Common.Scheduler.HealthCheck;
 using Turquoise.Scheduler.Services;
 
 namespace Turquoise.Scheduler.JobSchedules
@@ -16,21 +17,21 @@ namespace Turquoise.Scheduler.JobSchedules
     {
         private readonly ILogger<HealthCheckSchedulerRepositoryFeeder> _logger;
         private readonly MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo;
-        private readonly IMapper mapper;
+
         private readonly HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckSchedulerRepository;
 
-        public HealthCheckSchedulerRepositoryFeeder(ILogger<HealthCheckSchedulerRepositoryFeeder> logger, MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo, HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckSchedulerRepository, IMapper mapper)
+        public HealthCheckSchedulerRepositoryFeeder(
+            ILogger<HealthCheckSchedulerRepositoryFeeder> logger,
+            MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo,
+            HealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1> healthCheckSchedulerRepository)
         {
             _logger = logger;
             this.serviceRepo = serviceRepo;
-            this.mapper = mapper;
             this.healthCheckSchedulerRepository = healthCheckSchedulerRepository;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-
-
             var filter = Builders<Turquoise.Models.Mongo.ServiceV1>.Filter.ElemMatch(x => x.Annotations, x => x.Key == "healthcheck/crontab");
             var qq = await serviceRepo.Items.FindAsync(filter);
             var cronitems = qq.ToList();
@@ -56,7 +57,6 @@ namespace Turquoise.Scheduler.JobSchedules
                         };
 
                         healthCheckSchedulerRepository.Items.Add(newitem);
-
                     }
                 }
                 else
@@ -74,13 +74,6 @@ namespace Turquoise.Scheduler.JobSchedules
 
                 }
             }
-            // var mapped = mapper.Map<List<IScheduledTask<Turquoise.Models.Mongo.ServiceV1>>>(cronitems);
-            // var diffs = healthCheckSchedulerRepository.Items.AsParallel().Except(mapped.AsParallel());
-            // foreach (var item in diffs)
-            // {
-            //     healthCheckSchedulerRepository.Items.Add(item);
-            //     _logger.LogCritical("Feeder : " + item.Name);
-            // }
         }
     }
 }

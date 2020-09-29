@@ -87,8 +87,6 @@ namespace Turquoise.HealthChecker
             try
             {
                 document = BsonSerializer.Deserialize<BsonDocument>(res.FirstOrDefault().Result);
-
-
                 if (document["status"].IsString)
                 {
                     itemstatus = document["status"].ToString();

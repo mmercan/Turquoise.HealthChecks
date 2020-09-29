@@ -7,8 +7,8 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/Turquoise.Comms/*
-      - App/Sentinel.Api.Comms.Tests/*
+      - App/Workers/Turquoise.Worker.Comms/*
+      - App/Workers/Turquoise.Worker.Comms.Tests/*
       - App/Helm/Turquoise/charts/turquoise-comms/*
 
 stages:
@@ -24,7 +24,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Turquoise.Comms/docker-compose-test.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose-test.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -58,7 +58,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Turquoise.Comms/docker-compose.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -69,7 +69,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Turquoise.Comms/docker-compose.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"

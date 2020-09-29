@@ -9,7 +9,8 @@ using Microsoft.FeatureManagement;
 using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
-using Turquoise.K8s.Services;
+using Turquoise.Common.Services;
+using Turquoise.K8sServices;
 using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.Controllers
@@ -20,7 +21,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
     {
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly K8sService _k8sService;
+        private readonly K8sGeneralService _k8sService;
         private readonly AZAuthService _azservice;
         private readonly IFeatureManager featureManager;
         private readonly MangoBaseRepo<ServiceV1> serviceMongoRepo;
@@ -29,7 +30,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
 
         public KubernetesController(
             ILogger<WeatherForecastController> logger,
-            K8sService k8sService,
+            K8sGeneralService k8sService,
             AZAuthService azservice,
             IFeatureManager featureManager,
             MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceMongoRepo,
@@ -62,7 +63,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             IKubernetes client = new Kubernetes(config);
             Console.WriteLine("Starting Request!");
 
-            var list = client.ListNamespacedPod("cookbook-dev");
+            var list = client.ListNamespacedPod("sentinel-dev");
             foreach (var item in list.Items)
             {
                 Console.WriteLine(item.Metadata.Name);
@@ -82,14 +83,14 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             await _azservice.Authenticate();
 
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetPodsMapped("sentinel-dev");
+            return await Task.FromResult("GetPodsMapped not impelemted yet"); ///_k8sService.GetPodsMapped("sentinel-dev");
         }
 
         [HttpGet("deployment")]
         public async Task<object> GetDeployment()
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetAllDeploymentsAsync();
+            return await _k8sService.DeploymentClient.GetAllMongoDeploymentsAsync();
         }
 
 
@@ -109,7 +110,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             IKubernetes client = new Kubernetes(config);
             Console.WriteLine("Starting Request!");
 
-            var list = client.ListNamespacedReplicaSet("cookbook-dev");
+            var list = client.ListNamespacedReplicaSet("sentinel-dev");
             foreach (var item in list.Items)
             {
                 Console.WriteLine(item.Metadata.Name);
@@ -125,7 +126,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         [HttpGet("k8services")]
         public async Task<object> GetK8Services()
         {
-            var items = await _k8sService.GetAllServicesAsync();
+            var items = await _k8sService.ServiceClient.GetAllAsync(); //.GetAllServicesAsync();
             return items;
         }
 
@@ -136,7 +137,8 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             //   var items = await _k8sService.GetServices("sentinel-dev");
 
 
-            var items = await _k8sService.GetAllServicesWithIngressAsync();
+            // var items = await _k8sService.GetAllServicesWithIngressAsync();
+            var items = await _k8sService.ServiceClient.GetAllMongoServiceAsync(); //GetAllServicesWithIngressAsync();
             return items;
             // KubernetesClientConfiguration config = null;
             // try
@@ -180,20 +182,8 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         [HttpGet("ingress")]
         public async Task<object> GetIngress()
         {
-            KubernetesClientConfiguration config = null;
-            try
-            {
-                config = KubernetesClientConfiguration.BuildDefaultConfig();
-            }
-            catch
-            {
-                config = KubernetesClientConfiguration.InClusterConfig();
-            }
-            IKubernetes client = new Kubernetes(config);
             Console.WriteLine("Starting Request!");
-
-
-            var ingresses = await _k8sService.GetAllIngressAsync();
+            var ingresses = await _k8sService.IngressClient.GetAllAsync(); //.GetAllIngressAsync();
             return ingresses;
         }
 
@@ -213,7 +203,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
             Console.WriteLine("Starting Request!");
 
 
-            var ingresses = _k8sService.MapServiceIngressAndPodsAsync();
+            var ingresses = Task.FromResult("MapServiceIngressAndPodsAsync not implemented"); //_k8sService.MapServiceIngressAndPodsAsync();
             return ingresses;
         }
 
@@ -293,7 +283,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> GetVirtualservices()
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetVirtualServicesAsync("sentinel-dev");
+            return await _k8sService.VirtualServiceClient.GetAsync("sentinel-dev");
         }
 
 
@@ -301,7 +291,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> GetAllevents(string namespaceparam)
         {
             _logger.LogCritical("GetDeployment called the service");
-            return await _k8sService.GetEventsAsync(namespaceparam);
+            return await _k8sService.EventClient.GetAsync(namespaceparam);
         }
 
 
@@ -350,7 +340,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         public async Task<object> CreateNewEvent()
         {
 
-            var services = await _k8sService.GetServices("sentinel-dev");
+            var services = await _k8sService.ServiceClient.GetAsync("sentinel-dev");
             var service = services.FirstOrDefault(p => p.Metadata.Name == "sentinel-dev-admin-ui");
 
 
@@ -372,7 +362,7 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         [HttpGet("getmongodeployment")]
         public async Task<object> GetMongoDeployment()
         {
-            var deployments = await _k8sService.GetAllMongoDeploymentsAsync();
+            var deployments = await _k8sService.DeploymentClient.GetAllMongoDeploymentsAsync();
             return deployments;
         }
 

@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Turquoise.Models;
-using System.Linq;
 using Microsoft.Rest;
 using Microsoft.Extensions.Logging;
 using Turquoise.K8s.K8sClients;

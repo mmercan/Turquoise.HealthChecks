@@ -9,7 +9,7 @@ using Turquoise.Common.Scheduler;
 using Turquoise.Common.Scheduler.Cron;
 
 
-namespace Turquoise.Common.Scheduler
+namespace Turquoise.Common.Scheduler.HealthCheck
 {
     public class HealthCheckSchedulerRepository<T> where T : new()
     {

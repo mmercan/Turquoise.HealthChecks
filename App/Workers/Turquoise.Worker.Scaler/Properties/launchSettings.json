@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Turquoise.Worker.Scaler": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

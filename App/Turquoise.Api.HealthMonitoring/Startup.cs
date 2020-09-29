@@ -32,11 +32,13 @@ using Turquoise.Api.HealthMonitoring.GRPCServices;
 using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Hubs;
 using Turquoise.Common;
+using Turquoise.Common.Services;
 using Turquoise.HealthChecks.Common;
 using Turquoise.HealthChecks.Common.CheckCaller;
 using Turquoise.HealthChecks.Common.Checks;
 using Turquoise.K8s;
-using Turquoise.K8s.Services;
+using Turquoise.K8sServices;
+using Turquoise.K8sServices.K8sClients;
 
 namespace Turquoise.Api.HealthMonitoring
 {
@@ -226,7 +228,7 @@ namespace Turquoise.Api.HealthMonitoring
             // services.AddHostedService<HealthCheckSubscribeService>();
 
             services.AddSignalR();
-            services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sService).Assembly, typeof(Turquoise.Models.Deployment).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(K8sGeneralService).Assembly, typeof(Turquoise.Models.Mongo.DeploymentV1).Assembly);
             services.AddGrpc();
 
             services.AddMemoryCache();
@@ -238,8 +240,8 @@ namespace Turquoise.Api.HealthMonitoring
 
             services.AddSignalR();
 
-            services.AddSingleton<K8sService>();
-            services.AddSingleton<K8sMetricsService>();
+            services.AddSingleton<K8sGeneralService>();
+            //  services.AddSingleton<K8sMetricsService>();
             services.AddSingleton<MongoAliveAndWellResultStats>();
         }
 

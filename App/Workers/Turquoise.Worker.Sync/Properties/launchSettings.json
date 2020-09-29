@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Turquoise.Worker.Sync": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

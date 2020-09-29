@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
-using Turquoise.K8s.Services;
+using Turquoise.K8sServices;
 using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
@@ -18,7 +18,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> _logger;
-        private K8sService k8sService;
+        private K8sGeneralService k8sService;
         private MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private IFeatureManager featureManager;
         private MongoAliveAndWellResultStats aliveAndWellResultStats;
@@ -26,7 +26,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
-            K8sService k8sService,
+            K8sGeneralService k8sService,
             MangoBaseRepo<ServiceV1> serviceMongoRepo,
             MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo,
             IFeatureManager featureManager,
@@ -44,7 +44,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         {
             _logger.LogCritical("Got in to Get Namespace GRPC");
             var namespaces = new NamespaceListReply();
-            var ns = await k8sService.GetNamespaces();
+            var ns = await k8sService.NamespaceClient.GetAsync();
             var listns = ns.Select(ss => { return new NamespaceReply { CreationDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(ss.Metadata.CreationTimestamp.Value), Namespace = ss.Metadata.Name }; });
             namespaces.Namespaces.AddRange(listns);
             namespaces.UpdatedTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
@@ -58,7 +58,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("Namespace is missing");
             }
-            var deployments = await k8sService.GetDeploymentsAsync(ns);
+            var deployments = await k8sService.DeploymentClient.GetAsync(ns);
             DeploymentListReply deploy = new DeploymentListReply();
 
             foreach (var item in deployments)
@@ -220,7 +220,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         private async Task<ServiceListReply> getLiveServices(string namespaceParam)
         {
-            var services = await k8sService.GetServices(namespaceParam);
+            var services = await k8sService.ServiceClient.GetAsync(namespaceParam);
             ServiceListReply servicelist = new ServiceListReply();
 
             foreach (var item in services)
@@ -374,7 +374,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 throw new ArgumentException("Namespace is missing");
             }
             EventListReply events = new EventListReply();
-            var eventlist = await k8sService.GetEventsAsync(ns);
+            var eventlist = await k8sService.EventClient.GetAsync(ns);
             foreach (var item in eventlist)
             {
                 var ev = new EventReply();

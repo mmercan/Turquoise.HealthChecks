@@ -33,16 +33,15 @@
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
     <PackageReference Include="Turquoise.HealthChecks.Common" Version="2.2.1-ci-20200721.2" />
     <PackageReference Include="WebPush" Version="1.0.11" />
     
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common\Turquoise.Common.csproj" />
-    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Models\Turquoise.Models.csproj" />
-    <ProjectReference Include="..\Turquoise.Commons\Turquoise.Common.Mongo\Turquoise.Common.Mongo.csproj" />
-    <ProjectReference Include="..\Turquoise.Commons\Turquoise.K8s\Turquoise.K8s.csproj" />
+    <ProjectReference Include="..\Libs\Turquoise.Common\Turquoise.Common.csproj" />
+    <ProjectReference Include="..\Libs\Turquoise.Models\Turquoise.Models.csproj" />
+    <ProjectReference Include="..\Libs\Turquoise.Common.Mongo\Turquoise.Common.Mongo.csproj" />
+    <ProjectReference Include="..\Libs\Turquoise.K8sServices\Turquoise.K8sServices.csproj" />
   </ItemGroup>
 </Project>

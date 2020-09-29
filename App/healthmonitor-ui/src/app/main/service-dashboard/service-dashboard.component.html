@@ -11,6 +11,7 @@
         </div>
 
         <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
+        <span *ngIf="service" style="margin-right: 30px">last Sync {{service.latestsyncdateutc |  momentAge }}</span>
         </div>
     </div>
     <!-- / HEADER -->

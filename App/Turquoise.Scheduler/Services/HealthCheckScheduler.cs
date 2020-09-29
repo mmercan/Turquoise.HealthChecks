@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Turquoise.Common.Scheduler;
+using Turquoise.Common.Scheduler.HealthCheck;
 
 namespace Turquoise.Scheduler.Services
 {

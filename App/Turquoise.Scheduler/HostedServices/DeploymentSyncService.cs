@@ -29,12 +29,14 @@ namespace Turquoise.Scheduler.HostedServices
             IConfiguration configuration,
             K8sService k8sService,
             IDistributedCache cache
+            // StackExchange.Redis.IRedis redis
             )
         {
             this.logger = logger;
             this.configuration = configuration;
             this.k8sService = k8sService;
             this.cache = cache;
+            // redis.Ping();
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -117,6 +119,8 @@ namespace Turquoise.Scheduler.HostedServices
         }
         private async Task SavetoCache(string key, V1Deployment data)
         {
+
+            // cache.Get()
             var datajson = data.ToJSON();
             byte[] databyte = Encoding.UTF8.GetBytes(datajson);
             // var options = new DistributedCacheEntryOptions()

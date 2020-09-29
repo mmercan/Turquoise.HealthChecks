@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Turquoise.Worker.HealthChecker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

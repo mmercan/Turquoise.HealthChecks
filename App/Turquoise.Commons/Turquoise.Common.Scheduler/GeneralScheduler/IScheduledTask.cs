@@ -9,9 +9,7 @@ namespace Turquoise.Common.Scheduler
         string Schedule { get; }
         string Name { get; set; }
         string Uid { get; set; }
-
         T Item { get; set; }
-
         int? ReplicaNumber { get; set; }
 
         // Task ExecuteAsync(CancellationToken cancellationToken);

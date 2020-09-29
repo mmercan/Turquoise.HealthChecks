@@ -9,7 +9,7 @@ using Turquoise.Common.Scheduler;
 using Turquoise.Common.Scheduler.Cron;
 
 
-namespace Turquoise.Common.Scheduler
+namespace Turquoise.Common.Scheduler.Deployment
 {
     public class DeploymentSchedulerScaleUpRepository<T> where T : new()
     {
@@ -31,11 +31,6 @@ namespace Turquoise.Common.Scheduler
                 addItem(item);
             }
             Items.CollectionChanged += new NotifyCollectionChangedEventHandler(collectionChanged);
-            // var staticitems = testCronData.GetData();
-            // foreach (var item in staticitems)
-            // {
-            //     Items.Add(item);
-            // }
         }
 
 
@@ -55,7 +50,6 @@ namespace Turquoise.Common.Scheduler
         private void addItem(IScheduledTask<T> item)
         {
             var referenceTime = DateTime.UtcNow;
-            //   logger.LogCritical("scheduledTask Added " + item.Name);
 
             var scheduledTask = new SchedulerTaskWrapper<T>
             {

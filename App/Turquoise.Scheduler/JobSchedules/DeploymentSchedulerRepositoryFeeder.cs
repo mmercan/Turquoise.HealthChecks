@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using Quartz;
 using Turquoise.Common.Mongo;
 using Turquoise.Common.Scheduler;
+using Turquoise.Common.Scheduler.Deployment;
 using Turquoise.Scheduler.Services;
 
 namespace Turquoise.Scheduler.JobSchedules
@@ -17,7 +18,6 @@ namespace Turquoise.Scheduler.JobSchedules
     {
         private readonly ILogger<DeploymentSchedulerRepositoryFeeder> _logger;
         private readonly MangoBaseRepo<Turquoise.Models.Mongo.DeploymentV1> deploymentRepo;
-
         private readonly DeploymentSchedulerScaleUpRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentScaleUpRepository;
         private readonly DeploymentSchedulerScaleDownRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentScaleDownRepository;
 
@@ -47,10 +47,8 @@ namespace Turquoise.Scheduler.JobSchedules
                 if (item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-crontab")?.Value != null &&
                     item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/downscale-crontab")?.Value != null)
                 {
-                    int? replicanumber = getReplicaNumber(item);
-
-                    scaleUpAddEdit(item, replicanumber);
-                    scaleDownAddEdit(item, replicanumber);
+                    scaleUpAddEdit(item);
+                    scaleDownAddEdit(item);
                 }
                 else
                 {
@@ -60,8 +58,10 @@ namespace Turquoise.Scheduler.JobSchedules
 
         }
 
-        private void scaleUpAddEdit(Models.Mongo.DeploymentV1 item, int? replicanumber)
+        private void scaleUpAddEdit(Models.Mongo.DeploymentV1 item)
         {
+
+            int? replicanumber = getReplicaNumber(item, "taka/upscale-replica");
             var repoitem = deploymentScaleUpRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid);
             if (repoitem != null)
             {
@@ -99,8 +99,10 @@ namespace Turquoise.Scheduler.JobSchedules
             }
         }
 
-        private void scaleDownAddEdit(Models.Mongo.DeploymentV1 item, int? replicanumber)
+        private void scaleDownAddEdit(Models.Mongo.DeploymentV1 item)
         {
+
+            int? replicanumber = getReplicaNumber(item, "taka/downscale-replica");
             var repoitem = deploymentScaleDownRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid);
             if (repoitem != null)
             {
@@ -138,9 +140,9 @@ namespace Turquoise.Scheduler.JobSchedules
             }
         }
 
-        private static int? getReplicaNumber(Models.Mongo.DeploymentV1 item)
+        private static int? getReplicaNumber(Models.Mongo.DeploymentV1 item, string replicatag)
         {
-            string replica = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-replica")?.Value;
+            string replica = item.Metadata.Annotations.FirstOrDefault(p => p.Key == replicatag)?.Value;
             int? replicanumber = null;
             int replicaout = 0;
             if (!string.IsNullOrWhiteSpace(replica) && Int32.TryParse(replica, out replicaout))
@@ -150,12 +152,5 @@ namespace Turquoise.Scheduler.JobSchedules
 
             return replicanumber;
         }
-        // var mapped = mapper.Map<List<ScheduledTask<Turquoise.Models.Mongo.ServiceV1>>>(cronitems);
-        // var diffs = healthCheckSchedulerRepository.Items.AsParallel().Except(mapped.AsParallel());
-        // foreach (var item in diffs)
-        // {
-        //     healthCheckSchedulerRepository.Items.Add(item);
-        //     _logger.LogCritical("Feeder : " + item.Name);
-        // }
     }
 }
