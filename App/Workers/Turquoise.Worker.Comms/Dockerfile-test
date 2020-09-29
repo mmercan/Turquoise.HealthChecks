@@ -19,13 +19,13 @@ ENV ADID=$buildtime_ADID
 ENV SONAR_HOST=https://sonarcloud.io
 
 WORKDIR /src
-COPY Turquoise.Comms/Turquoise.Comms.csproj Turquoise.Comms/
-RUN dotnet restore Turquoise.Comms/Turquoise.Comms.csproj
+COPY Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.csproj Workers/Turquoise.Worker.Comms/
+RUN dotnet restore Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.csproj
 COPY . .
 RUN dotnet sonarscanner begin /k:$PROJECT /v:$VERSION /d:sonar.host.url=$SONAR_HOST /o:mmercan-github /d:sonar.login=$SONARKEY  /d:sonar.cs.opencover.reportsPaths="/TestResults/coverage.opencover.xml" /d:sonar.exclusions="**bootstrap.css, **bootstrap-reboot.css, **bootstrap.js, **/wwwroot/**, **Empty.Tests" /d:sonar.coverage.exclusions="**Tests*.cs, **.js," /d:sonar.cs.vstest.reportsPaths="/TestResults/*.trx"
-RUN dotnet build ./Turquoise.Comms/Turquoise.Comms.sln
+RUN dotnet build ./Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.sln
 
-RUN dotnet test ./Turquoise.Comms/Turquoise.Comms.sln   /p:CollectCoverage=true /p:CoverletOutput=/TestResults/ /p:MergeWith=/TestResults/coverage.json --logger=trx -r /TestResults/
+RUN dotnet test ./Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.sln   /p:CollectCoverage=true /p:CoverletOutput=/TestResults/ /p:MergeWith=/TestResults/coverage.json --logger=trx -r /TestResults/
 RUN dotnet test ./Empty.Tests/Empty.Tests.sln /p:CollectCoverage=true /p:MergeWith="/TestResults/coverage.json" /p:CoverletOutputFormat="opencover" /p:CoverletOutput=/TestResults/
 
 # RUN dotnet test ./HealthChecks/Mercan.HealthChecks.Common.Tests/Mercan.HealthChecks.Common.Tests.csproj  /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=/TestResults/Mercan.HealthChecks.Common.Tests.xml
@@ -33,4 +33,4 @@ RUN dotnet test ./Empty.Tests/Empty.Tests.sln /p:CollectCoverage=true /p:MergeWi
 RUN dotnet build-server shutdown
 RUN dotnet sonarscanner end /d:sonar.login=$SONARKEY
 
-ENTRYPOINT dotnet test ./Turquoise.Comms/Turquoise.Comms.sln  /p:CollectCoverage=true /p:Exclude="[xunit.*.*]*" /p:CoverletOutput=/TestResults/ /p:MergeWith=/TestResults/coverage.json --logger=trx -r /TestResults/ && dotnet test ./Empty.Tests/Empty.Tests.sln /p:CollectCoverage=true /p:MergeWith="/TestResults/coverage.json" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=/TestResults/
+ENTRYPOINT dotnet test ./Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.sln  /p:CollectCoverage=true /p:Exclude="[xunit.*.*]*" /p:CoverletOutput=/TestResults/ /p:MergeWith=/TestResults/coverage.json --logger=trx -r /TestResults/ && dotnet test ./Empty.Tests/Empty.Tests.sln /p:CollectCoverage=true /p:MergeWith="/TestResults/coverage.json" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=/TestResults/
