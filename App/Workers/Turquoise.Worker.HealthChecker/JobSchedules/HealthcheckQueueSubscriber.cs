@@ -22,9 +22,11 @@ namespace Turquoise.Worker.HealthChecker
         private IsAliveAndWellHealthChecker healthChecker;
         private MangoBaseRepo<AliveAndWellResult> healthresultRepo;
         private IConfiguration configuration;
-        private MangoBaseRepo<ServiceV1> serviceRepo;
+        //  private MangoBaseRepo<ServiceV1> serviceRepo;
         private ManualResetEventSlim _ResetEvent = new ManualResetEventSlim(false);
         private readonly ILogger<HealthcheckQueueSubscriber> logger;
+
+        private readonly MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo;
 
         private Task executingTask;
 
@@ -34,6 +36,7 @@ namespace Turquoise.Worker.HealthChecker
             IBus bus,
             IsAliveAndWellHealthChecker healthChecker,
             MangoBaseRepo<Turquoise.Models.Mongo.AliveAndWellResult> healthresultRepo,
+            MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo,
             MangoBaseRepo<Turquoise.Models.Mongo.ServiceV1> serviceRepo,
             IConfiguration configuration
             )
@@ -43,7 +46,8 @@ namespace Turquoise.Worker.HealthChecker
             this.healthChecker = healthChecker;
             this.healthresultRepo = healthresultRepo;
             this.configuration = configuration;
-            this.serviceRepo = serviceRepo;
+            this.serviceCheckSummaryRepo = serviceCheckSummaryRepo;
+            //this.serviceRepo = serviceRepo;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -138,33 +142,33 @@ namespace Turquoise.Worker.HealthChecker
                 await healthresultRepo.AddAsync(result);
             }
 
-            var mongoservice = serviceRepo.Find(p => p.Uid == service.Uid);
-            if (mongoservice.FirstOrDefault() != null)
-            {
-                if (itemstatus == "")
-                {
-                    if (res.FirstOrDefault().IsSuccessStatusCode)
-                    {
-                        itemstatus = "OK";
-                    }
-                    else if (res.FirstOrDefault().Status == "NotFound")
-                    {
-                        itemstatus = "NotFound";
-                    }
-                    else
-                    {
-                        itemstatus = "ServiceUnavailable";
-                    }
-                }
 
-                mongoservice.FirstOrDefault().HealthIsaliveAndWell = itemstatus;
-                mongoservice.FirstOrDefault().HealthIsaliveAndWellSyncDateUTC = DateTime.UtcNow;
-                await serviceRepo.UpdateAsync(mongoservice.FirstOrDefault());
-            }
-            else
+            if (itemstatus == "")
             {
-                logger.LogCritical("Line  166 : Mongo Service Not Found to Update" + service.Uid + service.Name);
+                if (res.FirstOrDefault().IsSuccessStatusCode)
+                {
+                    itemstatus = "OK";
+                }
+                else if (res.FirstOrDefault().Status == "NotFound")
+                {
+                    itemstatus = "NotFound";
+                }
+                else
+                {
+                    itemstatus = res.FirstOrDefault().Status;
+                }
             }
+
+            var summary = new ServiceHealthCheckResultSummary();
+            summary.Uid = service.Uid;
+            summary.Name = service.Name;
+            summary.Namespace = service.Namespace;
+            summary.HealthIsaliveAndWellSyncDateUTC = DateTime.UtcNow;
+            summary.HealthIsaliveAndWell = itemstatus;
+
+
+            await serviceCheckSummaryRepo.Upsert(summary, p => p.Uid == service.Uid);
+
 
             logger.LogInformation("HTTP Status : " + res.FirstOrDefault().Status);
 

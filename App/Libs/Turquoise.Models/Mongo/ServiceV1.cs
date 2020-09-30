@@ -39,11 +39,6 @@ namespace Turquoise.Models.Mongo
         public DateTime LatestSyncDateUTC { get; set; }
         public bool Deleted { get; set; }
 
-        public string HealthIsalive { get; set; }
-        public DateTime HealthIsaliveSyncDateUTC { get; set; }
-        public string HealthIsaliveAndWell { get; set; }
-        public DateTime HealthIsaliveAndWellSyncDateUTC { get; set; }
-
         public string ServiceApiVersion { get; set; }
         public string ServiceResourceVersion { get; set; }
 

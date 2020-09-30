@@ -27,6 +27,8 @@ namespace Turquoise.Worker.Sync.JobSchedules
             var services = await k8sService.ServiceClient.GetAllMongoServiceAsync();
             var syncTime = DateTime.UtcNow;
 
+
+            var mongodbservices = await serviceMongoRepo.GetAllAsync();
             foreach (var item in services)
             {
                 logger.LogInformation(item.NameandNamespace + " upsert");
@@ -34,7 +36,7 @@ namespace Turquoise.Worker.Sync.JobSchedules
                 await serviceMongoRepo.Upsert(item, p => p.Name == item.Name && p.Namespace == item.Namespace);
             }
 
-            var mongodbservices = await serviceMongoRepo.GetAllAsync();
+            mongodbservices = await serviceMongoRepo.GetAllAsync();
             foreach (var item in mongodbservices)
             {
                 if (!services.Any(p => p.Uid == item.Uid))

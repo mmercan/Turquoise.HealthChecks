@@ -20,6 +20,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         private ILogger<NamespaceGRPCService> _logger;
         private K8sGeneralService k8sService;
         private MangoBaseRepo<ServiceV1> serviceMongoRepo;
+        private readonly MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo;
         private IFeatureManager featureManager;
         private MongoAliveAndWellResultStats aliveAndWellResultStats;
         private MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
@@ -30,7 +31,9 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             MangoBaseRepo<ServiceV1> serviceMongoRepo,
             MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo,
             IFeatureManager featureManager,
-            MongoAliveAndWellResultStats aliveAndWellResultStats
+            MongoAliveAndWellResultStats aliveAndWellResultStats,
+            MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo
+
             )
         {
             _logger = logger;
@@ -39,6 +42,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             this.featureManager = featureManager;
             this.aliveAndWellResultStats = aliveAndWellResultStats;
             this.healthCheckMongoRepo = healthCheckMongoRepo;
+            this.serviceCheckSummaryRepo = serviceCheckSummaryRepo;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -131,10 +135,12 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         {
             ServiceListReply servicelist = new ServiceListReply();
             var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam);
+            var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam);
             foreach (var item in services)
             {
                 // var srv = new ServiceReply();
-                var srv = ConvertMongoServiceToGRPCService(item);
+                var summary = serviceresultsummaries.FirstOrDefault(p => p.Uid == item.Uid);
+                var srv = ConvertMongoServiceToGRPCService(item, summary);
                 servicelist.Services.Add(srv);
 
                 // srv.NameandNamespace = item.NameandNamespace;
@@ -214,7 +220,9 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             var services = await serviceMongoRepo.FindAsync(p => p.Deleted == false && p.Namespace == namespaceParam && p.Name == serviceName);
             var item = services.FirstOrDefault();
 
-            var srv = ConvertMongoServiceToGRPCService(item);
+            var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam && p.Name == serviceName);
+            var summary = serviceresultsummaries.FirstOrDefault();
+            var srv = ConvertMongoServiceToGRPCService(item, summary);
             return srv;
         }
 
@@ -262,7 +270,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             return servicelist;
         }
 
-        private ServiceReply ConvertMongoServiceToGRPCService(ServiceV1 item)
+        private ServiceReply ConvertMongoServiceToGRPCService(ServiceV1 item, ServiceHealthCheckResultSummary summary)
         {
             var srv = new ServiceReply();
 
@@ -314,23 +322,25 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
             }
             srv.Deleted = item.Deleted;
-            if (item.HealthIsalive != null)
+
+
+            if (summary.HealthIsalive != null)
             {
-                srv.HealthIsalive = item.HealthIsalive;
+                srv.HealthIsalive = summary.HealthIsalive;
             }
-            if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
+            if (summary.HealthIsaliveSyncDateUTC != DateTime.MinValue)
             {
-                srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
+                srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveSyncDateUTC);
             }
-            if (item.HealthIsaliveAndWell != null)
+            if (summary.HealthIsaliveAndWell != null)
             {
-                _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
-                srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
+                _logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
+                srv.HealthIsaliveAndWell = summary.HealthIsaliveAndWell;
             }
 
-            if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
+            if (summary.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
             {
-                srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
+                srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveAndWellSyncDateUTC);
             }
 
 

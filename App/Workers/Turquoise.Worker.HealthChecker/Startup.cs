@@ -67,6 +67,13 @@ namespace Turquoise.Worker.HealthChecker
                 "DeploymentSet", p => p.NameandNamespace
                 );
 
+
+            services.AddMangoRepo<Models.Mongo.ServiceHealthCheckResultSummary>(
+                Configuration["Mongodb:ConnectionString"], Configuration["Mongodb:DatabaseName"],
+                "HealthCheckResultSummary", p => p.NameandNamespace
+                );
+
+
             services.AddHostedService<QuartzHostedService>();
             // // Add Quartz services
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
