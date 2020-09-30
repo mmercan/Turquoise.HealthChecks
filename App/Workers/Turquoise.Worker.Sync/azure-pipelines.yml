@@ -78,7 +78,7 @@ stages:
           - task: CopyFiles@2
             displayName: "Copy Helm sync-api"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-sync"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-worker-sync"
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-worker-sync"
 
           - task: CopyFiles@2
