@@ -323,26 +323,27 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             }
             srv.Deleted = item.Deleted;
 
+            if (summary != null)
+            {
+                if (summary.HealthIsalive != null)
+                {
+                    srv.HealthIsalive = summary.HealthIsalive;
+                }
+                if (summary.HealthIsaliveSyncDateUTC != DateTime.MinValue)
+                {
+                    srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveSyncDateUTC);
+                }
+                if (summary.HealthIsaliveAndWell != null)
+                {
+                    _logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
+                    srv.HealthIsaliveAndWell = summary.HealthIsaliveAndWell;
+                }
 
-            if (summary.HealthIsalive != null)
-            {
-                srv.HealthIsalive = summary.HealthIsalive;
+                if (summary.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
+                {
+                    srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveAndWellSyncDateUTC);
+                }
             }
-            if (summary.HealthIsaliveSyncDateUTC != DateTime.MinValue)
-            {
-                srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveSyncDateUTC);
-            }
-            if (summary.HealthIsaliveAndWell != null)
-            {
-                _logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
-                srv.HealthIsaliveAndWell = summary.HealthIsaliveAndWell;
-            }
-
-            if (summary.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
-            {
-                srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveAndWellSyncDateUTC);
-            }
-
 
             // if (item.LivenessProbe != null)
             // {

@@ -177,9 +177,9 @@ namespace Turquoise.Api.HealthMonitoring
 
 
             services.AddMangoRepo<Turquoise.Models.Mongo.ServiceHealthCheckResultSummary>(
-                            Configuration["Mongodb:ConnectionString"], Configuration["Mongodb:DatabaseName"],
-                            "HealthCheckResultSummary", p => p.NameandNamespace
-                            );
+                Configuration["Mongodb:ConnectionString"], Configuration["Mongodb:DatabaseName"],
+                "HealthCheckResultSummary", p => p.NameandNamespace
+                );
 
             // services.AddMangoRepo<PushNotificationModel>(Configuration.GetSection("Mongodb"));
 
