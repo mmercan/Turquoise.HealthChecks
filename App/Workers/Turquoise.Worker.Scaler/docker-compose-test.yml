@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  turquoise-scaler:
+    image: turquoise-scaler-test
+    build:
+      target: test
+      context: ../../
+      dockerfile: Workers/Turquoise.Worker.Scaler/Dockerfile-test
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1

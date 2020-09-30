@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  turquoise-scheduler:
+    image: turquoise-scheduler-test
+    build:
+      target: test
+      context: ../../
+      dockerfile: Workers/Turquoise.Worker.Scheduler/Dockerfile-test
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1

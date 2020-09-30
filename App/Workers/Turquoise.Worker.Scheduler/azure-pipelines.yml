@@ -7,9 +7,9 @@ trigger:
       - features/experimental/*
   paths:
     include:
-      - App/Workers/Turquoise.Worker.Comms/*
-      - App/Workers/Turquoise.Worker.Comms.Tests/*
-      - App/Helm/Turquoise/charts/turquoise-worker-comms/*
+      - App/Workers/Turquoise.Worker.Scheduler/*
+      - App/Workers/Turquoise.Worker.Scheduler.Tests/*
+      - App/Helm/Turquoise/charts/turquoise-worker-scheduler/*
 
 stages:
   - stage: build
@@ -24,7 +24,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose-test.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Scheduler/docker-compose-test.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -36,7 +36,7 @@ stages:
             inputs:
               containerRegistry: dockerhub
               command: run
-              arguments: "-i -v $(Build.ArtifactStagingDirectory):/TestResults turquoise-comms-test"
+              arguments: "-i -v $(Build.ArtifactStagingDirectory):/TestResults turquoise-scheduler-test"
             continueOnError: true
 
           - task: PublishTestResults@2
@@ -58,7 +58,7 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Scheduler/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Build services"
               additionalImageTags: "$(Build.BuildNumber)"
@@ -69,17 +69,17 @@ stages:
             inputs:
               containerregistrytype: "Container Registry"
               dockerRegistryEndpoint: dockerhub
-              dockerComposeFile: "App/Workers/Turquoise.Worker.Comms/docker-compose.yml"
+              dockerComposeFile: "App/Workers/Turquoise.Worker.Scheduler/docker-compose.yml"
               dockerComposeFileArgs: "TAGVersion=01"
               action: "Push services"
               additionalImageTags: "$(Build.BuildNumber)"
               includeLatestTag: true
 
           - task: CopyFiles@2
-            displayName: "Copy Helm comms-api"
+            displayName: "Copy Helm schedule-api"
             inputs:
-              SourceFolder: "App/Helm/Turquoise/charts/turquoise-worker-comms"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-worker-comms"
+              SourceFolder: "App/Helm/Turquoise/charts/turquoise-worker-scheduler"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Helm/Turquoise/charts/turquoise-worker-scheduler"
 
           - task: CopyFiles@2
             displayName: "Copy Helm Values"
@@ -99,9 +99,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "turquoise-dev.turquoise-dev"
         variables:
-          chartName: "turquoise-worker-comms"
+          chartName: "turquoise-worker-scheduler"
           namespace: "turquoise-dev"
-          releaseName: "turquoise-comms-dev"
+          releaseName: "turquoise-scheduler-dev"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
@@ -160,9 +160,9 @@ stages:
         # creates an environment if it doesn't exist
         environment: "sentinel-dev.sentinel-dev"
         variables:
-          chartName: "comms-worker-api"
+          chartName: "scheduler-worker-api"
           namespace: "sentinel-test"
-          releaseName: "sentinel-dev-comms-api"
+          releaseName: "sentinel-dev-scheduler"
           pipelines_pipeline: '"$(Build.DefinitionName)"'
           pipelines_run: '"$(Build.BuildNumber)"'
           pipelines_pipelineId: '"$(System.DefinitionId)"'
