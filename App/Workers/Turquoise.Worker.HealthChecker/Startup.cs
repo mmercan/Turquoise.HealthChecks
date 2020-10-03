@@ -38,8 +38,8 @@ namespace Turquoise.Worker.HealthChecker
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddFeatureManagement();
             //Add Health Check
-            services.AddHealthChecks()
-            .AddSystemInfoCheck();
+            services.AddHealthChecks();
+            // .AddSystemInfoCheck();
 
             // services.AddAutoMapper(typeof(Program).Assembly, typeof(Turquoise.Models.Mongo.DeploymentV1).Assembly);
 
