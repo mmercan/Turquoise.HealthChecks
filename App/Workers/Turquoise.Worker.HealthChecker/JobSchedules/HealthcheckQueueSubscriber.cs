@@ -167,7 +167,7 @@ namespace Turquoise.Worker.HealthChecker
             summary.HealthIsaliveAndWell = itemstatus;
 
 
-            await serviceCheckSummaryRepo.Upsert(summary, p => p.Uid == service.Uid);
+            await serviceCheckSummaryRepo.Upsert(summary, p => p.NameandNamespace == service.NameandNamespace);
 
 
             logger.LogInformation("HTTP Status : " + res.FirstOrDefault().Status);

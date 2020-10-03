@@ -14,6 +14,7 @@ service NamespaceService {
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
   rpc GetLastHealthCheckResult (HealthCheckResultRequest) returns (HealthCheckResultReply);
+  rpc GetNodes (google.protobuf.Empty) returns (NodeReplies);
 }
 
 message GetServicesRequest
@@ -166,4 +167,56 @@ message HealthCheckResultReply
  string Status = 6;
  string StringResult = 7;
  string CheckedUrl = 8;
+}
+
+
+message NodeReplies
+{
+repeated NodeReply Nodes = 1;
+}
+
+message NodeReply
+{
+  string Name = 1;
+  string Uid = 2;
+  string providerID = 3;
+  repeated Pair Labels = 4;
+  repeated Pair Annotations = 5;
+  string status = 6;
+  repeated NodeReplyCondition Conditions = 7;
+  repeated Pair Allocatables = 8;
+  repeated Pair Capacities = 9;
+  repeated NodeReplyImage Images = 10;
+  NodeInfo NodeInfo = 11;
+}
+
+message NodeReplyCondition
+{
+  google.protobuf.Timestamp LastHeartbeatTime = 1;
+  google.protobuf.Timestamp LastTransitionTime = 2;
+  string Message =  3;
+  string  Reason = 4;
+  string Status = 5;
+  string Type = 6;
+}
+
+message NodeReplyImage
+{
+  string name = 1;
+  string size = 2;
+}
+
+
+message NodeInfo
+{
+    string Architecture = 1;
+    string bootID = 2;
+    string containerRuntimeVersion = 3;
+    string kernelVersion = 4;
+    string kubeProxyVersion = 5;
+    string kubeletVersion = 6;
+    string machineID = 7;
+    string operatingSystem = 8;
+    string osImage = 9;
+    string systemUUID = 10;
 }

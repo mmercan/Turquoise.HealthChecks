@@ -62,6 +62,8 @@ namespace Turquoise.HealthChecker.Services
 
         public async Task<IsAliveAndWellResult> DownloadAsync(Uri url)
         {
+
+            logger.LogCritical("Uri is : " + url.AbsolutePath);
             var getitem = await client.GetAsync(url);
             var isSuccessStatusCode = true;
             if (!getitem.IsSuccessStatusCode)

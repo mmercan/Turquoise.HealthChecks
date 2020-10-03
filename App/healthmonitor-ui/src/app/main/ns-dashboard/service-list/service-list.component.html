@@ -104,7 +104,7 @@
                          matRipple
                          [routerLink]="'/service/'+service.namespace+'/'+service.name"
                          [ngClass]="{ 
-                         'unhealthy': service.healthisaliveandwell == 'Unhealthy' || service.healthisaliveandwell == 'ServiceUnavailable',  
+                         'unhealthy': service.healthisaliveandwell == 'Unhealthy' || service.healthisaliveandwell == 'ServiceUnavailable' || service.healthisaliveandwell == 'Unauthorized' || service.healthisaliveandwell == 'NotAcceptable',  
                          'healthy': service.healthisaliveandwell == 'Healthy',
                          'ok': service.healthisaliveandwell == 'OK',
                          'degraded': service.healthisaliveandwell == 'Degraded'

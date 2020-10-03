@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -498,6 +499,13 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             result.StringResult = mongores.StringResult;
 
             return Task.FromResult(result);
+        }
+
+
+        public override Task<Turquoise.Api.HealthMonitoring.NodeReplies> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
+        {
+            var replies = new NodeReplies();
+            return Task.FromResult(replies);
         }
 
     }

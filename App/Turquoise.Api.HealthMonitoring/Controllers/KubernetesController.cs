@@ -76,6 +76,28 @@ namespace Turquoise.Api.HealthMonitoring.Controllers
         }
 
 
+
+
+        [HttpGet("nodes")]
+        public async Task<object> GetNodes()
+        {
+            _logger.LogCritical("GetDeployment called the service");
+            var nodes = await _k8sService.NodeClient.GetAsync();
+
+            foreach (var item in nodes.FirstOrDefault().Status.Allocatable)
+            {
+                _logger.LogCritical(item.Key + " : " + item.Value);
+            }
+
+
+            foreach (var item in nodes.FirstOrDefault().Status.Capacity)
+            {
+                _logger.LogCritical("CAP :" + item.Key + " : " + item.Value);
+            }
+            // nodes.FirstOrDefault().Status.Allocatable.FirstOrDefault().Value
+            return nodes;
+        }
+
         [HttpGet("podsmapped")]
         public async Task<object> GetPodsMapped()
         {
