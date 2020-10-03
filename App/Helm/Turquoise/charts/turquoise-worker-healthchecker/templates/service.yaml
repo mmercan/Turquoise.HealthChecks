@@ -4,8 +4,6 @@ metadata:
   name: {{ include "turquoise-healthchecker.fullname" . }}
   labels:
     {{- include "turquoise-healthchecker.labels" . | nindent 4 }}
-  annotations:
-    {{- include "turquoise-healthchecker.service.annotations" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
