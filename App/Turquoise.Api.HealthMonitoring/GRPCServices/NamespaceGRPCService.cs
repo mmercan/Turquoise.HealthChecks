@@ -18,7 +18,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
     [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
-        private ILogger<NamespaceGRPCService> _logger;
+        private ILogger<NamespaceGRPCService> logger;
         private K8sGeneralService k8sService;
         private MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private readonly MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo;
@@ -37,7 +37,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
             )
         {
-            _logger = logger;
+            this.logger = logger;
             this.k8sService = k8sService;
             this.serviceMongoRepo = serviceMongoRepo;
             this.featureManager = featureManager;
@@ -47,7 +47,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
-            _logger.LogCritical("Got in to Get Namespace GRPC");
+            logger.LogCritical("Got in to Get Namespace GRPC");
             var namespaces = new NamespaceListReply();
             var ns = await k8sService.NamespaceClient.GetAsync();
             var listns = ns.Select(ss => { return new NamespaceReply { CreationDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(ss.Metadata.CreationTimestamp.Value), Namespace = ss.Metadata.Name }; });
@@ -140,7 +140,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             foreach (var item in services)
             {
                 // var srv = new ServiceReply();
-                var summary = serviceresultsummaries.FirstOrDefault(p => p.Uid == item.Uid);
+                var summary = serviceresultsummaries.FirstOrDefault(p => p.NameandNamespace == item.NameandNamespace);
                 var srv = ConvertMongoServiceToGRPCService(item, summary);
                 servicelist.Services.Add(srv);
 
@@ -223,6 +223,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
             var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam && p.Name == serviceName);
             var summary = serviceresultsummaries.FirstOrDefault();
+            if (summary == null) { logger.LogCritical("healthcheck summary not found " + namespaceParam + "" + serviceName); }
             var srv = ConvertMongoServiceToGRPCService(item, summary);
             return srv;
         }
@@ -336,7 +337,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 }
                 if (summary.HealthIsaliveAndWell != null)
                 {
-                    _logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
+                    logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
                     srv.HealthIsaliveAndWell = summary.HealthIsaliveAndWell;
                 }
 
