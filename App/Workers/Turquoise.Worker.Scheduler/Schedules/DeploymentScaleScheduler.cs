@@ -68,7 +68,7 @@ namespace Turquoise.Worker.Scheduler.Schedules
                          {
                              if (task.IsCompleted)
                              {
-                                 logger.LogCritical("Task Added to RabbitMQ " + configuration["queue:scale"] + " " + taskThatShouldRun.Task.Name);
+                                 logger.LogCritical("Task Added to RabbitMQ " + configuration["queue:scale"] + " " + taskThatShouldRun.Task.Name + " at " + DateTime.Now.ToString());
                              }
                              if (task.IsFaulted)
                              {
