@@ -60,7 +60,6 @@ namespace Turquoise.Worker.Scheduler.Schedules
                     Name = taskThatShouldRun.Task.Name,
                     nameSpace = taskThatShouldRun.Task.Namespace,
                     Schedule = taskThatShouldRun.Task.Schedule,
-
                     ReplicaNumber = taskThatShouldRun.Task.ScaleDetails.ReplicaNumber,
                     ScaleUpDown = ScaleUpDown.ScaleUp
                 };
@@ -69,7 +68,7 @@ namespace Turquoise.Worker.Scheduler.Schedules
                          {
                              if (task.IsCompleted)
                              {
-                                 logger.LogInformation("Task Added to RabbitMQ " + configuration["queue:scale"] + " " + taskThatShouldRun.Task.Name);
+                                 logger.LogCritical("Task Added to RabbitMQ " + configuration["queue:scale"] + " " + taskThatShouldRun.Task.Name);
                              }
                              if (task.IsFaulted)
                              {

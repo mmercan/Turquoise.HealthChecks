@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using k8s;
 using k8s.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Turquoise.Models.Mongo;
 
@@ -47,6 +48,29 @@ namespace Turquoise.K8sServices.K8sClients
             var items = await GetAllAsync();
             var dtoitems = mapper.Map<IList<Turquoise.Models.Mongo.DeploymentV1>>(items);
             return dtoitems;
+        }
+
+
+        public async Task<V1Deployment> GetSingleAsync(string name, string nameSpace)
+        {
+            var deployment = await client.ReadNamespacedDeploymentAsync(name, nameSpace);
+
+            return deployment;
+        }
+
+        public async Task<V1Deployment> ScaleDeployment(string name, string nameSpace, int ScaleNumber)
+        {
+
+            var patch = new JsonPatchDocument<V1Deployment>();
+            patch.Replace(e => e.Spec.Replicas, ScaleNumber);
+            //  var orjdeployment  =await GetSingleAsync(name,nameSpace);
+            //   orjdeployment.Spec.Replicas =
+            // var deployment = await client.ReplaceNamespacedDeployment()
+
+
+
+            var deployment = await client.PatchNamespacedDeploymentAsync(new V1Patch(patch), name, nameSpace);
+            return deployment;
         }
 
     }

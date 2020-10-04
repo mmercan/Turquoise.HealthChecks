@@ -14,14 +14,14 @@ using Turquoise.Models.Scheduler;
 namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
 {
     [DisallowConcurrentExecution]
-    public class DeploymentSchedulerRepositoryFeeder : IJob
+    public class DeploymentScalerSchedulerRepositoryFeeder : IJob
     {
-        private readonly ILogger<DeploymentSchedulerRepositoryFeeder> _logger;
+        private readonly ILogger<DeploymentScalerSchedulerRepositoryFeeder> _logger;
         private readonly MangoBaseRepo<Turquoise.Models.Mongo.DeploymentV1> deploymentRepo;
         private readonly DeploymentSchedulerScaleRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentScaleRepository;
 
-        public DeploymentSchedulerRepositoryFeeder(
-         ILogger<DeploymentSchedulerRepositoryFeeder> logger,
+        public DeploymentScalerSchedulerRepositoryFeeder(
+         ILogger<DeploymentScalerSchedulerRepositoryFeeder> logger,
          MangoBaseRepo<Turquoise.Models.Mongo.DeploymentV1> deploymentRepo,
          DeploymentSchedulerScaleRepository<Turquoise.Models.Mongo.DeploymentV1> deploymentScaleRepository)
         {

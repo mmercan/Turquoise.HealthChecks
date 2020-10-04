@@ -77,9 +77,9 @@ namespace Turquoise.Worker.Scheduler
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(HealthCheckSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
 
-            services.AddSingleton<DeploymentSchedulerRepositoryFeeder>();
+            services.AddSingleton<DeploymentScalerSchedulerRepositoryFeeder>();
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(DeploymentSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
+                jobType: typeof(DeploymentScalerSchedulerRepositoryFeeder), cronExpression: "0 */2 * * * ?"));
 
             services.AddHealthCheckSchedulerRepository<Turquoise.Models.Mongo.ServiceV1>();
             services.AddDeploymentSchedulerRepository<Turquoise.Models.Mongo.DeploymentV1>();
