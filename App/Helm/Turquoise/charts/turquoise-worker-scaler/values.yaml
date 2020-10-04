@@ -76,6 +76,7 @@ configmap:
     ASPNETCORE_ENVIRONMENT: "Production"
     Mongodb__DatabaseName: "turquoise-dev"
     queue__servicev1: "healthcheck.service"
+    queue__scale: "healthcheck.scale"
     DOTNET_RUNNING_IN_CONTAINER: "true"
     RunOnCluster: "true"
 
