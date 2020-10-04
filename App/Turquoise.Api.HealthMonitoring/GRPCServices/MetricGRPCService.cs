@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Turquoise.GRPC;
+using Turquoise.GRPC.GRPCServices;
 using Turquoise.K8sServices;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices

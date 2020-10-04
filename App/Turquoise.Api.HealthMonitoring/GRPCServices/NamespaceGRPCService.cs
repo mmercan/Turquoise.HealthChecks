@@ -10,6 +10,9 @@ using MongoDB.Driver;
 using Turquoise.Api.HealthMonitoring.Helpers;
 using Turquoise.Api.HealthMonitoring.Models;
 using Turquoise.Common.Mongo;
+using Turquoise.GRPC;
+using Turquoise.GRPC.Converters;
+using Turquoise.GRPC.GRPCServices;
 using Turquoise.K8sServices;
 using Turquoise.Models.Mongo;
 
@@ -116,19 +119,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 return await getLiveServices(ns);
             }
 
-            // DeploymentListReply deploy = new DeploymentListReply();
-            // foreach (var item in deployments)
-            // {
-            //     var dep = new DeploymentReply();
-            //     dep.Name = item.Metadata.Name;
-            //     dep.Image = item.Spec.Template.Spec.Containers.FirstOrDefault().Image;
-            //     dep.Status = item.Status.Conditions.FirstOrDefault().Status.ToString();
-            //     dep.Labels.AddRange(item.Metadata.Labels.Select(lab => { return new Pair { Key = lab.Key, Value = lab.Value }; }));
-            //     deploy.Deployments.Add(dep);
-            // }
-            // return deploy;
-
-            // return base.GetServices(request, context);
         }
 
 
@@ -139,77 +129,9 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam);
             foreach (var item in services)
             {
-                // var srv = new ServiceReply();
                 var summary = serviceresultsummaries.FirstOrDefault(p => p.NameandNamespace == item.NameandNamespace);
-                var srv = ConvertMongoServiceToGRPCService(item, summary);
+                var srv = Turquoise.GRPC.Converters.ServiceReplyConverter.ConvertToServiceReply(item, summary, logger);
                 servicelist.Services.Add(srv);
-
-                // srv.NameandNamespace = item.NameandNamespace;
-                // srv.Uid = item.Uid;
-                // srv.Name = item.Name;
-                // srv.Namespace = item.Namespace;
-
-                // if (item.Labels != null && item.Labels.Count > 0)
-                // {
-                //     srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                // }
-                // srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
-
-
-                // if (item.LabelSelector != null && item.LabelSelector.Count > 0)
-                // {
-                //     srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                // }
-
-
-                // if (item.Annotations != null && item.Annotations.Count > 0)
-                // {
-                //     srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-                // }
-
-                // srv.ServiceType = item.Type;
-                // srv.SessionAffinity = item.SessionAffinity;
-                // srv.ClusterIP = item.ClusterIP;
-                // if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
-                // {
-                //     srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
-                // }
-                // if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
-                // {
-                //     srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
-                // }
-                // if (item.IngressUrl != null)
-                // {
-                //     srv.IngressUrl = item.IngressUrl;
-                // }
-                // if (item.VirtualServiceUrl != null)
-                // {
-                //     srv.VirtualServiceUrl = item.VirtualServiceUrl;
-                // }
-                // if (item.LatestSyncDateUTC != DateTime.MinValue)
-                // {
-                //     srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
-                // }
-                // srv.Deleted = item.Deleted;
-                // if (item.HealthIsalive != null)
-                // {
-                //     srv.HealthIsalive = item.HealthIsalive;
-                // }
-                // if (item.HealthIsaliveSyncDateUTC != DateTime.MinValue)
-                // {
-                //     srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveSyncDateUTC);
-                // }
-                // if (item.HealthIsaliveAndWell != null)
-                // {
-                //     _logger.LogCritical("HealthIsaliveAndWell :" + item.HealthIsaliveAndWell);
-                //     srv.HealthIsaliveAndWell = item.HealthIsaliveAndWell;
-                // }
-
-                // if (item.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
-                // {
-                //     srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.HealthIsaliveAndWellSyncDateUTC);
-                // }
-
             }
             return servicelist;
         }
@@ -232,152 +154,15 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         {
             var services = await k8sService.ServiceClient.GetAsync(namespaceParam);
             ServiceListReply servicelist = new ServiceListReply();
-
+            var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam);
             foreach (var item in services)
             {
-                var srv = new ServiceReply();
+                var result = serviceresultsummaries.FirstOrDefault(p => p.Name == item.Metadata.Name && p.Namespace == item.Metadata.NamespaceProperty);
+                var srv = ServiceReplyConverter.ConvertToServiceReply(item, result, logger);
                 servicelist.Services.Add(srv);
-                srv.Name = item.Metadata.Name;
-                srv.Uid = item.Metadata.Uid;
-                srv.Namespace = item.Metadata.NamespaceProperty;
-
-                if (item.Metadata.CreationTimestamp.HasValue)
-                {
-                    srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.Metadata.CreationTimestamp.Value);
-                }
-
-
-                if (item.Metadata.Annotations != null && item.Metadata.Annotations.Count > 0)
-                {
-                    srv.Annotations.AddRange(
-                        item.Metadata.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
-                if (item.Metadata.Labels != null && item.Metadata.Labels.Count > 0)
-                {
-                    srv.Labels.AddRange(
-                        item.Metadata.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
-                if (item.Spec.Selector != null && item.Spec.Selector.Count > 0)
-                {
-                    srv.LabelSelector.AddRange(
-                        item.Spec.Selector.Select(p => new Pair { Key = p.Key, Value = p.Value })
-                    );
-                }
-
             }
             return servicelist;
         }
-
-        private ServiceReply ConvertMongoServiceToGRPCService(ServiceV1 item, ServiceHealthCheckResultSummary summary)
-        {
-            var srv = new ServiceReply();
-
-
-            srv.NameandNamespace = item.NameandNamespace;
-            srv.Uid = item.Uid;
-            srv.Name = item.Name;
-            srv.Namespace = item.Namespace;
-
-            if (item.Labels != null && item.Labels.Count > 0)
-            {
-                srv.Labels.AddRange(item.Labels.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-            }
-            srv.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
-
-
-            if (item.LabelSelector != null && item.LabelSelector.Count > 0)
-            {
-                srv.LabelSelector.AddRange(item.LabelSelector.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-            }
-
-
-            if (item.Annotations != null && item.Annotations.Count > 0)
-            {
-                srv.Annotations.AddRange(item.Annotations.Select(p => new Pair { Key = p.Key, Value = p.Value }));
-            }
-
-            srv.ServiceType = item.Type;
-            srv.SessionAffinity = item.SessionAffinity;
-            srv.ClusterIP = item.ClusterIP;
-            if (item.InternalEndpoints != null && item.InternalEndpoints.Count > 0)
-            {
-                srv.InternalEndpoints.AddRange(item.InternalEndpoints.Select(p => new StringMessage { Value = p }));
-            }
-            if (item.ExternalEndpoints != null && item.ExternalEndpoints.Count > 0)
-            {
-                srv.ExternalEndpoints.AddRange(item.ExternalEndpoints.Select(p => new StringMessage { Value = p }));
-            }
-            if (item.IngressUrl != null)
-            {
-                srv.IngressUrl = item.IngressUrl;
-            }
-            if (item.VirtualServiceUrl != null)
-            {
-                srv.VirtualServiceUrl = item.VirtualServiceUrl;
-            }
-            if (item.LatestSyncDateUTC != DateTime.MinValue)
-            {
-                srv.LatestSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LatestSyncDateUTC);
-            }
-            srv.Deleted = item.Deleted;
-
-            if (summary != null)
-            {
-                if (summary.HealthIsalive != null)
-                {
-                    srv.HealthIsalive = summary.HealthIsalive;
-                }
-                if (summary.HealthIsaliveSyncDateUTC != DateTime.MinValue)
-                {
-                    srv.HealthIsaliveSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveSyncDateUTC);
-                }
-                if (summary.HealthIsaliveAndWell != null)
-                {
-                    logger.LogCritical("HealthIsaliveAndWell :" + summary.HealthIsaliveAndWell);
-                    srv.HealthIsaliveAndWell = summary.HealthIsaliveAndWell;
-                }
-
-                if (summary.HealthIsaliveAndWellSyncDateUTC != DateTime.MinValue)
-                {
-                    srv.HealthIsaliveAndWellSyncDateUTC = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(summary.HealthIsaliveAndWellSyncDateUTC);
-                }
-            }
-
-            // if (item.LivenessProbe != null)
-            // {
-            //     srv.LivenessProbe = item.LivenessProbe;
-            // }
-            // if (item.ReadinessProbe != null)
-            // {
-            //     srv.ReadinessProbe = item.ReadinessProbe;
-            // }
-            // if (item.StartupProbe != null )
-            // {
-            //     srv.StartupProbe = item.StartupProbe;
-            // }
-            if (item.CronDescription != null)
-            {
-                srv.CronDescription = item.CronDescription;
-            }
-            if (item.CronTab != null)
-            {
-                srv.CronTab = item.CronTab;
-            }
-            if (item.CronTabException != null)
-            {
-                srv.CronTabException = item.CronTabException;
-            }
-
-
-
-
-            return srv;
-        }
-
         public async override Task<EventListReply> GetEvents(GetEventListRequest request, ServerCallContext context)
         {
 
@@ -386,61 +171,9 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("Namespace is missing");
             }
-            EventListReply events = new EventListReply();
             var eventlist = await k8sService.EventClient.GetAsync(ns);
-            foreach (var item in eventlist)
-            {
-                var ev = new EventReply();
-                events.Events.Add(ev);
-
-                ev.Message = item.Message;
-
-                ev.Name = item.Metadata.Name;
-                ev.Message = item.Message;
-
-                if (item.Count.HasValue)
-                {
-                    ev.Count = item.Count.Value;
-                }
-                ev.Reason = item.Reason;
-                ev.Type = item.Type;
-                if (item.FirstTimestamp.HasValue && item.FirstTimestamp.Value != DateTime.MinValue)
-                {
-                    ev.FirstTimestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.FirstTimestamp.Value);
-                }
-
-
-                if (item.LastTimestamp.HasValue && item.LastTimestamp.Value != DateTime.MinValue)
-                {
-                    ev.LastTimestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.LastTimestamp.Value);
-                }
-
-                if (item.InvolvedObject != null)
-                {
-                    if (item.InvolvedObject.Name != null)
-                    {
-                        ev.InvolvedObjectName = item.InvolvedObject.Name;
-                    }
-
-                    if (item.InvolvedObject.Kind != null)
-                    {
-                        ev.InvolvedObjectKind = item.InvolvedObject.Kind;
-                    }
-                    if (item.InvolvedObject.NamespaceProperty != null)
-                    {
-                        ev.InvolvedObjectNamespace = item.InvolvedObject.NamespaceProperty;
-                    }
-                    if (item.InvolvedObject.Uid != null)
-                    {
-                        ev.InvolvedObjectUid = item.InvolvedObject.Uid;
-                    }
-                }
-
-                //                 ev.Metadata
-            }
+            var events = Turquoise.GRPC.Converters.EventReplyConverter.ConvertToEventListReply(eventlist);
             return events;
-
-
         }
 
         public override Task<HealthCheckStatsReply> GetHealthCheckStats(HealthCheckStatsRequest request, ServerCallContext context)
@@ -503,7 +236,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         }
 
 
-        public override Task<Turquoise.Api.HealthMonitoring.NodeReplies> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
+        public override Task<NodeReplies> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {
             var replies = new NodeReplies();
             return Task.FromResult(replies);

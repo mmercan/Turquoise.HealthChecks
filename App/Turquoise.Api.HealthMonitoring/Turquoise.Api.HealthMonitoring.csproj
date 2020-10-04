@@ -8,11 +8,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Protobuf Include="..\Protos\K8sHealthcheck.proto" Link="Protos\K8sHealthcheck.proto" GrpcServices="Server" ProtoRoot="..\Protos\" />
-    <Protobuf Include="..\Protos\K8sMetrics.proto" Link="Protos\K8sMetrics.proto" GrpcServices="Server" ProtoRoot="..\Protos\" />
     <Protobuf Include="Protos\country.proto" GrpcServices="Server" ProtoRoot="Protos\" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" ProtoRoot="Protos\" />
-    
   </ItemGroup>
 
   <ItemGroup>
@@ -43,5 +40,6 @@
     <ProjectReference Include="..\Libs\Turquoise.Models\Turquoise.Models.csproj" />
     <ProjectReference Include="..\Libs\Turquoise.Common.Mongo\Turquoise.Common.Mongo.csproj" />
     <ProjectReference Include="..\Libs\Turquoise.K8sServices\Turquoise.K8sServices.csproj" />
+    <ProjectReference Include="..\Libs\Turquoise.GRPC\Turquoise.GRPC.csproj" />
   </ItemGroup>
 </Project>

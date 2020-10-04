@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Turquoise.Api.HealthMonitoring";
+option csharp_namespace = "Turquoise.GRPC.GRPCServices";
 
 package k8App;
 import "google/protobuf/timestamp.proto";

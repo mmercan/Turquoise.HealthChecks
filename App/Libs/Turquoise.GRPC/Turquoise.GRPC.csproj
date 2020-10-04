@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.30.0" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.30.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Protobuf Include="..\..\Protos\K8sHealthcheck.proto" Link="Protos\K8sHealthcheck.proto" GrpcServices="Server" ProtoRoot="..\..\Protos\" />
+    <Protobuf Include="..\..\Protos\K8sMetrics.proto" Link="Protos\K8sMetrics.proto" GrpcServices="Server" ProtoRoot="..\..\Protos\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Turquoise.Models\Turquoise.Models.csproj" />
+    <ProjectReference Include="..\Turquoise.K8sServices\Turquoise.K8sServices.csproj" />
+  </ItemGroup>
+
+</Project>
