@@ -53,6 +53,15 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                 }
             }
 
+
+            foreach (var item in deploymentScaleRepository.Items)
+            {
+                var cronitem = cronitems.FirstOrDefault(p => p.Metadata.Uid == item.Uid);
+                if (cronitem == null)
+                {
+                    deploymentScaleRepository.Items.Remove(item);
+                }
+            }
         }
 
         private void scaleUpAddEdit(Models.Mongo.DeploymentV1 item)
