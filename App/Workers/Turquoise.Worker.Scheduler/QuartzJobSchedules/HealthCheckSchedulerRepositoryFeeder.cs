@@ -36,6 +36,8 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
             var cronitems = qq.ToList();
 
             _logger.LogCritical("HealthCheckSchedulerRepositoryFeeder Started " + cronitems.Count() + " element");
+
+            // Add Modify 
             foreach (var item in cronitems)
             {
                 var repoitem = healthCheckSchedulerRepository.Items.FirstOrDefault(p => p.Uid == item.Uid);
@@ -73,6 +75,16 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
 
                     healthCheckSchedulerRepository.Items.Add(newitem);
 
+                }
+            }
+
+
+            foreach (var item in healthCheckSchedulerRepository.Items)
+            {
+                var cronitem = cronitems.FirstOrDefault(p => p.Uid == item.Uid);
+                if (cronitem == null)
+                {
+                    healthCheckSchedulerRepository.Items.Remove(item);
                 }
             }
         }

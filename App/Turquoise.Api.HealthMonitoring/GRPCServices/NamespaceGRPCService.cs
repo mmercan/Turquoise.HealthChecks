@@ -103,7 +103,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         public async override Task<ServiceListReply> GetServices(GetServicesRequest request, ServerCallContext context)
         {
-
             var ns = request.NamespaceParam;
             if (String.IsNullOrWhiteSpace(ns))
             {
