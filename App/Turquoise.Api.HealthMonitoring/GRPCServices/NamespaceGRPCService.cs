@@ -146,7 +146,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             var serviceresultsummaries = await serviceCheckSummaryRepo.FindAsync(p => p.Namespace == namespaceParam && p.Name == serviceName);
             var summary = serviceresultsummaries.FirstOrDefault();
             if (summary == null) { logger.LogCritical("healthcheck summary not found " + namespaceParam + "" + serviceName); }
-            var srv = ConvertMongoServiceToGRPCService(item, summary);
+            var srv = ServiceReplyConverter.ConvertToServiceReply(item, summary, logger);
             return srv;
         }
 
