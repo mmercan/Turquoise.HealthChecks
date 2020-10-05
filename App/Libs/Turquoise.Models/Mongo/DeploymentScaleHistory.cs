@@ -20,6 +20,7 @@ namespace Turquoise.Models.Mongo
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string Schedule { get; set; }
+        public string Timezone { get; set; }
         public DateTime ScaledUtc { get; set; }
         public int OldScaleNumber { get; set; }
         public int NewScaleNumber { get; set; }

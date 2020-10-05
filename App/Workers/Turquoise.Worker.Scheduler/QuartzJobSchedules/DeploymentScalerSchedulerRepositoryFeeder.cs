@@ -75,6 +75,13 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                 {
                     _logger.LogCritical(item.NameandNamespace + " Upscale is Changed Updading now");
                     deploymentScaleRepository.Items.Remove(repoitem);
+
+                    var timezone = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/scale-timezone")?.Value;
+                    if (string.IsNullOrWhiteSpace(timezone))
+                    {
+                        timezone = "UTC";
+                    }
+
                     var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                     {
                         Item = item,
@@ -82,7 +89,7 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                         Namespace = item.Namespace,
                         Uid = item.Metadata.Uid,
                         Schedule = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-crontab")?.Value,
-                        ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleUp }
+                        ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleUp, Timezone = timezone }
                     };
                     deploymentScaleRepository.Items.Add(newitem);
                 }
@@ -94,6 +101,14 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
             else
             {
                 _logger.LogCritical("deploymentScaleUpRepository Item Added  " + item.Name);
+
+                var timezone = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/scale-timezone")?.Value;
+                if (string.IsNullOrWhiteSpace(timezone))
+                {
+                    timezone = "UTC";
+                }
+
+
                 var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                 {
                     Item = item,
@@ -101,7 +116,7 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                     Namespace = item.Namespace,
                     Uid = item.Metadata.Uid,
                     Schedule = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-crontab")?.Value,
-                    ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleUp },
+                    ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleUp, Timezone = timezone },
                 };
                 deploymentScaleRepository.Items.Add(newitem);
             }
@@ -119,6 +134,12 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                 {
                     _logger.LogCritical(item.NameandNamespace + " Downscale is Changed Updading now");
                     deploymentScaleRepository.Items.Remove(repoitem);
+
+                    var timezone = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/scale-timezone")?.Value;
+                    if (string.IsNullOrWhiteSpace(timezone))
+                    {
+                        timezone = "UTC";
+                    }
                     var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                     {
                         Item = item,
@@ -126,7 +147,7 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                         Namespace = item.Namespace,
                         Uid = item.Metadata.Uid,
                         Schedule = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/downscale-crontab")?.Value,
-                        ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleDown }
+                        ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleDown, Timezone = timezone }
                     };
                     deploymentScaleRepository.Items.Add(newitem);
                 }
@@ -138,6 +159,13 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
             else
             {
                 _logger.LogCritical("deploymentScaleDownRepository Item Added  " + item.Name);
+
+                var timezone = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/scale-timezone")?.Value;
+                if (string.IsNullOrWhiteSpace(timezone))
+                {
+                    timezone = "UTC";
+                }
+
                 var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                 {
                     Item = item,
@@ -145,7 +173,7 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                     Namespace = item.Namespace,
                     Uid = item.Metadata.Uid,
                     Schedule = item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/downscale-crontab")?.Value,
-                    ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleDown }
+                    ScaleDetails = new ScaleDetails { ReplicaNumber = replicanumber, ScaleUpDown = ScaleUpDown.ScaleDown, Timezone = timezone }
                 };
                 deploymentScaleRepository.Items.Add(newitem);
             }

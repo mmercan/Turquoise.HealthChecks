@@ -22,6 +22,6 @@ namespace Turquoise.Models.Scheduler
     {
         int? ReplicaNumber { get; set; }
         ScaleUpDown ScaleUpDown { get; set; }
-
+        string Timezone { get; set; }
     }
 }

@@ -121,6 +121,7 @@ namespace Turquoise.Worker.Scaler.JobSchedules
                 Name = scalerMessage.Name,
                 Namespace = scalerMessage.nameSpace,
                 Schedule = scalerMessage.Schedule,
+                Timezone = scalerMessage.Timezone,
                 ScaledUtc = DateTime.UtcNow,
                 NewScaleNumber = scaleNumber,
                 Status = status
