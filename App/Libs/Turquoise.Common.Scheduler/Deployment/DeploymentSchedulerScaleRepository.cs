@@ -58,6 +58,7 @@ namespace Turquoise.Common.Scheduler.Deployment
                 NextRunTime = referenceTime,
                 Item = item.Item
             };
+            scheduledTask.Increment();
 
             ScheduledTasks.Add(scheduledTask);
             logger.LogCritical(scheduledTask.Task.Name + " : " + scheduledTask.Schedule.ToString() + " ===> " + scheduledTask.Schedule.GetNextOccurrence(referenceTime).ToString("MM/dd/yyyy H:mm"));

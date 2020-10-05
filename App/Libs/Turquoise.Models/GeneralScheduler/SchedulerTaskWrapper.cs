@@ -18,6 +18,8 @@ namespace Turquoise.Models.Scheduler
         {
             LastRunTime = NextRunTime;
             NextRunTime = Schedule.GetNextOccurrence(NextRunTime);
+
+            string nxt = NextRunTime.ToString();
         }
 
         public bool ShouldRun(DateTime currentTime)

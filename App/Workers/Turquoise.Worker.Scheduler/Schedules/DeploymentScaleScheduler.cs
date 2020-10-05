@@ -61,7 +61,7 @@ namespace Turquoise.Worker.Scheduler.Schedules
                     nameSpace = taskThatShouldRun.Task.Namespace,
                     Schedule = taskThatShouldRun.Task.Schedule,
                     ReplicaNumber = taskThatShouldRun.Task.ScaleDetails.ReplicaNumber,
-                    ScaleUpDown = ScaleUpDown.ScaleUp
+                    ScaleUpDown = taskThatShouldRun.Task.ScaleDetails.ScaleUpDown
                 };
 
                 bus.PublishAsync(scalemessage, configuration["queue:scale"]).ContinueWith(task =>

@@ -47,6 +47,7 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
                     repoitem.Schedule != item.Annotations.FirstOrDefault(p => p.Key == "healthcheck/crontab")?.Value
                     )
                     {
+
                         healthCheckSchedulerRepository.Items.Remove(repoitem);
 
                         var newitem = new ScheduledTask<Models.Mongo.ServiceV1>

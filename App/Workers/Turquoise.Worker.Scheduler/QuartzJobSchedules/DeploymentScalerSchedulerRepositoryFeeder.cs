@@ -66,14 +66,14 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
 
         private void scaleUpAddEdit(Models.Mongo.DeploymentV1 item)
         {
-
             int? replicanumber = getReplicaNumber(item, "taka/upscale-replica");
-            var repoitem = deploymentScaleRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid);
+            var repoitem = deploymentScaleRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid && p.ScaleDetails.ScaleUpDown == ScaleUpDown.ScaleUp);
             if (repoitem != null)
             {
                 if (repoitem.Schedule != item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-crontab")?.Value ||
                     repoitem.ScaleDetails.ReplicaNumber.ToString() != item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/upscale-replica")?.Value)
                 {
+                    _logger.LogCritical(item.NameandNamespace + " Upscale is Changed Updading now");
                     deploymentScaleRepository.Items.Remove(repoitem);
                     var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                     {
@@ -111,12 +111,13 @@ namespace Turquoise.Worker.Scheduler.QuartzJobSchedules
         {
 
             int? replicanumber = getReplicaNumber(item, "taka/downscale-replica");
-            var repoitem = deploymentScaleRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid);
+            var repoitem = deploymentScaleRepository.Items.FirstOrDefault(p => p.Uid == item.Metadata.Uid && p.ScaleDetails.ScaleUpDown == ScaleUpDown.ScaleDown);
             if (repoitem != null)
             {
                 if (repoitem.Schedule != item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/downscale-crontab")?.Value ||
                     repoitem.ScaleDetails.ReplicaNumber.ToString() != item.Metadata.Annotations.FirstOrDefault(p => p.Key == "taka/downscale-replica")?.Value)
                 {
+                    _logger.LogCritical(item.NameandNamespace + " Downscale is Changed Updading now");
                     deploymentScaleRepository.Items.Remove(repoitem);
                     var newitem = new ScheduledTask<Models.Mongo.DeploymentV1>
                     {

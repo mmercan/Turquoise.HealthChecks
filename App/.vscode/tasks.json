@@ -1,8 +1,7 @@
 {
     "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
+    "tasks": [{
+            "label": "Turquoise.Api.HealthMonitoring-build",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -14,7 +13,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
+            "label": "Turquoise.Api.HealthMonitoring-publish",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -26,13 +25,52 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "watch",
+            "label": "Turquoise.Api.HealthMonitoring-watch",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "watch",
                 "run",
                 "${workspaceFolder}/Turquoise.Api.HealthMonitoring/Turquoise.Api.HealthMonitoring.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+
+
+        {
+            "label": "Turquoise.Worker.Scheduler-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Workers/Turquoise.Worker.Scheduler/Turquoise.Worker.Scheduler.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Turquoise.Worker.Scheduler-publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Workers/Turquoise.Worker.Scheduler/Turquoise.Worker.Scheduler.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Turquoise.Worker.Scheduler-watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/Workers/Turquoise.Worker.Scheduler/Turquoise.Worker.Scheduler.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
