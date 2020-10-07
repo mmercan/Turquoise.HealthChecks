@@ -1740,7 +1740,8 @@ proto.k8App.DeploymentReply.toObject = function(includeInstance, msg) {
     labelsList: jspb.Message.toObjectList(msg.getLabelsList(),
     proto.k8App.Pair.toObject, includeInstance),
     spec: (f = msg.getSpec()) && proto.k8App.DeploymentSpecReply.toObject(includeInstance, f),
-    status: (f = msg.getStatus()) && proto.k8App.DeploymentStatusReply.toObject(includeInstance, f)
+    status: (f = msg.getStatus()) && proto.k8App.DeploymentStatusReply.toObject(includeInstance, f),
+    creationtime: (f = msg.getCreationtime()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1800,6 +1801,11 @@ proto.k8App.DeploymentReply.deserializeBinaryFromReader = function(msg, reader) 
       var value = new proto.k8App.DeploymentStatusReply;
       reader.readMessage(value,proto.k8App.DeploymentStatusReply.deserializeBinaryFromReader);
       msg.setStatus(value);
+      break;
+    case 6:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setCreationtime(value);
       break;
     default:
       reader.skipField();
@@ -1867,6 +1873,14 @@ proto.k8App.DeploymentReply.serializeBinaryToWriter = function(message, writer) 
       5,
       f,
       proto.k8App.DeploymentStatusReply.serializeBinaryToWriter
+    );
+  }
+  f = message.getCreationtime();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
   }
 };
@@ -2037,6 +2051,43 @@ proto.k8App.DeploymentReply.prototype.clearStatus = function() {
  */
 proto.k8App.DeploymentReply.prototype.hasStatus = function() {
   return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional google.protobuf.Timestamp CreationTime = 6;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.k8App.DeploymentReply.prototype.getCreationtime = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 6));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.k8App.DeploymentReply} returns this
+*/
+proto.k8App.DeploymentReply.prototype.setCreationtime = function(value) {
+  return jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.k8App.DeploymentReply} returns this
+ */
+proto.k8App.DeploymentReply.prototype.clearCreationtime = function() {
+  return this.setCreationtime(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.k8App.DeploymentReply.prototype.hasCreationtime = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 

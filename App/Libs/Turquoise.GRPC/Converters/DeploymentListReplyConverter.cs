@@ -24,7 +24,10 @@ namespace Turquoise.GRPC.Converters
                 dep.Spec = ConvertV1DeploymentSpec(item);
                 dep.Labels.AddRange(item.Metadata.Labels.Select(lab => { return new Pair { Key = lab.Key, Value = lab.Value }; }));
                 dep.Annotations.AddRange(item.Metadata.Annotations.Select(lab => { return new Pair { Key = lab.Key, Value = lab.Value }; }));
-
+                if (item.CreationTimestamp().HasValue)
+                {
+                    dep.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTimestamp().Value);
+                }
                 deploy.Deployments.Add(dep);
             }
             deploy.UpdatedTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);

@@ -67,21 +67,18 @@
                         <span  *ngIf="deploment.spec && deploment.spec.replicas">
                             {{deploment.spec.replicas.value  }}
                         </span>
-                        <span >
-                            /
-                        </span>
 
-                        <span *ngIf="deploment.status.readyreplicas && deploment.status.readyreplicas.value ">
-                            {{deploment.status.readyreplicas.value }}
+                        <span *ngIf="deploment.status && deploment.status.readyreplicas && deploment.status.readyreplicas.value ">
+                           /  {{deploment.status.readyreplicas.value }}
                         </span>
-                                {{deploment.status.overallstatus}}
+                                
                     </mat-cell>
                 </ng-container>
 
 
                                 <!-- Quantity Column -->
                 <ng-container matColumnDef="image">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Last Test</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Image</mat-header-cell>
                     <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
                         <span  *ngIf="deploment.spec">
                             {{deploment.spec.image  }}
@@ -95,13 +92,9 @@
                 <!-- Quantity Column -->
                 <ng-container matColumnDef="age">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Age</mat-header-cell>
-                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
-
-                        <span class="quantity-indicator text-truncate"
-                              [ngClass]="{'red-500':service.quantity <= 5, 'amber-500':service.quantity > 5 && service.quantity <= 25,'green-600':service.quantity > 25}">
-                        </span>
-                        <span>
-                            {{service.creationtime  | momentAge }}
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
+                        <span *ngIf="deploment.creationtime">
+                            {{deploment.creationtime  | momentAge }}
                         </span>
 
                     </mat-cell>
@@ -110,10 +103,10 @@
                 <!-- Active Column -->
 
                 <ng-container matColumnDef="active">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
-                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
-                        <mat-icon *ngIf="!service.active" class="active-icon green-600 s-16">check</mat-icon>
-                        <mat-icon *ngIf="service.active" class="active-icon red-500 s-16">close</mat-icon>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="deploment.status && deploment.status.overallstatus=='True'" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="deploment.status && deploment.status.overallstatus=='False'" class="active-icon red-500 s-16">close</mat-icon>
                     </mat-cell>
                 </ng-container>
 

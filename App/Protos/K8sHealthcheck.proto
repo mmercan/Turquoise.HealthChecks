@@ -58,6 +58,7 @@ message DeploymentReply{
   repeated Pair Labels = 3;
   DeploymentSpecReply Spec = 4;
   DeploymentStatusReply Status = 5;
+  google.protobuf.Timestamp CreationTime=6;
 }
 
 message DeploymentSpecReply{

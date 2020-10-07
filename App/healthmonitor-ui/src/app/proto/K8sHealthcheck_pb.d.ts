@@ -184,6 +184,11 @@ export class DeploymentReply extends jspb.Message {
   getStatus(): DeploymentStatusReply | undefined;
   setStatus(value?: DeploymentStatusReply): void;
 
+  hasCreationtime(): boolean;
+  clearCreationtime(): void;
+  getCreationtime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setCreationtime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeploymentReply.AsObject;
   static toObject(includeInstance: boolean, msg: DeploymentReply): DeploymentReply.AsObject;
@@ -201,6 +206,7 @@ export namespace DeploymentReply {
     labelsList: Array<Pair.AsObject>,
     spec?: DeploymentSpecReply.AsObject,
     status?: DeploymentStatusReply.AsObject,
+    creationtime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 
