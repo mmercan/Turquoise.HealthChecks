@@ -4,6 +4,7 @@
 import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
+import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
 export class GetServicesRequest extends jspb.Message {
   getNamespaceparam(): string;
@@ -163,16 +164,25 @@ export class DeploymentReply extends jspb.Message {
   getName(): string;
   setName(value: string): void;
 
+  clearAnnotationsList(): void;
+  getAnnotationsList(): Array<Pair>;
+  setAnnotationsList(value: Array<Pair>): void;
+  addAnnotations(value?: Pair, index?: number): Pair;
+
   clearLabelsList(): void;
   getLabelsList(): Array<Pair>;
   setLabelsList(value: Array<Pair>): void;
   addLabels(value?: Pair, index?: number): Pair;
 
-  getImage(): string;
-  setImage(value: string): void;
+  hasSpec(): boolean;
+  clearSpec(): void;
+  getSpec(): DeploymentSpecReply | undefined;
+  setSpec(value?: DeploymentSpecReply): void;
 
-  getStatus(): string;
-  setStatus(value: string): void;
+  hasStatus(): boolean;
+  clearStatus(): void;
+  getStatus(): DeploymentStatusReply | undefined;
+  setStatus(value?: DeploymentStatusReply): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeploymentReply.AsObject;
@@ -187,9 +197,158 @@ export class DeploymentReply extends jspb.Message {
 export namespace DeploymentReply {
   export type AsObject = {
     name: string,
+    annotationsList: Array<Pair.AsObject>,
     labelsList: Array<Pair.AsObject>,
+    spec?: DeploymentSpecReply.AsObject,
+    status?: DeploymentStatusReply.AsObject,
+  }
+}
+
+export class DeploymentSpecReply extends jspb.Message {
+  hasProgressdeadlineseconds(): boolean;
+  clearProgressdeadlineseconds(): void;
+  getProgressdeadlineseconds(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setProgressdeadlineseconds(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasReplicas(): boolean;
+  clearReplicas(): void;
+  getReplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setReplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasRevisionhistorylimit(): boolean;
+  clearRevisionhistorylimit(): void;
+  getRevisionhistorylimit(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setRevisionhistorylimit(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  getSelectorstring(): string;
+  setSelectorstring(value: string): void;
+
+  getImage(): string;
+  setImage(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeploymentSpecReply.AsObject;
+  static toObject(includeInstance: boolean, msg: DeploymentSpecReply): DeploymentSpecReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DeploymentSpecReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeploymentSpecReply;
+  static deserializeBinaryFromReader(message: DeploymentSpecReply, reader: jspb.BinaryReader): DeploymentSpecReply;
+}
+
+export namespace DeploymentSpecReply {
+  export type AsObject = {
+    progressdeadlineseconds?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    replicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    revisionhistorylimit?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    selectorstring: string,
     image: string,
+  }
+}
+
+export class DeploymentStatusReply extends jspb.Message {
+  hasAvailablereplicas(): boolean;
+  clearAvailablereplicas(): void;
+  getAvailablereplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setAvailablereplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasCollisioncount(): boolean;
+  clearCollisioncount(): void;
+  getCollisioncount(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setCollisioncount(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasReadyreplicas(): boolean;
+  clearReadyreplicas(): void;
+  getReadyreplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setReadyreplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasReplicas(): boolean;
+  clearReplicas(): void;
+  getReplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setReplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasUnavailablereplicas(): boolean;
+  clearUnavailablereplicas(): void;
+  getUnavailablereplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setUnavailablereplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  hasUpdatedreplicas(): boolean;
+  clearUpdatedreplicas(): void;
+  getUpdatedreplicas(): google_protobuf_wrappers_pb.Int32Value | undefined;
+  setUpdatedreplicas(value?: google_protobuf_wrappers_pb.Int32Value): void;
+
+  clearConditionList(): void;
+  getConditionList(): Array<DeploymentStatusConditionReply>;
+  setConditionList(value: Array<DeploymentStatusConditionReply>): void;
+  addCondition(value?: DeploymentStatusConditionReply, index?: number): DeploymentStatusConditionReply;
+
+  getOverallstatus(): string;
+  setOverallstatus(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeploymentStatusReply.AsObject;
+  static toObject(includeInstance: boolean, msg: DeploymentStatusReply): DeploymentStatusReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DeploymentStatusReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeploymentStatusReply;
+  static deserializeBinaryFromReader(message: DeploymentStatusReply, reader: jspb.BinaryReader): DeploymentStatusReply;
+}
+
+export namespace DeploymentStatusReply {
+  export type AsObject = {
+    availablereplicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    collisioncount?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    readyreplicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    replicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    unavailablereplicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    updatedreplicas?: google_protobuf_wrappers_pb.Int32Value.AsObject,
+    conditionList: Array<DeploymentStatusConditionReply.AsObject>,
+    overallstatus: string,
+  }
+}
+
+export class DeploymentStatusConditionReply extends jspb.Message {
+  hasLasttransitiontime(): boolean;
+  clearLasttransitiontime(): void;
+  getLasttransitiontime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLasttransitiontime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  hasLastupdatetime(): boolean;
+  clearLastupdatetime(): void;
+  getLastupdatetime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLastupdatetime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getMessage(): string;
+  setMessage(value: string): void;
+
+  getReason(): string;
+  setReason(value: string): void;
+
+  getStatus(): string;
+  setStatus(value: string): void;
+
+  getType(): string;
+  setType(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeploymentStatusConditionReply.AsObject;
+  static toObject(includeInstance: boolean, msg: DeploymentStatusConditionReply): DeploymentStatusConditionReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DeploymentStatusConditionReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeploymentStatusConditionReply;
+  static deserializeBinaryFromReader(message: DeploymentStatusConditionReply, reader: jspb.BinaryReader): DeploymentStatusConditionReply;
+}
+
+export namespace DeploymentStatusConditionReply {
+  export type AsObject = {
+    lasttransitiontime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    lastupdatetime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    message: string,
+    reason: string,
     status: string,
+    type: string,
   }
 }
 
@@ -670,6 +829,226 @@ export namespace HealthCheckResultReply {
     status: string,
     stringresult: string,
     checkedurl: string,
+  }
+}
+
+export class NodeReplies extends jspb.Message {
+  clearNodesList(): void;
+  getNodesList(): Array<NodeReply>;
+  setNodesList(value: Array<NodeReply>): void;
+  addNodes(value?: NodeReply, index?: number): NodeReply;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeReplies.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeReplies): NodeReplies.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeReplies, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeReplies;
+  static deserializeBinaryFromReader(message: NodeReplies, reader: jspb.BinaryReader): NodeReplies;
+}
+
+export namespace NodeReplies {
+  export type AsObject = {
+    nodesList: Array<NodeReply.AsObject>,
+  }
+}
+
+export class NodeReply extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  getUid(): string;
+  setUid(value: string): void;
+
+  getProviderid(): string;
+  setProviderid(value: string): void;
+
+  clearLabelsList(): void;
+  getLabelsList(): Array<Pair>;
+  setLabelsList(value: Array<Pair>): void;
+  addLabels(value?: Pair, index?: number): Pair;
+
+  clearAnnotationsList(): void;
+  getAnnotationsList(): Array<Pair>;
+  setAnnotationsList(value: Array<Pair>): void;
+  addAnnotations(value?: Pair, index?: number): Pair;
+
+  getStatus(): string;
+  setStatus(value: string): void;
+
+  clearConditionsList(): void;
+  getConditionsList(): Array<NodeReplyCondition>;
+  setConditionsList(value: Array<NodeReplyCondition>): void;
+  addConditions(value?: NodeReplyCondition, index?: number): NodeReplyCondition;
+
+  clearAllocatablesList(): void;
+  getAllocatablesList(): Array<Pair>;
+  setAllocatablesList(value: Array<Pair>): void;
+  addAllocatables(value?: Pair, index?: number): Pair;
+
+  clearCapacitiesList(): void;
+  getCapacitiesList(): Array<Pair>;
+  setCapacitiesList(value: Array<Pair>): void;
+  addCapacities(value?: Pair, index?: number): Pair;
+
+  clearImagesList(): void;
+  getImagesList(): Array<NodeReplyImage>;
+  setImagesList(value: Array<NodeReplyImage>): void;
+  addImages(value?: NodeReplyImage, index?: number): NodeReplyImage;
+
+  hasNodeinfo(): boolean;
+  clearNodeinfo(): void;
+  getNodeinfo(): NodeInfo | undefined;
+  setNodeinfo(value?: NodeInfo): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeReply.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeReply): NodeReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeReply;
+  static deserializeBinaryFromReader(message: NodeReply, reader: jspb.BinaryReader): NodeReply;
+}
+
+export namespace NodeReply {
+  export type AsObject = {
+    name: string,
+    uid: string,
+    providerid: string,
+    labelsList: Array<Pair.AsObject>,
+    annotationsList: Array<Pair.AsObject>,
+    status: string,
+    conditionsList: Array<NodeReplyCondition.AsObject>,
+    allocatablesList: Array<Pair.AsObject>,
+    capacitiesList: Array<Pair.AsObject>,
+    imagesList: Array<NodeReplyImage.AsObject>,
+    nodeinfo?: NodeInfo.AsObject,
+  }
+}
+
+export class NodeReplyCondition extends jspb.Message {
+  hasLastheartbeattime(): boolean;
+  clearLastheartbeattime(): void;
+  getLastheartbeattime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLastheartbeattime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  hasLasttransitiontime(): boolean;
+  clearLasttransitiontime(): void;
+  getLasttransitiontime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setLasttransitiontime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getMessage(): string;
+  setMessage(value: string): void;
+
+  getReason(): string;
+  setReason(value: string): void;
+
+  getStatus(): string;
+  setStatus(value: string): void;
+
+  getType(): string;
+  setType(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeReplyCondition.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeReplyCondition): NodeReplyCondition.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeReplyCondition, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeReplyCondition;
+  static deserializeBinaryFromReader(message: NodeReplyCondition, reader: jspb.BinaryReader): NodeReplyCondition;
+}
+
+export namespace NodeReplyCondition {
+  export type AsObject = {
+    lastheartbeattime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    lasttransitiontime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    message: string,
+    reason: string,
+    status: string,
+    type: string,
+  }
+}
+
+export class NodeReplyImage extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  getSize(): string;
+  setSize(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeReplyImage.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeReplyImage): NodeReplyImage.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeReplyImage, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeReplyImage;
+  static deserializeBinaryFromReader(message: NodeReplyImage, reader: jspb.BinaryReader): NodeReplyImage;
+}
+
+export namespace NodeReplyImage {
+  export type AsObject = {
+    name: string,
+    size: string,
+  }
+}
+
+export class NodeInfo extends jspb.Message {
+  getArchitecture(): string;
+  setArchitecture(value: string): void;
+
+  getBootid(): string;
+  setBootid(value: string): void;
+
+  getContainerruntimeversion(): string;
+  setContainerruntimeversion(value: string): void;
+
+  getKernelversion(): string;
+  setKernelversion(value: string): void;
+
+  getKubeproxyversion(): string;
+  setKubeproxyversion(value: string): void;
+
+  getKubeletversion(): string;
+  setKubeletversion(value: string): void;
+
+  getMachineid(): string;
+  setMachineid(value: string): void;
+
+  getOperatingsystem(): string;
+  setOperatingsystem(value: string): void;
+
+  getOsimage(): string;
+  setOsimage(value: string): void;
+
+  getSystemuuid(): string;
+  setSystemuuid(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeInfo.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeInfo): NodeInfo.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeInfo, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeInfo;
+  static deserializeBinaryFromReader(message: NodeInfo, reader: jspb.BinaryReader): NodeInfo;
+}
+
+export namespace NodeInfo {
+  export type AsObject = {
+    architecture: string,
+    bootid: string,
+    containerruntimeversion: string,
+    kernelversion: string,
+    kubeproxyversion: string,
+    kubeletversion: string,
+    machineid: string,
+    operatingsystem: string,
+    osimage: string,
+    systemuuid: string,
   }
 }
 

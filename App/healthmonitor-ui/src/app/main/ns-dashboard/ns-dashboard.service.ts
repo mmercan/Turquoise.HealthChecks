@@ -7,6 +7,8 @@ import { NSDashboardResponse } from './ns-dashboard.model';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 import { K8sEventService } from 'app/shared/grpc-services/k8s-event.service';
 import { K8sHealthcheckService } from 'app/shared/grpc-services/k8s-healthcheck.service';
+import { K8sDeploymentService } from 'app/shared/grpc-services/k8s-deployment.service';
+import { DeploymentReply } from 'app/proto/K8sHealthcheck_pb';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,7 @@ export class NsDashboardService implements Resolve<any> {
   public events: any[] = [];
   public stats = {};
   public currentNamespace: string;
-
+  public deployments: DeploymentReply[] = [];
 
 
   public dataset: Observable<NSDashboardResponse>;
@@ -35,20 +37,23 @@ export class NsDashboardService implements Resolve<any> {
     currentNamespace: string,
     events: any[],
     services: any[]
-    stats: any
+    stats: any,
+    deployments: DeploymentReply[]
   };
 
   constructor(
     private httpClient: HttpClient,
     private k8sService: K8sServiceService,
     private k8sEventService: K8sEventService,
-    private k8sHealthcheckService: K8sHealthcheckService) {
+    private k8sHealthcheckService: K8sHealthcheckService,
+    private k8sDeploymentService: K8sDeploymentService) {
 
     this.dataStore = {
       currentNamespace: '',
       events: [],
       services: [],
       stats: {},
+      deployments: []
     };
 
     this._dataset = new BehaviorSubject(
@@ -56,7 +61,8 @@ export class NsDashboardService implements Resolve<any> {
         currentNamespace: undefined,
         events: undefined,
         services: undefined,
-        stats: undefined
+        stats: undefined,
+        deployments: undefined
       }
     );
 
@@ -76,6 +82,7 @@ export class NsDashboardService implements Resolve<any> {
       this.updateevents(route.params.nsname);
       this.updateServices(route.params.nsname);
       this.updateStats(route.params.nsname);
+      this.updateDeployments(route.params.nsname);
       Promise.all([
         this.getProjects(),
         this.getWidgets(),
@@ -148,7 +155,6 @@ export class NsDashboardService implements Resolve<any> {
       error => { }
     );
 
-
     // this.httpClient.get('api/k8sevents-services').subscribe(
     //   data => {
     //     this.services = data as any[];
@@ -157,6 +163,18 @@ export class NsDashboardService implements Resolve<any> {
     //   },
     //   error => { }
     // );
+  }
+
+  private updateDeployments(ns: string): void {
+    this.k8sDeploymentService.getDeployments(ns).subscribe(
+      data => {
+        this.deployments = data as any[];
+        this.dataStore.deployments = data as any[];
+        this._dataset.next(Object.assign({}, this.dataStore));
+        // debugger;
+      },
+      error => { }
+    );
   }
 
   getProjects(): Promise<any> {

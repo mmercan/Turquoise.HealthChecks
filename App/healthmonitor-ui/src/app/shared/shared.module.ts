@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NamespaceAppService } from './grpc-services/namespace.service';
-import { DeploymentAppService } from './grpc-services/deployment-app.service';
+import { K8sDeploymentService } from './grpc-services/k8s-deployment.service';
 import { K8sServiceService } from './grpc-services/k8s-service.service';
 import { K8sEventService } from './grpc-services/k8s-event.service';
 import { K8sHealthcheckService } from './grpc-services/k8s-healthcheck.service';
@@ -21,14 +21,14 @@ import { OfflineNotificationService } from './offline/offline-notification.servi
     IfOnlineDirective,
     IfSignalrDirective
   ],
-  providers: [NamespaceAppService, DeploymentAppService, K8sServiceService, K8sEventService,
+  providers: [NamespaceAppService, K8sDeploymentService, K8sServiceService, K8sEventService,
     K8sHealthcheckService, SignalRService, OfflineNotificationService],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<any> {
     return {
       ngModule: SharedModule,
-      providers: [NamespaceAppService, DeploymentAppService, K8sServiceService, K8sEventService,
+      providers: [NamespaceAppService, K8sDeploymentService, K8sServiceService, K8sEventService,
         K8sHealthcheckService, SignalRService, OfflineNotificationService],
     };
   }

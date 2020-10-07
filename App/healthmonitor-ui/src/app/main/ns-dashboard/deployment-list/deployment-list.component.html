@@ -1,96 +1,145 @@
-                    <!-- WIDGET GROUP -->
-                    <div class="widget-group" fxLayout="row wrap" fxFlex="100">
+        <!-- CONTENT CARD -->
+        <div class="content-card">
 
-                        <!-- WIDGET 11 -->
-                        <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
-                                     fxFlex="100">
+            <mat-table class="products-table"
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
 
-                            <!-- Front -->
-                            <div class="fuse-widget-front">
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let service">
+                        <p class="text-truncate">{{service.id}}</p>
+                    </mat-cell>
+                </ng-container>
 
-                                <div class="p-24 mb-8 border-bottom" fxLayout="row"
-                                     fxLayoutAlign="space-between center">
-                                    <div class="h2">{{widgets.widget11.title}}</div>
-                                    <div class="text-boxed accent m-0">
-                                        {{widgets.widget11.table.rows.length}}
-                                        members
-                                    </div>
-                                </div>
+                <!-- Image Column
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let service">
+                        <img class="service-image"
+                             *ngIf="service.featuredImageId" [alt]="service.name"
+                             [src]="service.images[service.featuredImageId].url"/>
+                        <img *ngIf="!service.featuredImageId"
+                             [src]="'assets/images/ecommerce/service-image-placeholder.png'">
+                    </mat-cell>
+                </ng-container>
+                 -->
 
-                                <mat-table #table [dataSource]="widget11.dataSource">
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let service">
+                        <p class="text-truncate">{{service.name}}</p>
+                    </mat-cell>
+                </ng-container>
 
-                                    <!-- Avatar Column -->
-                                    <ng-container matColumnDef="avatar">
-                                        <mat-header-cell fxFlex="96px" *matHeaderCellDef></mat-header-cell>
-                                        <mat-cell fxFlex="96px" *matCellDef="let contact">
-                                            <img class="avatar" *ngIf="contact.avatar" [alt]="contact.name"
-                                                 [src]="contact.avatar"/>
-                                        </mat-cell>
-                                    </ng-container>
+                <!-- Category Column 
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
+                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
+                        <p class="category text-truncate">
+                            {{product.categories[0]}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+-->
+            
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
+                        <p class="price text-truncate">
+                        {{service.healthisaliveandwell}} 
+                          <!--  {{service.priceTaxIncl | currency:'USD':'symbol'}} -->
+                        </p>
+                    </mat-cell>
+                </ng-container>
 
-                                    <!-- Name Column -->
-                                    <ng-container matColumnDef="name">
-                                        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-                                        <mat-cell *matCellDef="let contact">
-                                            <p class="text-truncate font-weight-600">{{contact.name}}
-                                                {{contact.lastName}}</p>
-                                        </mat-cell>
-                                    </ng-container>
 
-                                    <!-- Position Column -->
-                                    <ng-container matColumnDef="position">
-                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Position
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-sm>
-                                            <p class="position text-truncate">
-                                                {{contact.position}}
-                                            </p>
-                                        </mat-cell>
-                                    </ng-container>
 
-                                    <!-- Office Column -->
-                                    <ng-container matColumnDef="office">
-                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Office
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-md>
-                                            <p class="office text-truncate">
-                                                {{contact.office}}
-                                            </p>
-                                        </mat-cell>
-                                    </ng-container>
 
-                                    <!-- Email Column -->
-                                    <ng-container matColumnDef="email">
-                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Email
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-sm>
-                                            <p class="email text-truncate">
-                                                {{contact.email}}
-                                            </p>
-                                        </mat-cell>
-                                    </ng-container>
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="replicas">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Replicas</mat-header-cell>
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
+                        <span  *ngIf="deploment.spec && deploment.spec.replicas">
+                            {{deploment.spec.replicas.value  }}
+                        </span>
+                        <span >
+                            /
+                        </span>
 
-                                    <!-- Phone Column -->
-                                    <ng-container matColumnDef="phone">
-                                        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Phone
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let contact" fxHide fxShow.gt-md>
-                                            <p class="phone text-truncate">
-                                                {{contact.phone}}
-                                            </p>
-                                        </mat-cell>
-                                    </ng-container>
+                        <span *ngIf="deploment.status.readyreplicas && deploment.status.readyreplicas.value ">
+                            {{deploment.status.readyreplicas.value }}
+                        </span>
+                                {{deploment.status.overallstatus}}
+                    </mat-cell>
+                </ng-container>
 
-                                    <mat-header-row
-                                        *matHeaderRowDef="widgets.widget11.table.columns"></mat-header-row>
-                                    <mat-row *matRowDef="let contact; columns: widgets.widget11.table.columns;">
-                                    </mat-row>
-                                </mat-table>
-                            </div>
-                            <!-- / Front -->
 
-                        </fuse-widget>
-                        <!-- / WIDGET 11 -->
+                                <!-- Quantity Column -->
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Last Test</mat-header-cell>
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
+                        <span  *ngIf="deploment.spec">
+                            {{deploment.spec.image  }}
+                        </span>
 
-                    </div>
-                    <!-- / WIDGET GROUP -->
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Active Column -->
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="age">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Age</mat-header-cell>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-sm>
+
+                        <span class="quantity-indicator text-truncate"
+                              [ngClass]="{'red-500':service.quantity <= 5, 'amber-500':service.quantity > 5 && service.quantity <= 25,'green-600':service.quantity > 25}">
+                        </span>
+                        <span>
+                            {{service.creationtime  | momentAge }}
+                        </span>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Active Column -->
+
+                <ng-container matColumnDef="active">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="!service.active" class="active-icon green-600 s-16">check</mat-icon>
+                        <mat-icon *ngIf="service.active" class="active-icon red-500 s-16">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let service; columns: displayedColumns;"
+                         class="product"
+                         matRipple
+                         [routerLink]="'/service/'+service.namespace+'/'+service.name"
+                         [ngClass]="{ 
+                         'unhealthy': service.healthisaliveandwell == 'Unhealthy' || service.healthisaliveandwell == 'ServiceUnavailable' || service.healthisaliveandwell == 'Unauthorized' || service.healthisaliveandwell == 'NotAcceptable',  
+                         'healthy': service.healthisaliveandwell == 'Healthy',
+                         'ok': service.healthisaliveandwell == 'OK',
+                         'degraded': service.healthisaliveandwell == 'Degraded'
+                           }"
+                         >
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="25"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+

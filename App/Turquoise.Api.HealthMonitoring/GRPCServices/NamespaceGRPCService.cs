@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         private IFeatureManager featureManager;
         private MongoAliveAndWellResultStats aliveAndWellResultStats;
         private MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
-
+        private readonly IMapper mapper;
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
             K8sGeneralService k8sService,
@@ -36,8 +37,8 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo,
             IFeatureManager featureManager,
             MongoAliveAndWellResultStats aliveAndWellResultStats,
-            MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo
-
+            MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo,
+            IMapper mapper
             )
         {
             this.logger = logger;
@@ -47,6 +48,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             this.aliveAndWellResultStats = aliveAndWellResultStats;
             this.healthCheckMongoRepo = healthCheckMongoRepo;
             this.serviceCheckSummaryRepo = serviceCheckSummaryRepo;
+            this.mapper = mapper;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -67,19 +69,8 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
                 throw new ArgumentException("Namespace is missing");
             }
             var deployments = await k8sService.DeploymentClient.GetAsync(ns);
-            DeploymentListReply deploy = new DeploymentListReply();
-
-            foreach (var item in deployments)
-            {
-                var dep = new DeploymentReply();
-                dep.Name = item.Metadata.Name;
-                dep.Image = item.Spec.Template.Spec.Containers.FirstOrDefault().Image;
-                dep.Status = item.Status.Conditions.FirstOrDefault().Status.ToString();
-                dep.Labels.AddRange(item.Metadata.Labels.Select(lab => { return new Pair { Key = lab.Key, Value = lab.Value }; }));
-
-                deploy.Deployments.Add(dep);
-            }
-
+            logger.LogCritical("deployments'Count " + deployments.Count.ToString());
+            DeploymentListReply deploy = DeploymentListReplyConverter.ConvertToDeploymentListReply(deployments);
             return deploy;
         }
 
@@ -120,7 +111,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
 
         }
 
-
         private async Task<ServiceListReply> getMongoDbServices(string namespaceParam)
         {
             ServiceListReply servicelist = new ServiceListReply();
@@ -134,7 +124,6 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             }
             return servicelist;
         }
-
 
         private async Task<ServiceReply> getMongoDbService(string namespaceParam, string serviceName)
         {

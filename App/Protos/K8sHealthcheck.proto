@@ -5,6 +5,8 @@ option csharp_namespace = "Turquoise.GRPC.GRPCServices";
 package k8App;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
 
 service NamespaceService {
   rpc GetNamespaces (google.protobuf.Empty) returns (NamespaceListReply); 
@@ -52,10 +54,43 @@ message DeploymentListReply{
 
 message DeploymentReply{
   string Name = 1;
-  repeated Pair Labels = 2;
-  string Image=3;
-  string status=4;
+  repeated Pair Annotations = 2;
+  repeated Pair Labels = 3;
+  DeploymentSpecReply Spec = 4;
+  DeploymentStatusReply Status = 5;
 }
+
+message DeploymentSpecReply{
+  google.protobuf.Int32Value ProgressDeadlineSeconds = 1;
+  google.protobuf.Int32Value Replicas = 2;
+  google.protobuf.Int32Value RevisionHistoryLimit = 3;
+  string SelectorString = 4;
+  string Image = 5;
+}
+
+message DeploymentStatusReply
+{
+  google.protobuf.Int32Value AvailableReplicas = 1;
+  google.protobuf.Int32Value CollisionCount = 2;
+  
+  google.protobuf.Int32Value ReadyReplicas = 4;
+  google.protobuf.Int32Value Replicas = 5;
+  google.protobuf.Int32Value UnavailableReplicas = 6;
+  google.protobuf.Int32Value UpdatedReplicas = 7;
+  repeated DeploymentStatusConditionReply Condition=8;
+  string OverallStatus = 9;
+}
+
+message DeploymentStatusConditionReply
+{
+  google.protobuf.Timestamp LastTransitionTime = 1;
+  google.protobuf.Timestamp LastUpdateTime = 2;
+  string Message = 3;
+  string Reason = 4;
+  string Status = 5;
+  string Type = 6;
+}
+
 
 message Pair {
   string key = 1;
