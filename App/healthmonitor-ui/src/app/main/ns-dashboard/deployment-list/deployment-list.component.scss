@@ -127,7 +127,7 @@ e-commerce-products {
   }
 }
 
-.products-table {
+.deployment-table {
   flex: 1 1 auto;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   overflow: auto;
@@ -153,15 +153,7 @@ e-commerce-products {
     flex: 0 1 84px;
   }
 
-  .mat-column-image {
-    flex: 0 1 84px;
 
-    .product-image {
-      width: 52px;
-      height: 52px;
-      border: 1px solid rgba(0, 0, 0, .12);
-    }
-  }
 
   .mat-column-category {
     flex: 0 1 240px;

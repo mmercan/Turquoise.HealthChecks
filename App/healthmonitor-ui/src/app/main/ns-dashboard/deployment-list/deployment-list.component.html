@@ -1,7 +1,7 @@
         <!-- CONTENT CARD -->
         <div class="content-card">
 
-            <mat-table class="products-table"
+            <mat-table class="deployment-table"
                        #table [dataSource]="dataSource"
                        matSort
                        [@animateStagger]="{value:'50'}"
@@ -31,59 +31,35 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                    <mat-cell *matCellDef="let service">
-                        <p class="text-truncate">{{service.name}}</p>
+                    <mat-cell *matCellDef="let deploment">
+                        <p class="text-truncate">{{deploment.name}}</p>
                     </mat-cell>
                 </ng-container>
-
-                <!-- Category Column 
-                <ng-container matColumnDef="category">
-                    <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
-                    <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="category text-truncate">
-                            {{product.categories[0]}}
-                        </p>
-                    </mat-cell>
-                </ng-container>
--->
-            
-                <ng-container matColumnDef="status">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Status</mat-header-cell>
-                    <mat-cell *matCellDef="let service" fxHide fxShow.gt-xs>
-                        <p class="price text-truncate">
-                        {{service.healthisaliveandwell}} 
-                          <!--  {{service.priceTaxIncl | currency:'USD':'symbol'}} -->
-                        </p>
-                    </mat-cell>
-                </ng-container>
-
-
 
 
                 <!-- Quantity Column -->
-                <ng-container matColumnDef="replicas">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Replicas</mat-header-cell>
-                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
-                        <span  *ngIf="deploment.spec && deploment.spec.replicas">
-                            {{deploment.spec.replicas.value  }}
-                        </span>
-
-                        <span *ngIf="deploment.status && deploment.status.readyreplicas && deploment.status.readyreplicas.value ">
-                           /  {{deploment.status.readyreplicas.value }}
-                        </span>
-                                
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Image</mat-header-cell>
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>               
+                        {{deploment.spec.image  }}                             
                     </mat-cell>
                 </ng-container>
 
 
                                 <!-- Quantity Column -->
-                <ng-container matColumnDef="image">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Image</mat-header-cell>
+                <ng-container matColumnDef="replicas">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Replicas</mat-header-cell>
                     <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-sm>
                         <span  *ngIf="deploment.spec">
-                            {{deploment.spec.image  }}
-                        </span>
 
+                        <span  *ngIf="deploment.spec && deploment.spec.replicas">
+                            {{deploment.spec.replicas.value  }}
+                        </span>
+                        <span *ngIf="deploment.status && deploment.status.readyreplicas && deploment.status.readyreplicas.value ">
+                           /  {{deploment.status.readyreplicas.value }}
+                        </span>
+                            
+                        </span>
                     </mat-cell>
                 </ng-container>
 

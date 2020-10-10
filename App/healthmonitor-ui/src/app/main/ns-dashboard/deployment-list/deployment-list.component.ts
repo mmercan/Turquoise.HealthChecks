@@ -20,7 +20,7 @@ import { FuseUtils } from '@fuse/utils';
 })
 export class DeploymentListComponent implements OnInit {
   dataSource: DeploymentDataSource | null;
-  displayedColumns = ['name', 'replicas', 'image', 'status', 'age', 'active'];
+  displayedColumns = ['name', 'image', 'replicas', 'age', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;

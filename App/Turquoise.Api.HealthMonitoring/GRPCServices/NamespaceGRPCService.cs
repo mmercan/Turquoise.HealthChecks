@@ -19,7 +19,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    [Authorize]
+    // [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> logger;
@@ -224,10 +224,12 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         }
 
 
-        public override Task<NodeReplies> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
+        public async override Task<NodeListReply> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {
-            var replies = new NodeReplies();
-            return Task.FromResult(replies);
+            var nodes = await k8sService.NodeClient.GetAsync();
+            logger.LogCritical(nodes.Count.ToString());
+            var replies = NodeListReplyConverter.ConvertToEventListReply(nodes);
+            return replies;
         }
 
     }
