@@ -24,6 +24,19 @@
 
                     <mat-expansion-panel >
                         <mat-expansion-panel-header>
+                            <mat-panel-title>Usage</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <hr/>
+                            <table class="info jobs">
+                                <tr class="job"  *ngFor="let item of node.usageList" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>
+                            </table>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel >
+                        <mat-expansion-panel-header>
                             <mat-panel-title>Allocatables</mat-panel-title>
                         </mat-expansion-panel-header>
                         <hr/>
@@ -57,8 +70,8 @@
                         <hr/>
                             <table class="info jobs">
                                 <tr class="job"  *ngFor="let item of node.conditionsList " >
-                                    <td class="company"> {{item.key}} </td>
-                                    <td class="date"> {{item.value}} </td>
+                                   <!-- <td class="company"> {{item.type}} </td> -->
+                                    <td class="date"> {{item.message}} </td>
                                 </tr>
                             </table>
                     </mat-expansion-panel>

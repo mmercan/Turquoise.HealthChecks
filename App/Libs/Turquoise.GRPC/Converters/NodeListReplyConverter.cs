@@ -8,14 +8,19 @@ namespace Turquoise.GRPC.Converters
 {
     public static class NodeListReplyConverter
     {
-        public static NodeListReply ConvertToEventListReply(IList<V1Node> nodelist)
+        public static NodeListReply ConvertToNodeListReply(IList<V1Node> nodelist, List<NodeMetrics> metrics)
         {
             NodeListReply reply = new NodeListReply();
             //  reply.Nodes.AddRange
 
             // reply.Nodes.
             foreach (var item in nodelist)
+
             {
+
+                var nodeMetric = metrics.FirstOrDefault(p => p.Metadata.Name == item.Name());
+
+
                 NodeReply node = new NodeReply();
                 reply.Nodes.Add(node);
 
@@ -42,6 +47,7 @@ namespace Turquoise.GRPC.Converters
 
                 node.Allocatables.AddRange(item.Status.Allocatable.Select(alloc => new Mertic { Format = alloc.Key, Key = alloc.Key, Value = alloc.Value.CanonicalizeString() }));
                 node.Capacities.AddRange(item.Status.Capacity.Select(cap => new Mertic { Format = cap.Key, Key = cap.Key, Value = cap.Value.CanonicalizeString() }));
+                node.Usage.AddRange(nodeMetric.Usage.Select(cap => new Mertic { Format = cap.Key, Key = cap.Key, Value = cap.Value.CanonicalizeString() }));
                 node.Conditions.AddRange(item.Status.Conditions.Select(p => new NodeReplyCondition
                 {
                     LastHeartbeatTime = Timestamp.FromDateTime(p.LastHeartbeatTime.Value),

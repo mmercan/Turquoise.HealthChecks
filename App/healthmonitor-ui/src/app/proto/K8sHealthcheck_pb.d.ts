@@ -926,6 +926,11 @@ export class NodeReply extends jspb.Message {
   setCapacitiesList(value: Array<Mertic>): void;
   addCapacities(value?: Mertic, index?: number): Mertic;
 
+  clearUsageList(): void;
+  getUsageList(): Array<Mertic>;
+  setUsageList(value: Array<Mertic>): void;
+  addUsage(value?: Mertic, index?: number): Mertic;
+
   clearImagesList(): void;
   getImagesList(): Array<NodeReplyImage>;
   setImagesList(value: Array<NodeReplyImage>): void;
@@ -957,6 +962,7 @@ export namespace NodeReply {
     conditionsList: Array<NodeReplyCondition.AsObject>,
     allocatablesList: Array<Mertic.AsObject>,
     capacitiesList: Array<Mertic.AsObject>,
+    usageList: Array<Mertic.AsObject>,
     imagesList: Array<NodeReplyImage.AsObject>,
     nodeinfo?: NodeInfo.AsObject,
   }

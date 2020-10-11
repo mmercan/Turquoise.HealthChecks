@@ -229,8 +229,9 @@ message NodeReply
   repeated NodeReplyCondition Conditions = 7;
   repeated Mertic Allocatables = 8;
   repeated Mertic Capacities = 9;
-  repeated NodeReplyImage Images = 10;
-  NodeInfo NodeInfo = 11;
+  repeated Mertic Usage = 10;
+  repeated NodeReplyImage Images = 11;
+  NodeInfo NodeInfo = 12;
 }
 
 message NodeReplyCondition

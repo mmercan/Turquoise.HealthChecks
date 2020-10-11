@@ -7130,7 +7130,7 @@ proto.k8App.NodeListReply.prototype.clearNodesList = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.k8App.NodeReply.repeatedFields_ = [4,5,7,8,9,10];
+proto.k8App.NodeReply.repeatedFields_ = [4,5,7,8,9,10,11];
 
 
 
@@ -7176,6 +7176,8 @@ proto.k8App.NodeReply.toObject = function(includeInstance, msg) {
     allocatablesList: jspb.Message.toObjectList(msg.getAllocatablesList(),
     proto.k8App.Mertic.toObject, includeInstance),
     capacitiesList: jspb.Message.toObjectList(msg.getCapacitiesList(),
+    proto.k8App.Mertic.toObject, includeInstance),
+    usageList: jspb.Message.toObjectList(msg.getUsageList(),
     proto.k8App.Mertic.toObject, includeInstance),
     imagesList: jspb.Message.toObjectList(msg.getImagesList(),
     proto.k8App.NodeReplyImage.toObject, includeInstance),
@@ -7258,11 +7260,16 @@ proto.k8App.NodeReply.deserializeBinaryFromReader = function(msg, reader) {
       msg.addCapacities(value);
       break;
     case 10:
+      var value = new proto.k8App.Mertic;
+      reader.readMessage(value,proto.k8App.Mertic.deserializeBinaryFromReader);
+      msg.addUsage(value);
+      break;
+    case 11:
       var value = new proto.k8App.NodeReplyImage;
       reader.readMessage(value,proto.k8App.NodeReplyImage.deserializeBinaryFromReader);
       msg.addImages(value);
       break;
-    case 11:
+    case 12:
       var value = new proto.k8App.NodeInfo;
       reader.readMessage(value,proto.k8App.NodeInfo.deserializeBinaryFromReader);
       msg.setNodeinfo(value);
@@ -7364,10 +7371,18 @@ proto.k8App.NodeReply.serializeBinaryToWriter = function(message, writer) {
       proto.k8App.Mertic.serializeBinaryToWriter
     );
   }
-  f = message.getImagesList();
+  f = message.getUsageList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       10,
+      f,
+      proto.k8App.Mertic.serializeBinaryToWriter
+    );
+  }
+  f = message.getImagesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      11,
       f,
       proto.k8App.NodeReplyImage.serializeBinaryToWriter
     );
@@ -7375,7 +7390,7 @@ proto.k8App.NodeReply.serializeBinaryToWriter = function(message, writer) {
   f = message.getNodeinfo();
   if (f != null) {
     writer.writeMessage(
-      11,
+      12,
       f,
       proto.k8App.NodeInfo.serializeBinaryToWriter
     );
@@ -7646,12 +7661,50 @@ proto.k8App.NodeReply.prototype.clearCapacitiesList = function() {
 
 
 /**
- * repeated NodeReplyImage Images = 10;
+ * repeated Mertic Usage = 10;
+ * @return {!Array<!proto.k8App.Mertic>}
+ */
+proto.k8App.NodeReply.prototype.getUsageList = function() {
+  return /** @type{!Array<!proto.k8App.Mertic>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.k8App.Mertic, 10));
+};
+
+
+/**
+ * @param {!Array<!proto.k8App.Mertic>} value
+ * @return {!proto.k8App.NodeReply} returns this
+*/
+proto.k8App.NodeReply.prototype.setUsageList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 10, value);
+};
+
+
+/**
+ * @param {!proto.k8App.Mertic=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.k8App.Mertic}
+ */
+proto.k8App.NodeReply.prototype.addUsage = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 10, opt_value, proto.k8App.Mertic, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.k8App.NodeReply} returns this
+ */
+proto.k8App.NodeReply.prototype.clearUsageList = function() {
+  return this.setUsageList([]);
+};
+
+
+/**
+ * repeated NodeReplyImage Images = 11;
  * @return {!Array<!proto.k8App.NodeReplyImage>}
  */
 proto.k8App.NodeReply.prototype.getImagesList = function() {
   return /** @type{!Array<!proto.k8App.NodeReplyImage>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.k8App.NodeReplyImage, 10));
+    jspb.Message.getRepeatedWrapperField(this, proto.k8App.NodeReplyImage, 11));
 };
 
 
@@ -7660,7 +7713,7 @@ proto.k8App.NodeReply.prototype.getImagesList = function() {
  * @return {!proto.k8App.NodeReply} returns this
 */
 proto.k8App.NodeReply.prototype.setImagesList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 10, value);
+  return jspb.Message.setRepeatedWrapperField(this, 11, value);
 };
 
 
@@ -7670,7 +7723,7 @@ proto.k8App.NodeReply.prototype.setImagesList = function(value) {
  * @return {!proto.k8App.NodeReplyImage}
  */
 proto.k8App.NodeReply.prototype.addImages = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 10, opt_value, proto.k8App.NodeReplyImage, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 11, opt_value, proto.k8App.NodeReplyImage, opt_index);
 };
 
 
@@ -7684,12 +7737,12 @@ proto.k8App.NodeReply.prototype.clearImagesList = function() {
 
 
 /**
- * optional NodeInfo NodeInfo = 11;
+ * optional NodeInfo NodeInfo = 12;
  * @return {?proto.k8App.NodeInfo}
  */
 proto.k8App.NodeReply.prototype.getNodeinfo = function() {
   return /** @type{?proto.k8App.NodeInfo} */ (
-    jspb.Message.getWrapperField(this, proto.k8App.NodeInfo, 11));
+    jspb.Message.getWrapperField(this, proto.k8App.NodeInfo, 12));
 };
 
 
@@ -7698,7 +7751,7 @@ proto.k8App.NodeReply.prototype.getNodeinfo = function() {
  * @return {!proto.k8App.NodeReply} returns this
 */
 proto.k8App.NodeReply.prototype.setNodeinfo = function(value) {
-  return jspb.Message.setWrapperField(this, 11, value);
+  return jspb.Message.setWrapperField(this, 12, value);
 };
 
 
@@ -7716,7 +7769,7 @@ proto.k8App.NodeReply.prototype.clearNodeinfo = function() {
  * @return {boolean}
  */
 proto.k8App.NodeReply.prototype.hasNodeinfo = function() {
-  return jspb.Message.getField(this, 11) != null;
+  return jspb.Message.getField(this, 12) != null;
 };
 
 
