@@ -1,79 +1,70 @@
 <div class="widget-group p-12" fxLayout="row wrap" fxFlex="100">
- <fuse-widget *ngFor="let node of nodes" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+ <fuse-widget *ngFor="let node of nodes" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="100">
 
      <div class="fuse-widget-front">
          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
              <div class="h3"> {{node.name}} </div>
          </div>
 
-         <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-             <div class="red-fg font-size-72 line-height-72">  </div>
-             <!-- <div class="h3 secondary-text font-weight-500">  Services  </div> -->
-         </div>
-
          <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
             
-
-     <div class="profile-box friends" fxLayout="column">
-            <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
-                <div class="title">Details</div>
-            </header>
-
-
-            <div class="content" > 
-
-                <mat-accordion>
+                <mat-accordion style="width: 100%">
                     <mat-expansion-panel >
                         <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Images
-                            </mat-panel-title>
-                            <mat-panel-description>
-                              status
-                            </mat-panel-description>
+                            <mat-panel-title>Images </mat-panel-title>
                         </mat-expansion-panel-header>
-                    
-                        <div class="title">Description :</div>
-                        <p> des </p>
                         <hr/>
-                        <div class="title">Details :</div>
                             <table class="info jobs">
-                           <!--     <tr class="job"  *ngFor="let item of result.data | keyvalue" >
-                                    <td class="company"> {{item.key}} </td>
-                                    <td class="date"> {{item.value}} </td>
-                                </tr>-->
+                                <tr class="job"  *ngFor="let item of node.imagesList" >
+                                    <td class="company"> {{item.name}} </td>
+                                    <td class="date"> {{item.size}} </td>
+                                </tr>
                             </table>
                     </mat-expansion-panel>
 
-<mat-expansion-panel >
+                    <mat-expansion-panel >
                         <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                name
-                            </mat-panel-title>
-                            <mat-panel-description>
-                              status
-                            </mat-panel-description>
+                            <mat-panel-title>Allocatables</mat-panel-title>
                         </mat-expansion-panel-header>
-                    
-                        <div class="title">Description :</div>
-                        <p> des </p>
                         <hr/>
-                        <div class="title">Details :</div>
                             <table class="info jobs">
-                           <!--     <tr class="job"  *ngFor="let item of result.data | keyvalue" >
+                                <tr class="job"  *ngFor="let item of node.allocatablesList" >
                                     <td class="company"> {{item.key}} </td>
                                     <td class="date"> {{item.value}} </td>
-                                </tr>-->
+                                </tr>
+                            </table>
+                    </mat-expansion-panel>
+
+
+                    <mat-expansion-panel >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Capacities</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <hr/>
+                            <table class="info jobs">
+                             <tr class="job"  *ngFor="let item of node.capacitiesList" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>
+                            </table>
+                    </mat-expansion-panel>
+
+
+                    <mat-expansion-panel >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Conditions </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <hr/>
+                            <table class="info jobs">
+                                <tr class="job"  *ngFor="let item of node.conditionsList " >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>
                             </table>
                     </mat-expansion-panel>
 
                 </mat-accordion>
-            </div>
-        </div>
-   
-
-
-
+            
          </div>
      </div>
  </fuse-widget>
