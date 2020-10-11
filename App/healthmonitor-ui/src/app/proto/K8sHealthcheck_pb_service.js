@@ -80,7 +80,7 @@ NamespaceService.GetNodes = {
   requestStream: false,
   responseStream: false,
   requestType: google_protobuf_empty_pb.Empty,
-  responseType: K8sHealthcheck_pb.NodeReplies
+  responseType: K8sHealthcheck_pb.NodeListReply
 };
 
 exports.NamespaceService = NamespaceService;

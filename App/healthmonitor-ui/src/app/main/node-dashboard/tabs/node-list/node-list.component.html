@@ -1,9 +1,9 @@
 <div class="widget-group p-12" fxLayout="row wrap" fxFlex="100">
- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+ <fuse-widget *ngFor="let node of nodes" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
 
      <div class="fuse-widget-front">
          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-             <div class="h3">Total Health Checks </div>
+             <div class="h3"> {{node.name}} </div>
          </div>
 
          <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
@@ -12,61 +12,80 @@
          </div>
 
          <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
-             <span class="h4 secondary-text text-truncate"> Tests Ran at last  </span>
-             <span class="h4 ml-8">24 Hours</span>
-         </div>
-     </div>
- </fuse-widget>
-
- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
-
-
-     <div class="fuse-widget-front">
-         <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-             <div class="h3"> Failed Health Checks</div>
-         </div>
-
-         <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-             <div class="orange-fg font-size-72 line-height-72">  </div>
-           <!--  <div class="h3 secondary-text font-weight-500">  </div> -->
-         </div>
-
-         <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
-             <span class="h4 secondary-text text-truncate"> Tests Failed at last </span>
-             <span class="h4 ml-8">24 Hours</span>
-         </div>
-     </div>
- </fuse-widget>
-
- <fuse-widget class="widget" fxLayout="column"  fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
-
-     <div class="fuse-widget-front">
-         <div class="pl-16 pr-8 py-16 h-52" fxLayout="row"
-              fxLayoutAlign="space-between center">
-             <div class="h3">Successful Health Checks </div>
-         </div>
-
-         <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-             <div class="blue-grey-fg font-size-72 line-height-72">  </div>
-             <!-- <div class="h3 secondary-text font-weight-500"> Active </div> -->
-         </div>
-
-         <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
-             <span class="h4 secondary-text text-truncate"> Tests run successfully at last </span>
-             <span class="h4 ml-8"> 24 Hours </span>
-         </div>
-     </div>
             
+
+     <div class="profile-box friends" fxLayout="column">
+            <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="title">Details</div>
+            </header>
+
+
+            <div class="content" > 
+
+                <mat-accordion>
+                    <mat-expansion-panel >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Images
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              status
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <div class="title">Description :</div>
+                        <p> des </p>
+                        <hr/>
+                        <div class="title">Details :</div>
+                            <table class="info jobs">
+                           <!--     <tr class="job"  *ngFor="let item of result.data | keyvalue" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>-->
+                            </table>
+                    </mat-expansion-panel>
+
+<mat-expansion-panel >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                name
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              status
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <div class="title">Description :</div>
+                        <p> des </p>
+                        <hr/>
+                        <div class="title">Details :</div>
+                            <table class="info jobs">
+                           <!--     <tr class="job"  *ngFor="let item of result.data | keyvalue" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>-->
+                            </table>
+                    </mat-expansion-panel>
+
+                </mat-accordion>
+            </div>
+        </div>
+   
+
+
+
+         </div>
+     </div>
  </fuse-widget>
 
   <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
 
-     <div class="fuse-widget-front">
+    <!-- <div class="fuse-widget-front">
          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
              <div class="h3">Failed Services</div>
          </div>
 
-    <!--       <div  *ngIf="stats.unhealthyservicestodayList" class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+           <div  *ngIf="stats.unhealthyservicestodayList" class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
             
                 <div *ngFor="let unsrv of stats.unhealthyservicestodayList" class="h3 secondary-text font-weight-500">
                     {{ unsrv.value }}
@@ -76,7 +95,7 @@
        <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
              <span class="h4 secondary-text text-truncate"> Completed:  </span>
              <span class="h4 ml-8"> 7 </span>
-         </div> -->
-     </div>
+         </div> 
+     </div>-->
  </fuse-widget>
 </div>

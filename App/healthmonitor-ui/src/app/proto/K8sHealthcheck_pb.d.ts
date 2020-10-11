@@ -382,6 +382,34 @@ export namespace Pair {
   }
 }
 
+export class Mertic extends jspb.Message {
+  getKey(): string;
+  setKey(value: string): void;
+
+  getValue(): string;
+  setValue(value: string): void;
+
+  getFormat(): string;
+  setFormat(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Mertic.AsObject;
+  static toObject(includeInstance: boolean, msg: Mertic): Mertic.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Mertic, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Mertic;
+  static deserializeBinaryFromReader(message: Mertic, reader: jspb.BinaryReader): Mertic;
+}
+
+export namespace Mertic {
+  export type AsObject = {
+    key: string,
+    value: string,
+    format: string,
+  }
+}
+
 export class StringMessage extends jspb.Message {
   getValue(): string;
   setValue(value: string): void;
@@ -838,23 +866,23 @@ export namespace HealthCheckResultReply {
   }
 }
 
-export class NodeReplies extends jspb.Message {
+export class NodeListReply extends jspb.Message {
   clearNodesList(): void;
   getNodesList(): Array<NodeReply>;
   setNodesList(value: Array<NodeReply>): void;
   addNodes(value?: NodeReply, index?: number): NodeReply;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): NodeReplies.AsObject;
-  static toObject(includeInstance: boolean, msg: NodeReplies): NodeReplies.AsObject;
+  toObject(includeInstance?: boolean): NodeListReply.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeListReply): NodeListReply.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: NodeReplies, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): NodeReplies;
-  static deserializeBinaryFromReader(message: NodeReplies, reader: jspb.BinaryReader): NodeReplies;
+  static serializeBinaryToWriter(message: NodeListReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeListReply;
+  static deserializeBinaryFromReader(message: NodeListReply, reader: jspb.BinaryReader): NodeListReply;
 }
 
-export namespace NodeReplies {
+export namespace NodeListReply {
   export type AsObject = {
     nodesList: Array<NodeReply.AsObject>,
   }
@@ -889,14 +917,14 @@ export class NodeReply extends jspb.Message {
   addConditions(value?: NodeReplyCondition, index?: number): NodeReplyCondition;
 
   clearAllocatablesList(): void;
-  getAllocatablesList(): Array<Pair>;
-  setAllocatablesList(value: Array<Pair>): void;
-  addAllocatables(value?: Pair, index?: number): Pair;
+  getAllocatablesList(): Array<Mertic>;
+  setAllocatablesList(value: Array<Mertic>): void;
+  addAllocatables(value?: Mertic, index?: number): Mertic;
 
   clearCapacitiesList(): void;
-  getCapacitiesList(): Array<Pair>;
-  setCapacitiesList(value: Array<Pair>): void;
-  addCapacities(value?: Pair, index?: number): Pair;
+  getCapacitiesList(): Array<Mertic>;
+  setCapacitiesList(value: Array<Mertic>): void;
+  addCapacities(value?: Mertic, index?: number): Mertic;
 
   clearImagesList(): void;
   getImagesList(): Array<NodeReplyImage>;
@@ -927,8 +955,8 @@ export namespace NodeReply {
     annotationsList: Array<Pair.AsObject>,
     status: string,
     conditionsList: Array<NodeReplyCondition.AsObject>,
-    allocatablesList: Array<Pair.AsObject>,
-    capacitiesList: Array<Pair.AsObject>,
+    allocatablesList: Array<Mertic.AsObject>,
+    capacitiesList: Array<Mertic.AsObject>,
     imagesList: Array<NodeReplyImage.AsObject>,
     nodeinfo?: NodeInfo.AsObject,
   }
