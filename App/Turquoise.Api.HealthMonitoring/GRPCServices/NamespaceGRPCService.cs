@@ -19,7 +19,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    // [Authorize]
+    [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private ILogger<NamespaceGRPCService> logger;

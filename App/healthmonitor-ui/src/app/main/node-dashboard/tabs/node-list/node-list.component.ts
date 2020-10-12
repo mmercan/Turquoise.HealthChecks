@@ -17,7 +17,7 @@ export class NodeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.nodes = this.nodeDashboardService.nodes;
-    debugger;
+    // debugger;
   }
 
 }
