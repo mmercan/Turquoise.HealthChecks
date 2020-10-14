@@ -88,15 +88,15 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let service; columns: displayedColumns;"
+                <mat-row *matRowDef="let deployment; columns: displayedColumns;"
                          class="product"
                          matRipple
-                         [routerLink]="'/service/'+service.namespace+'/'+service.name"
+                         [routerLink]="'/deployment/'+deployment.namespace+'/'+deployment.name"
                          [ngClass]="{ 
-                         'unhealthy': service.healthisaliveandwell == 'Unhealthy' || service.healthisaliveandwell == 'ServiceUnavailable' || service.healthisaliveandwell == 'Unauthorized' || service.healthisaliveandwell == 'NotAcceptable',  
-                         'healthy': service.healthisaliveandwell == 'Healthy',
-                         'ok': service.healthisaliveandwell == 'OK',
-                         'degraded': service.healthisaliveandwell == 'Degraded'
+                         'unhealthy': deployment.healthisaliveandwell == 'Unhealthy' || deployment.healthisaliveandwell == 'ServiceUnavailable' || deployment.healthisaliveandwell == 'Unauthorized' || deployment.healthisaliveandwell == 'NotAcceptable',  
+                         'healthy': deployment.healthisaliveandwell == 'Healthy',
+                         'ok': deployment.healthisaliveandwell == 'OK',
+                         'degraded': deployment.healthisaliveandwell == 'Degraded'
                            }"
                          >
                 </mat-row>

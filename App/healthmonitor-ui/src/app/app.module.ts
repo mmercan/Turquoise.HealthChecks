@@ -24,6 +24,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthenticationModule } from './shared/authentication/authentication.module';
 import { SharedModule } from './shared/shared.module';
 
+
 @NgModule({
     declarations: [
         AppComponent

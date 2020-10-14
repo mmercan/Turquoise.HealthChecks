@@ -70,6 +70,30 @@ export namespace GetDeploymentsRequest {
   }
 }
 
+export class GetDeploymentRequest extends jspb.Message {
+  getNamespace(): string;
+  setNamespace(value: string): void;
+
+  getDeploymentname(): string;
+  setDeploymentname(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetDeploymentRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetDeploymentRequest): GetDeploymentRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetDeploymentRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetDeploymentRequest;
+  static deserializeBinaryFromReader(message: GetDeploymentRequest, reader: jspb.BinaryReader): GetDeploymentRequest;
+}
+
+export namespace GetDeploymentRequest {
+  export type AsObject = {
+    namespace: string,
+    deploymentname: string,
+  }
+}
+
 export class NamespaceListReply extends jspb.Message {
   clearNamespacesList(): void;
   getNamespacesList(): Array<NamespaceReply>;
@@ -164,6 +188,9 @@ export class DeploymentReply extends jspb.Message {
   getName(): string;
   setName(value: string): void;
 
+  getNamespace(): string;
+  setNamespace(value: string): void;
+
   clearAnnotationsList(): void;
   getAnnotationsList(): Array<Pair>;
   setAnnotationsList(value: Array<Pair>): void;
@@ -189,6 +216,27 @@ export class DeploymentReply extends jspb.Message {
   getCreationtime(): google_protobuf_timestamp_pb.Timestamp | undefined;
   setCreationtime(value?: google_protobuf_timestamp_pb.Timestamp): void;
 
+  getCrondescriptionscaleup(): string;
+  setCrondescriptionscaleup(value: string): void;
+
+  getCrondescriptionscaledown(): string;
+  setCrondescriptionscaledown(value: string): void;
+
+  getDownscalecrontab(): string;
+  setDownscalecrontab(value: string): void;
+
+  getUpscalecrontab(): string;
+  setUpscalecrontab(value: string): void;
+
+  getDownscalereplica(): string;
+  setDownscalereplica(value: string): void;
+
+  getUpscalereplica(): string;
+  setUpscalereplica(value: string): void;
+
+  getCrontabtimezone(): string;
+  setCrontabtimezone(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeploymentReply.AsObject;
   static toObject(includeInstance: boolean, msg: DeploymentReply): DeploymentReply.AsObject;
@@ -202,11 +250,19 @@ export class DeploymentReply extends jspb.Message {
 export namespace DeploymentReply {
   export type AsObject = {
     name: string,
+    namespace: string,
     annotationsList: Array<Pair.AsObject>,
     labelsList: Array<Pair.AsObject>,
     spec?: DeploymentSpecReply.AsObject,
     status?: DeploymentStatusReply.AsObject,
     creationtime?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    crondescriptionscaleup: string,
+    crondescriptionscaledown: string,
+    downscalecrontab: string,
+    upscalecrontab: string,
+    downscalereplica: string,
+    upscalereplica: string,
+    crontabtimezone: string,
   }
 }
 

@@ -15,6 +15,10 @@ const appRoutes: Routes = [
     loadChildren: () => import('./main/service-dashboard/service-dashboard.module').then((m) => m.ServiceDashboardModule),
   },
   {
+    path: 'deployment/:nsname/:deploymentname',
+    loadChildren: () => import('./main/deployment-dashbord/deployment-dashbord.module').then((m) => m.DeploymentDashbordModule),
+  },
+  {
     path: 'nodes',
     loadChildren: () => import('./main/node-dashboard/node-dashboard.module').then((m) => m.NodeDashboardModule),
   },

@@ -75,6 +75,19 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         }
 
 
+        public override async Task<DeploymentReply> GetDeployment(GetDeploymentRequest request, Grpc.Core.ServerCallContext context)
+        {
+            var ns = request.Namespace;
+            var deploymentName = request.DeploymentName;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+            var deployment = await k8sService.DeploymentClient.GetSingleAsync(deploymentName, ns);
+            logger.LogCritical("deployment Name " + deployment.Metadata.Name);
+            var deploy = DeploymentListReplyConverter.ConvertToDeploymentReply(deployment);
+            return deploy;
+        }
         public async override Task<ServiceReply> GetService(GetServiceRequest request, ServerCallContext context)
         {
             var ns = request.NamespaceParam;

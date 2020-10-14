@@ -17,8 +17,19 @@ namespace Turquoise.GRPC.Converters
 
             foreach (var item in deployments)
             {
+                var dep = ConvertToDeploymentReply(item);
+                deploy.Deployments.Add(dep);
+            }
+            deploy.UpdatedTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
+            return deploy;
+
+        }
+
+        public static DeploymentReply ConvertToDeploymentReply(V1Deployment item)
+        {
                 var dep = new DeploymentReply();
                 dep.Name = item.Metadata.Name;
+                dep.Namespace = item.Metadata.Namespace();
                 // dep.Image = item.Spec.Template.Spec.Containers.FirstOrDefault().Image;
                 dep.Status = ConvertV1DeploymentStatus(item.Status);
                 dep.Spec = ConvertV1DeploymentSpec(item);
@@ -28,13 +39,39 @@ namespace Turquoise.GRPC.Converters
                 {
                     dep.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTimestamp().Value);
                 }
-                deploy.Deployments.Add(dep);
-            }
-            deploy.UpdatedTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
-            return deploy;
 
+                var downscalecrontab = item.Metadata.Annotations.FirstOrDefault(p => p.Key =="taka/downscale-crontab");
+                var upscalecrontab = item.Metadata.Annotations.FirstOrDefault(p => p.Key =="taka/upscale-crontab");
+                if(downscalecrontab.Value != null){
+                    var Schedule = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(downscalecrontab.Value);
+                    dep.CronDescriptionScaleDown = Schedule;
+                    dep.DownscaleCrontab = downscalecrontab.Value;
+                }
+
+                if(upscalecrontab.Value != null){
+                    var Schedule = CronExpressionDescriptor.ExpressionDescriptor.GetDescription(upscalecrontab.Value);
+                    dep.CronDescriptionScaleUp = Schedule;
+                    dep.UpscaleCrontab = upscalecrontab.Value;
+                }
+
+
+                var upscaleReplica = item.Metadata.Annotations.FirstOrDefault(p => p.Key =="taka/upscale-replica");
+                if(upscaleReplica.Value!=null){
+                    dep.UpscaleReplica =upscaleReplica.Value;
+                }
+                var downscaleReplica = item.Metadata.Annotations.FirstOrDefault(p => p.Key =="taka/downscale-replica");
+                if(downscaleReplica.Value!=null)
+                {
+                    dep.DownscaleReplica = downscaleReplica.Value;
+                }
+                var timezone =item.Metadata.Annotations.FirstOrDefault(p => p.Key =="taka/scale-timezone");
+                if(timezone.Value!=null)
+                {
+                  dep.CrontabTimezone =  timezone.Value;
+                }
+                
+               return dep;
         }
-
 
         public static DeploymentSpecReply ConvertV1DeploymentSpec(V1Deployment dep)
         {

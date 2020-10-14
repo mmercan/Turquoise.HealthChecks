@@ -13,6 +13,7 @@ service NamespaceService {
   rpc GetServices  (GetServicesRequest) returns (ServiceListReply); 
   rpc GetService  (GetServiceRequest) returns (ServiceReply); 
   rpc GetDeployments (GetDeploymentsRequest) returns (DeploymentListReply); 
+  rpc GetDeployment (GetDeploymentRequest) returns (DeploymentReply); 
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
   rpc GetLastHealthCheckResult (HealthCheckResultRequest) returns (HealthCheckResultReply);
@@ -36,6 +37,12 @@ message GetDeploymentsRequest
   string namespace=1;
 }
 
+message GetDeploymentRequest
+{
+  string Namespace = 1;
+  string DeploymentName = 2;
+}
+
 message NamespaceListReply{
     repeated NamespaceReply namespaces = 1;
     google.protobuf.Timestamp UpdatedTime = 2;
@@ -54,11 +61,21 @@ message DeploymentListReply{
 
 message DeploymentReply{
   string Name = 1;
-  repeated Pair Annotations = 2;
-  repeated Pair Labels = 3;
-  DeploymentSpecReply Spec = 4;
-  DeploymentStatusReply Status = 5;
-  google.protobuf.Timestamp CreationTime=6;
+  string Namespace = 2;
+  repeated Pair Annotations = 3;
+  repeated Pair Labels = 4;
+  DeploymentSpecReply Spec = 5;
+  DeploymentStatusReply Status = 6;
+  google.protobuf.Timestamp CreationTime = 7;
+  string CronDescriptionScaleUp = 8;
+  string CronDescriptionScaleDown = 9;
+  
+  string DownscaleCrontab=10;
+  string UpscaleCrontab=11;
+
+  string DownscaleReplica=12;
+  string UpscaleReplica=13;
+  string CrontabTimezone=14;
 }
 
 message DeploymentSpecReply{

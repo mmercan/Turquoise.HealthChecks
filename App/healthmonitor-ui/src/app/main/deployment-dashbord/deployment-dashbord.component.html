@@ -1,0 +1,39 @@
+<div id="profile" class="page-layout simple tabbed">
+    <!-- HEADER -->
+    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
+        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
+               <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/ns/'+currentNamespace">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            <div class="name" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                {{currentDeploymentName}}
+            </div>
+        </div>
+
+        <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
+        <span *ngIf="deployment" style="margin-right: 30px">last Sync {{deployment.lastupdatetime |  momentAge }}</span>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <mat-tab-group dynamicHeight="true">
+            <mat-tab label="Deployment Details">
+            <app-deployment-detail></app-deployment-detail>
+              
+            </mat-tab>
+
+            <mat-tab label="About">
+                <!-- <profile-about></profile-about>-->
+            </mat-tab>
+        </mat-tab-group>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+
+
