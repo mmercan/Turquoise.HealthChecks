@@ -76,7 +76,7 @@ namespace Turquoise.Worker.Scaler.JobSchedules
             ScalerQueueSubscriberStats.SetProcessTime();
             string status = "Success";
             int scaleNumber;
-            int oldscaleNumber;
+            int oldscaleNumber= -1;
             if (!scalerMessage.ReplicaNumber.HasValue)
             {
                 if (scalerMessage.ScaleUpDown == ScaleUpDown.ScaleDown)
@@ -123,6 +123,7 @@ namespace Turquoise.Worker.Scaler.JobSchedules
                 Schedule = scalerMessage.Schedule,
                 Timezone = scalerMessage.Timezone,
                 ScaledUtc = DateTime.UtcNow,
+                OldScaleNumber = oldscaleNumber,
                 NewScaleNumber = scaleNumber,
                 Status = status
 
