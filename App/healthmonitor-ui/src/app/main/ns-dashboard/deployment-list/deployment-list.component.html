@@ -78,6 +78,14 @@
 
                 <!-- Active Column -->
 
+                <ng-container matColumnDef="scale">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Scale</mat-header-cell>
+                    <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-xs>
+                        <mat-icon *ngIf="deploment.downscalereplica && deploment.crondescriptionscaledown" class="active-icon green-600 s-16">access_alarms</mat-icon>
+                      
+                    </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="active">
                     <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Status</mat-header-cell>
                     <mat-cell *matCellDef="let deploment" fxHide fxShow.gt-xs>
