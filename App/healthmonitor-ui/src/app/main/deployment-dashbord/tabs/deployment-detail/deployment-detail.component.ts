@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DeploymentScaleHistoryReply } from 'app/proto/K8sHealthcheck_pb';
 import { DeploymentDashbordService } from '../../deployment-dashbord.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class DeploymentDetailComponent implements OnInit {
   panelOpenState = true;
   deployment: any;
   scaleHistory: [] = [];
+  deploymentHistory: DeploymentScaleHistoryReply[];
   constructor(private deploymentDashbordService: DeploymentDashbordService) { }
 
   ngOnInit(): void {
@@ -30,6 +32,14 @@ export class DeploymentDetailComponent implements OnInit {
       }
     );
 
+    this.deploymentDashbordService.getCurrentDeploymentHistoryList().subscribe(
+      (data) => {
+        this.deploymentHistory = data;
+      },
+      (error) => {
+
+      }
+    );
 
   }
 

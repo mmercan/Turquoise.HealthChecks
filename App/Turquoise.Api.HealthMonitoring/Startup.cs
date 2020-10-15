@@ -181,6 +181,11 @@ namespace Turquoise.Api.HealthMonitoring
                 "HealthCheckResultSummary", p => p.NameandNamespace
                 );
 
+
+            services.AddMangoRepo<Turquoise.Models.Mongo.DeploymentScaleHistory>(
+                Configuration["Mongodb:ConnectionString"], Configuration["Mongodb:DatabaseName"],
+                "DeploymentScaleHistory", p => p.Id
+                );
             // services.AddMangoRepo<PushNotificationModel>(Configuration.GetSection("Mongodb"));
 
             // services.AddHttpClient("run_with_try", options =>

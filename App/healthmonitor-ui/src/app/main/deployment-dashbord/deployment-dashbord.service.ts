@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { DeploymentScaleHistoryReply } from 'app/proto/K8sHealthcheck_pb';
 import { K8sDeploymentService } from 'app/shared/grpc-services/k8s-deployment.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -28,6 +29,10 @@ export class DeploymentDashbordService implements Resolve<any> {
 
   }
 
+
+  getCurrentDeploymentHistoryList(): Observable<DeploymentScaleHistoryReply[]> {
+    return this.k8sDeployment.getDeploymentHistoryList(this.currentNamespace, this.currentDeploymentName);
+  }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
 

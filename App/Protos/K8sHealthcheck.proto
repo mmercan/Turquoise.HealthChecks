@@ -18,6 +18,7 @@ service NamespaceService {
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
   rpc GetLastHealthCheckResult (HealthCheckResultRequest) returns (HealthCheckResultReply);
   rpc GetNodes (google.protobuf.Empty) returns (NodeListReply);
+  rpc GetDeploymentHistories (GetDeploymentRequest) returns (DeploymentScaleHistoryListReply);
 }
 
 message GetServicesRequest
@@ -109,6 +110,24 @@ message DeploymentStatusConditionReply
   string Type = 6;
 }
 
+message DeploymentScaleHistoryListReply
+{
+  repeated DeploymentScaleHistoryReply Histories=8;
+}
+
+message DeploymentScaleHistoryReply
+{
+  string Uid = 1;
+  string Name = 2;
+  string Namespace = 3;
+  string Schedule = 4;
+  string Timezone = 5;
+  google.protobuf.Timestamp  ScaledUtc = 6;
+  int32 OldScaleNumber = 7;
+  int32 NewScaleNumber = 8;
+  string Status = 9;
+
+}
 
 message Pair {
   string key = 1;

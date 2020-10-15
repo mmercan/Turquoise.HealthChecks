@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using k8s.Models;
 using Turquoise.GRPC.GRPCServices;
+using Turquoise.Models.Mongo;
 
 namespace Turquoise.GRPC.Converters
 {
@@ -126,6 +127,36 @@ namespace Turquoise.GRPC.Converters
                 conditionReply.Type = item.Type;
             }
             return reply;
+        }
+   
+   
+        public static DeploymentScaleHistoryListReply ConvertListDeploymentScaleHistory(List<DeploymentScaleHistory> histories)
+        {
+            DeploymentScaleHistoryListReply replies = new DeploymentScaleHistoryListReply();
+            foreach (var item in histories)
+            {
+                DeploymentScaleHistoryReply reply = new DeploymentScaleHistoryReply();
+                reply.Uid =item.Uid;
+                reply.Name = item.Name;
+                reply.Namespace = item.Namespace;
+               
+                if(!string.IsNullOrWhiteSpace(item.Schedule)){
+                reply.Schedule = item.Schedule;
+                }
+                if(!string.IsNullOrWhiteSpace(item.Timezone)){
+                    reply.Timezone = item.Timezone;
+                }
+                
+                reply.ScaledUtc = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.ScaledUtc);
+                reply.OldScaleNumber = item.OldScaleNumber;
+                reply.NewScaleNumber = item.NewScaleNumber;
+                
+                if(!string.IsNullOrWhiteSpace(item.Status)){
+                    reply.Status = item.Status;
+                }
+                replies.Histories.Add(reply);
+            }
+            return replies;
         }
     }
 }

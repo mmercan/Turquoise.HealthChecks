@@ -86,6 +86,15 @@ type NamespaceServiceGetNodes = {
   readonly responseType: typeof K8sHealthcheck_pb.NodeListReply;
 };
 
+type NamespaceServiceGetDeploymentHistories = {
+  readonly methodName: string;
+  readonly service: typeof NamespaceService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof K8sHealthcheck_pb.GetDeploymentRequest;
+  readonly responseType: typeof K8sHealthcheck_pb.DeploymentScaleHistoryListReply;
+};
+
 export class NamespaceService {
   static readonly serviceName: string;
   static readonly GetNamespaces: NamespaceServiceGetNamespaces;
@@ -97,6 +106,7 @@ export class NamespaceService {
   static readonly GetHealthCheckStats: NamespaceServiceGetHealthCheckStats;
   static readonly GetLastHealthCheckResult: NamespaceServiceGetLastHealthCheckResult;
   static readonly GetNodes: NamespaceServiceGetNodes;
+  static readonly GetDeploymentHistories: NamespaceServiceGetDeploymentHistories;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -211,6 +221,15 @@ export class NamespaceServiceClient {
   getNodes(
     requestMessage: google_protobuf_empty_pb.Empty,
     callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.NodeListReply|null) => void
+  ): UnaryResponse;
+  getDeploymentHistories(
+    requestMessage: K8sHealthcheck_pb.GetDeploymentRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.DeploymentScaleHistoryListReply|null) => void
+  ): UnaryResponse;
+  getDeploymentHistories(
+    requestMessage: K8sHealthcheck_pb.GetDeploymentRequest,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.DeploymentScaleHistoryListReply|null) => void
   ): UnaryResponse;
 }
 

@@ -92,6 +92,15 @@ NamespaceService.GetNodes = {
   responseType: K8sHealthcheck_pb.NodeListReply
 };
 
+NamespaceService.GetDeploymentHistories = {
+  methodName: "GetDeploymentHistories",
+  service: NamespaceService,
+  requestStream: false,
+  responseStream: false,
+  requestType: K8sHealthcheck_pb.GetDeploymentRequest,
+  responseType: K8sHealthcheck_pb.DeploymentScaleHistoryListReply
+};
+
 exports.NamespaceService = NamespaceService;
 
 function NamespaceServiceClient(serviceHost, options) {
@@ -352,6 +361,37 @@ NamespaceServiceClient.prototype.getNodes = function getNodes(requestMessage, me
     callback = arguments[1];
   }
   var client = grpc.unary(NamespaceService.GetNodes, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+NamespaceServiceClient.prototype.getDeploymentHistories = function getDeploymentHistories(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(NamespaceService.GetDeploymentHistories, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

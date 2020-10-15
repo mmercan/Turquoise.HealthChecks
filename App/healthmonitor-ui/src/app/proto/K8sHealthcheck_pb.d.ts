@@ -414,6 +414,82 @@ export namespace DeploymentStatusConditionReply {
   }
 }
 
+export class DeploymentScaleHistoryListReply extends jspb.Message {
+  clearHistoriesList(): void;
+  getHistoriesList(): Array<DeploymentScaleHistoryReply>;
+  setHistoriesList(value: Array<DeploymentScaleHistoryReply>): void;
+  addHistories(value?: DeploymentScaleHistoryReply, index?: number): DeploymentScaleHistoryReply;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeploymentScaleHistoryListReply.AsObject;
+  static toObject(includeInstance: boolean, msg: DeploymentScaleHistoryListReply): DeploymentScaleHistoryListReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DeploymentScaleHistoryListReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeploymentScaleHistoryListReply;
+  static deserializeBinaryFromReader(message: DeploymentScaleHistoryListReply, reader: jspb.BinaryReader): DeploymentScaleHistoryListReply;
+}
+
+export namespace DeploymentScaleHistoryListReply {
+  export type AsObject = {
+    historiesList: Array<DeploymentScaleHistoryReply.AsObject>,
+  }
+}
+
+export class DeploymentScaleHistoryReply extends jspb.Message {
+  getUid(): string;
+  setUid(value: string): void;
+
+  getName(): string;
+  setName(value: string): void;
+
+  getNamespace(): string;
+  setNamespace(value: string): void;
+
+  getSchedule(): string;
+  setSchedule(value: string): void;
+
+  getTimezone(): string;
+  setTimezone(value: string): void;
+
+  hasScaledutc(): boolean;
+  clearScaledutc(): void;
+  getScaledutc(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setScaledutc(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getOldscalenumber(): number;
+  setOldscalenumber(value: number): void;
+
+  getNewscalenumber(): number;
+  setNewscalenumber(value: number): void;
+
+  getStatus(): string;
+  setStatus(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DeploymentScaleHistoryReply.AsObject;
+  static toObject(includeInstance: boolean, msg: DeploymentScaleHistoryReply): DeploymentScaleHistoryReply.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DeploymentScaleHistoryReply, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DeploymentScaleHistoryReply;
+  static deserializeBinaryFromReader(message: DeploymentScaleHistoryReply, reader: jspb.BinaryReader): DeploymentScaleHistoryReply;
+}
+
+export namespace DeploymentScaleHistoryReply {
+  export type AsObject = {
+    uid: string,
+    name: string,
+    namespace: string,
+    schedule: string,
+    timezone: string,
+    scaledutc?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    oldscalenumber: number,
+    newscalenumber: number,
+    status: string,
+  }
+}
+
 export class Pair extends jspb.Message {
   getKey(): string;
   setKey(value: string): void;

@@ -12,8 +12,11 @@ import { ServiceDashboardService } from '../../service-dashboard.service';
 export class ServiceDetailComponent implements OnInit {
   service: any;
   healthcheckresult: any;
+  currentNamespace: any;
+  currentDeploymentName: any;
 
-  constructor(private serviceDashboardService: ServiceDashboardService) { }
+  constructor(
+    private serviceDashboardService: ServiceDashboardService) { }
 
   ngOnInit(): void {
     this.serviceDashboardService.serviceDataset.subscribe(
@@ -37,6 +40,7 @@ export class ServiceDetailComponent implements OnInit {
 
       }
     );
+
   }
 
 }

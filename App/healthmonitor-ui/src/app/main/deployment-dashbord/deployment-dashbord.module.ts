@@ -13,6 +13,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { DeploymentDetailComponent } from './tabs/deployment-detail/deployment-detail.component';
 import { DeploymentDashbordComponent } from './deployment-dashbord.component';
+import { SharedModule } from 'app/shared/shared.module';
 
 @NgModule({
   declarations: [DeploymentDetailComponent, DeploymentDashbordComponent],
@@ -24,7 +25,8 @@ import { DeploymentDashbordComponent } from './deployment-dashbord.component';
     MatDividerModule,
     MatIconModule,
     MatTabsModule,
-    FuseSharedModule
+    FuseSharedModule,
+    SharedModule
   ],
   providers: [DeploymentDashbordService]
 })

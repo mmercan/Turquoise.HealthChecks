@@ -1,5 +1,12 @@
 @import "src/@fuse/scss/fuse";
 
+.success {
+  background: #1b5e20 !important;
+}
+
+.unsuccess {
+  background: #b71c1c !important
+}
 
 .theme-default {
   .unhealthy {

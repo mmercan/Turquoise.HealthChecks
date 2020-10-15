@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
+import { DeploymentScaleHistoryReply } from 'app/proto/K8sHealthcheck_pb';
+import { K8sDeploymentService } from 'app/shared/grpc-services/k8s-deployment.service';
 import { DeploymentDashbordService } from './deployment-dashbord.service';
 
 
@@ -16,8 +18,11 @@ export class DeploymentDashbordComponent implements OnInit {
   currentNamespace: any;
   panelOpenState = true;
   deployment: any;
+  deploymentHistory: DeploymentScaleHistoryReply[];
 
-  constructor(private deploymentDashbordService: DeploymentDashbordService) { }
+  constructor(
+    private deploymentDashbordService: DeploymentDashbordService,
+    private k8sDeploymentService: K8sDeploymentService) { }
 
   ngOnInit(): void {
 
@@ -28,12 +33,13 @@ export class DeploymentDashbordComponent implements OnInit {
     this.deploymentDashbordService.deploymentDataset.subscribe(
       (data) => {
         this.deployment = data.deployment;
+
+
       },
       (error) => {
 
       }
     );
-
 
   }
 

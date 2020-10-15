@@ -19,16 +19,17 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-    [Authorize]
+   [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
-        private ILogger<NamespaceGRPCService> logger;
-        private K8sGeneralService k8sService;
-        private MangoBaseRepo<ServiceV1> serviceMongoRepo;
+        private readonly ILogger<NamespaceGRPCService> logger;
+        private readonly K8sGeneralService k8sService;
+        private readonly MangoBaseRepo<ServiceV1> serviceMongoRepo;
         private readonly MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo;
-        private IFeatureManager featureManager;
-        private MongoAliveAndWellResultStats aliveAndWellResultStats;
-        private MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
+        private readonly IFeatureManager featureManager;
+        private readonly MongoAliveAndWellResultStats aliveAndWellResultStats;
+        private readonly MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
+         private readonly MangoBaseRepo<DeploymentScaleHistory> deploymentScaleHistoryRepo;
         private readonly IMapper mapper;
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
@@ -38,6 +39,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             IFeatureManager featureManager,
             MongoAliveAndWellResultStats aliveAndWellResultStats,
             MangoBaseRepo<ServiceHealthCheckResultSummary> serviceCheckSummaryRepo,
+            MangoBaseRepo<DeploymentScaleHistory> deploymentScaleHistoryRepo,
             IMapper mapper
             )
         {
@@ -49,6 +51,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             this.healthCheckMongoRepo = healthCheckMongoRepo;
             this.serviceCheckSummaryRepo = serviceCheckSummaryRepo;
             this.mapper = mapper;
+            this.deploymentScaleHistoryRepo = deploymentScaleHistoryRepo;
         }
         public override async Task<NamespaceListReply> GetNamespaces(Google.Protobuf.WellKnownTypes.Empty request, Grpc.Core.ServerCallContext context)
         {
@@ -83,11 +86,39 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("Namespace is missing");
             }
+             if (String.IsNullOrWhiteSpace(deploymentName))
+            {
+                throw new ArgumentException("Deployment is missing");
+            }
+
             var deployment = await k8sService.DeploymentClient.GetSingleAsync(deploymentName, ns);
             logger.LogCritical("deployment Name " + deployment.Metadata.Name);
             var deploy = DeploymentListReplyConverter.ConvertToDeploymentReply(deployment);
             return deploy;
         }
+
+        public override Task<DeploymentScaleHistoryListReply> GetDeploymentHistories(GetDeploymentRequest request, ServerCallContext context)
+        {
+
+            var ns = request.Namespace;
+            var deploymentName = request.DeploymentName;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+             if (String.IsNullOrWhiteSpace(deploymentName))
+            {
+                throw new ArgumentException("Deployment is missing");
+            }
+
+            var builder = Builders<DeploymentScaleHistory>.Filter;
+            var filter = builder.Eq(x => x.Namespace, ns) & builder.Eq(x => x.Name, deploymentName) & builder.Gt(x => x.ScaledUtc, DateTime.UtcNow.AddDays(-14));
+            var mongoScalehistories =  deploymentScaleHistoryRepo.Items.Find(filter).SortByDescending(p => p.ScaledUtc).Limit(50).ToList();
+
+            var reply =DeploymentListReplyConverter.ConvertListDeploymentScaleHistory(mongoScalehistories);
+            return Task.FromResult( reply);
+        }
+
         public async override Task<ServiceReply> GetService(GetServiceRequest request, ServerCallContext context)
         {
             var ns = request.NamespaceParam;
