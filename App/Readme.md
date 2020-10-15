@@ -1,4 +1,42 @@
 
+### Scale 
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  app-name
+  labels:
+    
+  annotations:
+    
+    taka/downscale-crontab : "0 22 * * *"
+    taka/downscale-replica : "0"
+    taka/scale-timezone : "Australia/Melbourne"
+    taka/upscale-crontab : "0 7 * * 1-5"
+    taka/upscale-replica : "1"
+spec:
+```
+
+
+### Health Check
+```yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-name
+  labels:
+    
+  annotations:
+    healthcheck/isalive: "/Health/IsAlive"
+    healthcheck/isaliveandwell: "/Health/IsAliveAndWell"
+    healthcheck/crontab: "*/2 * * * *"
+    healthcheck/clientid: "67d009b1-97fe-4963-84ff-3590b06df0da"
+spec:
+
+
+
+```
 
 ![diagram](taka1.png)
 
