@@ -1,0 +1,66 @@
+{ 
+    "name": "sentinel-dev-comms-api", 
+    "namespace": "sentinel-dev", 
+    "annotationsList": [
+         { "key": "azure-pipelines/jobName", "value": "deploy Web App" }, 
+         { "key": "azure-pipelines/org", "value": "https://bupaaunz.visualstudio.com/" }, 
+         { "key": "azure-pipelines/pipeline", "value": "Sentinel.Api.Comms" }, 
+         { "key": "azure-pipelines/pipelineId", "value": "3130" }, 
+         { "key": "azure-pipelines/project", "value": "AKS_Experiment" }, 
+         { "key": "azure-pipelines/run", "value": "20201005.2" }, 
+         { "key": "azure-pipelines/runuri", "value": "https://bupaaunz.visualstudio.com/AKS_Experiment/_build/results?buildId=255616" }, 
+         { "key": "deployment.kubernetes.io/revision", "value": "3" }, 
+         { "key": "taka/downscale-crontab", "value": "0 22 * * *" }, 
+         { "key": "taka/downscale-replica", "value": "0" }, 
+         { "key": "taka/scale-timezone", "value": "Australia/Melbourne" }, 
+         { "key": "taka/upscale-crontab", "value": "0 7 * * 1-5" }, 
+         { "key": "taka/upscale-replica", "value": "1" } ], 
+    "labelsList": [ 
+        { "key": "app", "value": "comms-api" }, 
+        { "key": "app.kubernetes.io/instance", "value": "sentinel-dev-comms-api" }, 
+        { "key": "app.kubernetes.io/managed-by", "value": "Helm" }, 
+        { "key": "app.kubernetes.io/name", "value": "comms-api" }, 
+        { "key": "app.kubernetes.io/version", "value": "1.0" }, 
+        { "key": "branch", "value": "master" }, 
+        { "key": "helm.sh/chart", "value": "comms-api-2.0.0-20201005.2" }, 
+        { "key": "version", "value": "1.0" } ], 
+    "spec": { 
+        "progressdeadlineseconds": { "value": 600 }, 
+        "replicas": { "value": 1 }, 
+        "revisionhistorylimit": { "value": 1 }, 
+        "selectorstring": "app=comms-api,app.kubernetes.io/instance=sentinel-dev-comms-api,app.kubernetes.io/name=comms-api,branch=master,version=1.0", 
+        "image": "mmercan/sentinel-api-comms:20201005.2" 
+    }, 
+    "status": { 
+        "availablereplicas": { "value": 1 }, 
+        "readyreplicas": { "value": 1 }, 
+        "replicas": { "value": 1 }, 
+        "updatedreplicas": { "value": 1 }, 
+        "conditionList": [ 
+        { 
+            "lasttransitiontime": { "seconds": 1599466742, "nanos": 0 }, 
+            "lastupdatetime": { "seconds": 1601886884, "nanos": 0 }, 
+            "message": "ReplicaSet \"sentinel-dev-comms-api-d6b69d66d\" has successfully progressed.", 
+            "reason": "NewReplicaSetAvailable", 
+            "status": "True", 
+            "type": "Progressing" 
+        }, 
+        { 
+            "lasttransitiontime": { "seconds": 1602654496, "nanos": 0 }, 
+            "lastupdatetime": { "seconds": 1602654496, "nanos": 0 }, 
+            "message": "Deployment has minimum availability.", 
+            "reason": "MinimumReplicasAvailable", "status": "True", "type": "Available" 
+        } 
+        ], 
+        "overallstatus": "True" 
+    }, 
+    "creationtime": { "seconds": 1599466742, "nanos": 0 }, 
+    "crondescriptionscaleup": "At 07:00 AM, Monday through Friday", 
+    "crondescriptionscaledown": "At 10:00 PM",
+    "downscalecrontab": "0 22 * * *", 
+    "upscalecrontab": "0 7 * * 1-5", 
+    "downscalereplica": "0", 
+    "upscalereplica": "1", 
+    "crontabtimezone": "Australia/Melbourne" 
+}
+    

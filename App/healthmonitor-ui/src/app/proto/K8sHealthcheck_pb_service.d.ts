@@ -77,6 +77,15 @@ type NamespaceServiceGetLastHealthCheckResult = {
   readonly responseType: typeof K8sHealthcheck_pb.HealthCheckResultReply;
 };
 
+type NamespaceServiceGetHealthCheckResultList = {
+  readonly methodName: string;
+  readonly service: typeof NamespaceService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof K8sHealthcheck_pb.HealthCheckResultRequest;
+  readonly responseType: typeof K8sHealthcheck_pb.HealthCheckResultListReply;
+};
+
 type NamespaceServiceGetNodes = {
   readonly methodName: string;
   readonly service: typeof NamespaceService;
@@ -105,6 +114,7 @@ export class NamespaceService {
   static readonly GetEvents: NamespaceServiceGetEvents;
   static readonly GetHealthCheckStats: NamespaceServiceGetHealthCheckStats;
   static readonly GetLastHealthCheckResult: NamespaceServiceGetLastHealthCheckResult;
+  static readonly GetHealthCheckResultList: NamespaceServiceGetHealthCheckResultList;
   static readonly GetNodes: NamespaceServiceGetNodes;
   static readonly GetDeploymentHistories: NamespaceServiceGetDeploymentHistories;
 }
@@ -212,6 +222,15 @@ export class NamespaceServiceClient {
   getLastHealthCheckResult(
     requestMessage: K8sHealthcheck_pb.HealthCheckResultRequest,
     callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.HealthCheckResultReply|null) => void
+  ): UnaryResponse;
+  getHealthCheckResultList(
+    requestMessage: K8sHealthcheck_pb.HealthCheckResultRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.HealthCheckResultListReply|null) => void
+  ): UnaryResponse;
+  getHealthCheckResultList(
+    requestMessage: K8sHealthcheck_pb.HealthCheckResultRequest,
+    callback: (error: ServiceError|null, responseMessage: K8sHealthcheck_pb.HealthCheckResultListReply|null) => void
   ): UnaryResponse;
   getNodes(
     requestMessage: google_protobuf_empty_pb.Empty,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { ServiceReply } from 'app/proto/K8sHealthcheck_pb';
+import { HealthCheckResultReply, ServiceReply } from 'app/proto/K8sHealthcheck_pb';
 import { K8sHealthcheckService } from 'app/shared/grpc-services/k8s-healthcheck.service';
 import { K8sServiceService } from 'app/shared/grpc-services/k8s-service.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -12,6 +12,9 @@ export class ServiceDashboardService implements Resolve<any> {
   currentNamespace: any;
   currentServiceName: any;
   healthCheckResult: any;
+
+  onHealthHistoriesChanged: BehaviorSubject<any>;
+  onHealthHistorySelected: BehaviorSubject<any>;
 
   public serviceDataset: Observable<any>;
   private service_dataset: BehaviorSubject<any>;
@@ -47,6 +50,8 @@ export class ServiceDashboardService implements Resolve<any> {
     this.healthcheck_dataset = new BehaviorSubject([]);
     this.healthcheckDataset = this.healthcheck_dataset.asObservable();
 
+    this.onHealthHistoriesChanged = new BehaviorSubject({});
+    this.onHealthHistorySelected = new BehaviorSubject({});
 
   }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
@@ -76,6 +81,26 @@ export class ServiceDashboardService implements Resolve<any> {
 
 
     });
+    return obs;
+  }
+
+  public GetHealthCheckResultList(): Observable<HealthCheckResultReply.AsObject[]> {
+
+    const obs = new Observable<HealthCheckResultReply.AsObject[]>((observer) => {
+
+
+      this.k8sHealthcheckService.GetHealthCheckResultList(this.currentNamespace, this.currentServiceName).subscribe(
+        (data) => {
+          this.onHealthHistoriesChanged.next(data);
+          this.onHealthHistorySelected.next(data[0]);
+        },
+        (error) => {
+
+        }
+      );
+
+    });
+
     return obs;
   }
 

@@ -16,22 +16,18 @@
     </div>
     <!-- / HEADER -->
 
-    <!-- CONTENT -->
+    
     <div class="content">
-
-        <mat-tab-group dynamicHeight="true">
+        <mat-tab-group dynamicHeight="true"  #tabGroup (selectedTabChange)="onTabClick($event)">
             <mat-tab label="Service Details">
-            <app-service-detail></app-service-detail>
-              <!--  <profile-timeline></profile-timeline> -->
+                <app-service-detail></app-service-detail>
             </mat-tab>
 
-            <mat-tab label="About">
-                <!-- <profile-about></profile-about>-->
+            <mat-tab label="Health Check Histories">
+                 <app-health-check-histories *ngIf="activetab=='history'"></app-health-check-histories>
             </mat-tab>
         </mat-tab-group>
-
     </div>
-    <!-- / CONTENT -->
 
 </div>
 

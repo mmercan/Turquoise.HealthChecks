@@ -1,0 +1,27 @@
+<mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+    <ng-container matColumnDef="url">
+        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-lg>Url</mat-header-cell>
+        <mat-cell *matCellDef="let row" fxHide fxShow.gt-lg> {{row.checkedurl}}</mat-cell>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef fxHide.xs>Status</mat-header-cell>
+        <mat-cell *matCellDef="let row" fxHide.xs>{{row.status}}</mat-cell>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="age">
+        <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.creationtime  | momentAge }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             (click)="onSelect(row)"
+             [ngClass]="{'selected' : row == selected}"
+             [@animate]="{value:'*',params:{y:'100%'}}"
+    >
+    </mat-row>
+</mat-table>

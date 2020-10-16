@@ -22,6 +22,13 @@ export class ServiceDashboardComponent implements OnInit {
 
 
   }
+  activetab = '';
+  onTabClick(event: any): void {
+    if (event.index) {
+      this.activetab = 'history';
+    }
+
+  }
 
   ngOnInit(): void {
     // this.dataStore = this.serviceDashboardService.dataStore;
@@ -39,5 +46,7 @@ export class ServiceDashboardComponent implements OnInit {
       }
     );
   }
+
+
 
 }

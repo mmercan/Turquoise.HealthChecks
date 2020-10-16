@@ -1,23 +1,42 @@
 @mixin file-manager-theme($theme) {
 
-    $background: map-get($theme, background);
-    $accent: map-get($theme, accent);
-    $is-dark: map-get($theme, is-dark);
+  $background: map-get($theme, background);
+  $accent: map-get($theme, accent);
+  $is-dark: map-get($theme, is-dark);
 
-    file-list {
+  file-list {
 
-        .mat-table {
+    .mat-table {
 
-            .mat-row {
+      .mat-row {
 
-                &.selected {
-                    @if ($is-dark) {
-                        background: map-get($background, hover);
-                    } @else {
-                        background: map-get($accent, 50);
-                    }
-                }
-            }
+        &.selected {
+          @if ($is-dark) {
+            background: map-get($background, hover);
+          }
+
+          @else {
+            background: map-get($accent, 50);
+          }
         }
+      }
     }
+  }
+
+
+  .mat-table {
+
+    .mat-row {
+
+      &.selected {
+        @if ($is-dark) {
+          background: map-get($background, hover);
+        }
+
+        @else {
+          background: map-get($accent, 50);
+        }
+      }
+    }
+  }
 }

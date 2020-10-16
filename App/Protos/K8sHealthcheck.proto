@@ -17,6 +17,7 @@ service NamespaceService {
   rpc GetEvents (GetEventListRequest) returns (EventListReply); 
   rpc GetHealthCheckStats (HealthCheckStatsRequest) returns (HealthCheckStatsReply);
   rpc GetLastHealthCheckResult (HealthCheckResultRequest) returns (HealthCheckResultReply);
+  rpc GetHealthCheckResultList (HealthCheckResultRequest) returns (HealthCheckResultListReply);
   rpc GetNodes (google.protobuf.Empty) returns (NodeListReply);
   rpc GetDeploymentHistories (GetDeploymentRequest) returns (DeploymentScaleHistoryListReply);
 }

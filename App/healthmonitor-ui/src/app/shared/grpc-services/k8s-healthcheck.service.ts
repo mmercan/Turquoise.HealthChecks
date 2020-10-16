@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { environment } from 'environments/environment';
-import { HealthCheckResultReply, HealthCheckResultRequest, HealthCheckStatsReply, HealthCheckStatsRequest } from 'app/proto/K8sHealthcheck_pb';
+import { HealthCheckResultListReply, HealthCheckResultReply, HealthCheckResultRequest, HealthCheckStatsReply, HealthCheckStatsRequest } from 'app/proto/K8sHealthcheck_pb';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +28,45 @@ export class K8sHealthcheckService {
     authService.getUserInfo().subscribe(
       (user) => { this.token = authService.getLocalToken(); }
     );
-
-
   }
 
+  GetHealthCheckResultList(namespaceparam: string, serviceName: string): Observable<HealthCheckResultReply.AsObject[]> {
+
+    const obs = Observable.create(observer => {
+      const getRequest = new HealthCheckResultRequest();
+      getRequest.setNamespaceparam(namespaceparam);
+      getRequest.setServicename(serviceName);
+
+      const authmetadata = new grpc.Metadata();
+      authmetadata.append('authorization', `Bearer ${this.token}`);
+
+      grpc.unary(NamespaceService.GetHealthCheckResultList, {
+
+        metadata: authmetadata,
+        request: getRequest,
+        host: environment.grpc.url,
+
+        onEnd: res => {
+          const message = res.message as HealthCheckResultListReply;
+          const status = res.status;
+
+          if (status === grpc.Code.OK && message) {
+            observer.next(message.toObject().resultsList);
+          } else if (status === grpc.Code.Unauthenticated) {
+            this.authService.login();
+          } else {
+            observer.error(status);
+          }
+        }
+      });
+    });
+    return obs;
+
+  }
 
   getLastHealthCheckResult(namespaceparam: string, serviceName: string): Observable<HealthCheckResultReply.AsObject> {
 
     const obs = Observable.create(observer => {
-
       const getRequest = new HealthCheckResultRequest();
       getRequest.setNamespaceparam(namespaceparam);
       getRequest.setServicename(serviceName);

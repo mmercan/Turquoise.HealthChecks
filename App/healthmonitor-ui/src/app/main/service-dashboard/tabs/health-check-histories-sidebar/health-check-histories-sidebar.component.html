@@ -1,0 +1,106 @@
+  <div class="about-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="95">
+        <div class="profile-box info-box general" fxLayout="column">
+            <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="title">HealthCheck Result</div>
+            </header>
+            
+            <div class="content" *ngIf="healthcheckresult && healthcheckresult.result" > 
+                <div  *ngIf="!healthcheckresult.result.noJson"  class="info-line"  [ngClass]="{'ok': healthcheckresult.result.status=='OK',  'healthy': healthcheckresult.result.status=='Healthy', 'degraded': healthcheckresult.result.status=='Degraded', 'unhealthy': healthcheckresult.result.status=='Unhealthy'}">
+                    <div class="title">HealthCheck Result</div>
+                    <div class="info"> {{ healthcheckresult.result.status }} </div>
+                </div>
+
+                <div  *ngIf="healthcheckresult.result.noJson"  class="info-line"  [ngClass]="{'ok': healthcheckresult.status=='OK',  'healthy': healthcheckresult.status=='Healthy', 'degraded': healthcheckresult.status=='Degraded', 'unhealthy': healthcheckresult.status=='Unhealthy',  'unhealthy': healthcheckresult.status=='ServiceUnavailable'}">
+                    <div class="title">HealthCheck Result</div>
+                    <div class="info"> {{ healthcheckresult.status }} </div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">HealthCheck Ran </div>
+                    <div *ngIf=" healthcheckresult.creationtime" class="info"> {{healthcheckresult.creationtime | momentDate }} </div>
+                </div>
+
+                <div class="info-line">
+                    <div class="title">Duration</div>
+                    <div class="info"> {{ healthcheckresult.result.duration }} </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-box friends" fxLayout="column">
+            <header class="accent" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="title">HealthCheck Details</div>
+            </header>
+
+
+            <div class="content" *ngIf="healthcheckresult && healthcheckresult.result" > 
+
+                <mat-accordion  *ngIf="healthcheckresult.result.results">
+                    <mat-expansion-panel *ngFor="let result of healthcheckresult.result.results">
+                        <mat-expansion-panel-header [ngClass]="{'ok': result.status=='OK',  'healthy':  result.status=='Healthy', 'degraded':  result.status=='Degraded', 'unhealthy':  result.status=='Unhealthy'}">
+                            <mat-panel-title>
+                                {{result.name}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                {{result.status}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                    
+                        <div class="title">Description :</div>
+                        <p> {{result.description}} </p>
+                        <hr/>
+                        <div class="title">Details :</div>
+                            <table class="info jobs">
+                                <tr class="job"  *ngFor="let item of result.data | keyvalue" >
+                                    <td class="company"> {{item.key}} </td>
+                                    <td class="date"> {{item.value}} </td>
+                                </tr>
+                            </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+   
+
+
+        <div class="profile-box info-box contact" fxLayout="column">
+
+            <header class="accent">
+                <div class="title">Json</div>
+            </header>
+
+            <div class="content">
+       {{healthcheckresult | json}}
+
+
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                This is the expansion title
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                This is a summary of the content
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                            <p>This is the primary content of the panel.</p>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Self aware panel
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Currently I am 
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                                <p>I'm visible because I am open</p>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+
+            </div>
+
+        </div>
+    </div>

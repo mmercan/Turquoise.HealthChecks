@@ -19,7 +19,7 @@ using Turquoise.Models.Mongo;
 
 namespace Turquoise.Api.HealthMonitoring.GRPCServices
 {
-   [Authorize]
+    [Authorize]
     public class NamespaceGRPCService : NamespaceService.NamespaceServiceBase
     {
         private readonly ILogger<NamespaceGRPCService> logger;
@@ -29,7 +29,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
         private readonly IFeatureManager featureManager;
         private readonly MongoAliveAndWellResultStats aliveAndWellResultStats;
         private readonly MangoBaseRepo<AliveAndWellResult> healthCheckMongoRepo;
-         private readonly MangoBaseRepo<DeploymentScaleHistory> deploymentScaleHistoryRepo;
+        private readonly MangoBaseRepo<DeploymentScaleHistory> deploymentScaleHistoryRepo;
         private readonly IMapper mapper;
         public NamespaceGRPCService(
             ILogger<NamespaceGRPCService> logger,
@@ -86,7 +86,7 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("Namespace is missing");
             }
-             if (String.IsNullOrWhiteSpace(deploymentName))
+            if (String.IsNullOrWhiteSpace(deploymentName))
             {
                 throw new ArgumentException("Deployment is missing");
             }
@@ -106,17 +106,17 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("Namespace is missing");
             }
-             if (String.IsNullOrWhiteSpace(deploymentName))
+            if (String.IsNullOrWhiteSpace(deploymentName))
             {
                 throw new ArgumentException("Deployment is missing");
             }
 
             var builder = Builders<DeploymentScaleHistory>.Filter;
             var filter = builder.Eq(x => x.Namespace, ns) & builder.Eq(x => x.Name, deploymentName) & builder.Gt(x => x.ScaledUtc, DateTime.UtcNow.AddDays(-14));
-            var mongoScalehistories =  deploymentScaleHistoryRepo.Items.Find(filter).SortByDescending(p => p.ScaledUtc).Limit(50).ToList();
+            var mongoScalehistories = deploymentScaleHistoryRepo.Items.Find(filter).SortByDescending(p => p.ScaledUtc).Limit(50).ToList();
 
-            var reply =DeploymentListReplyConverter.ConvertListDeploymentScaleHistory(mongoScalehistories);
-            return Task.FromResult( reply);
+            var reply = DeploymentListReplyConverter.ConvertListDeploymentScaleHistory(mongoScalehistories);
+            return Task.FromResult(reply);
         }
 
         public async override Task<ServiceReply> GetService(GetServiceRequest request, ServerCallContext context)
@@ -248,14 +248,14 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             {
                 throw new ArgumentException("ServiceName is missing");
             }
-            var result = new HealthCheckResultReply();
+
 
             var builder = Builders<AliveAndWellResult>.Filter;
             var filter = builder.Eq(x => x.ServiceNamespace, ns) & builder.Eq(x => x.ServiceName, serviceName) & builder.Gt(x => x.CreationTime, DateTime.UtcNow.AddDays(-1));
 
             AliveAndWellResult mongores = healthCheckMongoRepo.Items.Find(filter).SortByDescending(p => p.CreationTime).FirstOrDefault(); //.OrderByDescending(p => p.CreationTime).FirstOrDefault();
 
-
+            var result = new HealthCheckResultReply();
             result.Id = mongores.Id.ToString();
             result.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(mongores.CreationTime);
             result.ServiceUid = mongores.ServiceUid;
@@ -263,10 +263,46 @@ namespace Turquoise.Api.HealthMonitoring.GRPCServices
             result.ServiceNamespace = mongores.ServiceNamespace;
             result.Status = mongores.Status;
             result.StringResult = mongores.StringResult;
-
+            result.CheckedUrl = mongores.CheckedUrl;
             return Task.FromResult(result);
         }
 
+
+        public override Task<HealthCheckResultListReply> GetHealthCheckResultList(HealthCheckResultRequest request, ServerCallContext context)
+        {
+            var ns = request.NamespaceParam;
+            if (String.IsNullOrWhiteSpace(ns))
+            {
+                throw new ArgumentException("Namespace is missing");
+            }
+
+            var serviceName = request.ServiceName;
+            if (String.IsNullOrWhiteSpace(serviceName))
+            {
+                throw new ArgumentException("ServiceName is missing");
+            }
+            var reply = new HealthCheckResultListReply();
+
+            var builder = Builders<AliveAndWellResult>.Filter;
+            var filter = builder.Eq(x => x.ServiceNamespace, ns) & builder.Eq(x => x.ServiceName, serviceName) & builder.Gt(x => x.CreationTime, DateTime.UtcNow.AddDays(-1));
+
+            var mongores = healthCheckMongoRepo.Items.Find(filter).SortByDescending(p => p.CreationTime).Limit(50).ToList(); //.OrderByDescending(p => p.CreationTime).FirstOrDefault();
+
+            foreach (var item in mongores)
+            {
+                var result = new HealthCheckResultReply();
+                result.Id = item.Id.ToString();
+                result.CreationTime = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(item.CreationTime);
+                result.ServiceUid = item.ServiceUid;
+                result.ServiceName = item.ServiceName;
+                result.ServiceNamespace = item.ServiceNamespace;
+                result.Status = item.Status;
+                result.StringResult = item.StringResult;
+                result.CheckedUrl = item.CheckedUrl;
+                reply.Results.Add(result);
+            }
+            return Task.FromResult(reply);
+        }
 
         public override Task<NodeListReply> GetNodes(Google.Protobuf.WellKnownTypes.Empty request, ServerCallContext context)
         {

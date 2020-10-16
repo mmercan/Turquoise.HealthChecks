@@ -12,11 +12,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FuseSharedModule } from '@fuse/shared.module';
 
+import { MatRippleModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTableModule } from '@angular/material/table';
+
 import { ServiceDashboardService } from './service-dashboard.service';
 import { ServiceDetailComponent } from './tabs/service-detail/service-detail.component';
+import { HealthCheckHistoriesComponent } from './tabs/health-check-histories/health-check-histories.component';
+import { HealthCheckHistoriesListComponent } from './tabs/health-check-histories-list/health-check-histories-list.component';
+import { HealthCheckHistoriesSidebarComponent } from './tabs/health-check-histories-sidebar/health-check-histories-sidebar.component';
+import { FuseSidebarModule } from '@fuse/components';
 
 @NgModule({
-  declarations: [ServiceDashboardComponent, ServiceDetailComponent],
+  declarations: [ServiceDashboardComponent,
+    ServiceDetailComponent, HealthCheckHistoriesComponent, HealthCheckHistoriesListComponent, HealthCheckHistoriesSidebarComponent],
   imports: [
     CommonModule,
     MatExpansionModule,
@@ -25,8 +34,11 @@ import { ServiceDetailComponent } from './tabs/service-detail/service-detail.com
     MatDividerModule,
     MatIconModule,
     MatTabsModule,
-
-    FuseSharedModule
+    FuseSidebarModule,
+    FuseSharedModule,
+    MatRippleModule,
+    MatSlideToggleModule,
+    MatTableModule
   ],
   providers: [ServiceDashboardService]
 })

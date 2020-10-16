@@ -11,3 +11,15 @@ export class MomentAgePipe implements PipeTransform {
         }
     }
 }
+
+
+@Pipe({ name: 'momentDate' })
+export class MomentDatePipe implements PipeTransform {
+
+    transform(value: any, args: any[] = []): string {
+        if (value && value.seconds) {
+            const day = moment.unix(value.seconds).calendar();
+            return day;  // value ? String(value).replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`) : '';
+        }
+    }
+}
