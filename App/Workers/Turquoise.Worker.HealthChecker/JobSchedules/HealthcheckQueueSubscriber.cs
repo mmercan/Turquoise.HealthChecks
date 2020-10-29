@@ -13,6 +13,7 @@ using Turquoise.Common.Mongo;
 using Turquoise.HealthChecker.Services;
 using Turquoise.Models.Mongo;
 using Turquoise.Models.RabbitMQ;
+using Turquoise.Worker.HealthChecker.RMQueueHealthCheck;
 
 namespace Turquoise.Worker.HealthChecker
 {
@@ -210,47 +211,6 @@ namespace Turquoise.Worker.HealthChecker
                     logger.LogCritical("\n\n");
                 }
             });
-
-        }
-    }
-
-
-    public static class HealthcheckQueueSubscriberStats
-    {
-        private static bool _isqueueSubscriberStarted = true;
-        private static DateTime _lastProcessTime;
-        private static readonly object _lockObject = new object();
-
-        public static DateTime GetLastProcessTime()
-        {
-            lock (_lockObject)
-            {
-                return _lastProcessTime;
-            }
-        }
-        public static void SetProcessTime()
-        {
-            lock (_lockObject)
-            {
-                _lastProcessTime = DateTime.UtcNow;
-            }
-        }
-
-
-
-        public static bool GetIsqueueSubscriberStarted()
-        {
-            lock (_lockObject)
-            {
-                return _isqueueSubscriberStarted;
-            }
-        }
-        public static void SetIsqueueSubscriberStarted(bool status)
-        {
-            lock (_lockObject)
-            {
-                _isqueueSubscriberStarted = status;
-            }
         }
     }
 

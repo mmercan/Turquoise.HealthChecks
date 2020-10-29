@@ -21,6 +21,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Turquoise.HealthChecker.Services;
 using System.Net.Http.Headers;
 using Turquoise.Common.Services;
+using Turquoise.Worker.HealthChecker.RMQueueHealthCheck;
 
 namespace Turquoise.Worker.HealthChecker
 {
@@ -38,7 +39,8 @@ namespace Turquoise.Worker.HealthChecker
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddFeatureManagement();
             //Add Health Check
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+            .AddCheck<QueueSubscribeHealthCheck>("queue_health_check");
             // .AddSystemInfoCheck();
 
             // services.AddAutoMapper(typeof(Program).Assembly, typeof(Turquoise.Models.Mongo.DeploymentV1).Assembly);
