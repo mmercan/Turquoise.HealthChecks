@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-Turquoise.Worker.Comms-C41A1696-61B7-4058-85D2-618B8644740A</UserSecretsId>
   </PropertyGroup>
 

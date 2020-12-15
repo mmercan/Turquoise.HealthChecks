@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
 ENV ASPNETCORE_URLS=http://+:80
 WORKDIR /app
 EXPOSE 80
 EXPOSE 81
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS develop
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS develop
 ENV ASPNETCORE_URLS=http://+:80
 ENV DOTNET_USE_POLLING_FILE_WATCHER=1
 ENV ASPNETCORE_ENVIRONMENT=Development
@@ -12,7 +12,7 @@ WORKDIR /src/Workers/Turquoise.Worker.Comms
 EXPOSE 80
 EXPOSE 81
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src/
 COPY ["Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.csproj", "Workers/Turquoise.Worker.Comms/"]
 RUN dotnet restore "Workers/Turquoise.Worker.Comms/Turquoise.Worker.Comms.csproj"
