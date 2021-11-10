@@ -64,8 +64,8 @@ namespace Turquoise.HealthChecks.RabbitMQ
                 data.Add("type", "RabbitMQHealthCheckFromBus");
                 try
                 {
-                    bus.Publish("Test", "healthcheck.rabbitmq");
-                    data.Add("Connected", bus.IsConnected);
+                    bus.PubSub.Publish("Test", "healthcheck.rabbitmq");
+                    data.Add("Connected", bus.Advanced.IsConnected);
                     string description = "RabbitMQHealthCheck is healthy";
                     ReadOnlyDictionary<string, Object> rodata = new ReadOnlyDictionary<string, object>(data);
                     return HealthCheckResult.Healthy(description, rodata);
