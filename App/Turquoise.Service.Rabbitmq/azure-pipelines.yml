@@ -16,7 +16,7 @@ stages:
       - job: A
         displayName: Build
         pool:
-          name: Hosted Ubuntu 1604
+          name: Hosted ubuntu-latest
         steps:
           - task: DockerCompose@0
             displayName: "Build Images"
