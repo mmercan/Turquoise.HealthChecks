@@ -16,7 +16,7 @@ stages:
       - job: A
         displayName: Build
         pool:
-          name: ubuntu-20.04
+          vmImage: 'ubuntu-latest'
         steps:
           - task: DockerCompose@0
             displayName: "Build Images"
