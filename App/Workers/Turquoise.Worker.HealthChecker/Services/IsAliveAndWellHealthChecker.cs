@@ -28,8 +28,6 @@ namespace Turquoise.HealthChecker.Services
             this.azAuthService = azAuthService;
         }
 
-
-
         public async Task<List<IsAliveAndWellResult>> DownloadAsync(ServiceV1 service)
         {
             var results = new List<IsAliveAndWellResult>();
@@ -83,7 +81,6 @@ namespace Turquoise.HealthChecker.Services
             return new IsAliveAndWellResult { Result = content, Status = status, IsSuccessStatusCode = isSuccessStatusCode, CheckedUrl = url.AbsoluteUri };
 
         }
-
 
         private async Task authenticate(bool force, ServiceV1 service)
         {

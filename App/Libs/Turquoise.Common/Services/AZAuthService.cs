@@ -28,13 +28,14 @@ namespace Turquoise.Common.Services
             this.memoryCache = memoryCache;
         }
 
-        public async Task<string> Authenticate()
+        //  authenticate with AZAuthServiceSettings [parameters]  and return ClaimsPrincipal
+        public async Task<string> Authenticate(AZAuthServiceSettings authsettings)
         {
-            if (settingsOptions.Value == null)
+           if (authsettings == null)
             {
                 throw new ArgumentNullException("settingsOptions");
             }
-            var setting = settingsOptions.Value;
+            var setting = authsettings;
 
             if (string.IsNullOrEmpty(setting.Secret))
             {
@@ -60,6 +61,11 @@ namespace Turquoise.Common.Services
                 logger.LogCritical("used cached token expires in " + totalmin.ToString() + " Minutes  at UTC " + token.ExpiresOn.ToString());
             }
             return token.Token;
+        }
+
+        public async Task<string> Authenticate()
+        {
+            return await Authenticate( settingsOptions.Value);
         }
 
 
