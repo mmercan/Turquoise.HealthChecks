@@ -39,9 +39,17 @@ namespace Turquoise.HealthChecks.Redis
                 {
                     var redisconnection = ConnectionMultiplexer.Connect(connectionString);
                     var database = redisconnection.GetDatabase();
+                    var status = redisconnection.GetStatus();
                     data.Add("Connected", redisconnection.IsConnected);
-                    string description = "RedisHealthCheck is healthy";
+                    data.Add("Status", status);
                     ReadOnlyDictionary<string, Object> rodata = new ReadOnlyDictionary<string, object>(data);
+
+                    if (!redisconnection.IsConnected)
+                    {
+                        return HealthCheckResult.Unhealthy("Redis is not connected", data: rodata);
+                    }
+
+                    string description = "RedisHealthCheck is healthy";
                     return HealthCheckResult.Healthy(description, rodata);
                 }
                 catch (Exception ex)
