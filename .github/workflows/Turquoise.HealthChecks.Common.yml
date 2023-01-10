@@ -14,36 +14,3 @@ jobs:
     uses: mmercan/Turquoise.HealthChecks/.github/workflows/reusable-buildPack-workflow.yml@master
     with:
       working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
-      
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
-
-    - name: Pack
-      working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
-      run: |
-        echo $GITHUB_REF 
-        b=$GITHUB_REF
-        if ($b -eq "master") then
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
-        else 
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
-        fi
-      
