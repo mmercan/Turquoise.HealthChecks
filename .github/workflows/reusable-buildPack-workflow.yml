@@ -1,0 +1,40 @@
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ${{ inputs.working-directory }}
+      
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: ${{ inputs.working-directory }}
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Pack
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        echo $GITHUB_REF 
+        b=$GITHUB_REF
+        if ($b -eq "master") then
+          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+        else 
+          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+        fi
+      
