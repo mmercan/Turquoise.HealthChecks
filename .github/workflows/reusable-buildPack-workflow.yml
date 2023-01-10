@@ -35,8 +35,12 @@ jobs:
         echo $GITHUB_REF 
         b=$GITHUB_REF
         if ($b -eq "master") then
-          dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID
+          dotnet pack --output $RUNNER_TEMP --no-restore
         else 
           dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID
         fi
       
+    - name: Push
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        dotnet nuget push "*.nupkg" -s $RUNNER_TEMP  -k ${{ secrets.NugetApiKey }}
