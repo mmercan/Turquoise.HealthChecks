@@ -14,3 +14,5 @@ jobs:
     uses: mmercan/Turquoise.HealthChecks/.github/workflows/reusable-buildPack-workflow.yml@master
     with:
       working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
+    secrets:
+      NugetApiKey: ${{ secrets.NUGETAPIKEY }}
