@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -28,16 +28,3 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./HealthChecks
-      
-    - name: Pack
-    - run: |
-        echo $GITHUB_REF 
-        b=$GITHUB_REF
-        if ($b -eq "master") then
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
-        else 
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
-        fi
-      working-directory: ./HealthChecks
-      
-      
