@@ -26,6 +26,7 @@ namespace Turquoise.HealthChecks.Common.Checks
         {
             return await Task.Run(() =>
             {
+                var errorcount = 0;
                 IDictionary<string, Object> data = new Dictionary<string, object>();
                 data.Add("type", "ProcessListHealthChecks");
                 UInt32 totalsize = 0;
@@ -44,7 +45,8 @@ namespace Turquoise.HealthChecks.Common.Checks
                     {
                         if (!string.IsNullOrWhiteSpace(ex.Message))
                         {
-                            data.Add("error", ex.Message);
+                            errorcount++;
+                            data.Add("error-"+errorcount.ToString(), ex.Message);
                         }
                         // data.Add(aProc.ProcessName + "_TotalProcessorTime " + number.ToString(), "Failed to load");
                     }

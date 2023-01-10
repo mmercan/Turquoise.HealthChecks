@@ -8,7 +8,7 @@ namespace Turquoise.HealthChecks.Network.Tests.Checks
 {
     public class PingHelperShould
     {
-        string connectionString = "13.77.151.111:15672";
+        string connectionString = "www.google.com:443";
         HealthCheckContext context = new HealthCheckContext();
 
         [Fact]

@@ -6,6 +6,10 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using Xunit.Abstractions;
+using DotNet.Testcontainers.Containers;
+using DotNet.Testcontainers.Builders;
+using System.IO;
+using DotNet.Testcontainers.Configurations;
 
 namespace Turquoise.HealthChecks.Common.Tests.Checks
 {
@@ -14,7 +18,12 @@ namespace Turquoise.HealthChecks.Common.Tests.Checks
 
 
         private readonly ITestOutputHelper output;
-        string conection = "Server=52.175.193.162;Database=sentinel;User Id=sa;Password=MySentP@ssw0rd;";  //Environment.GetEnvironmentVariable("SentinelConnection");
+        string conection = "Server=localhost;Database=master;User Id=sa;Password=MySentP@ssw0rd;TrustServerCertificate=True";  //Environment.GetEnvironmentVariable("SentinelConnection");
+
+
+
+
+
         public SqlConnectionHealthCheckTests(ITestOutputHelper output)
         {
             this.output = output;
@@ -22,6 +31,37 @@ namespace Turquoise.HealthChecks.Common.Tests.Checks
         [Fact]
         public async Task ConnectDatabase()
         {
+
+            IOutputConsumer outputConsumer = Consume.RedirectStdoutAndStderrToStream(new MemoryStream(), new MemoryStream());
+
+            TestcontainersContainer _sqlContainer = new TestcontainersBuilder<MsSqlTestcontainer>()
+             .WithDatabase(new MsSqlTestcontainerConfiguration
+             {
+                 Password = "MySentP@ssw0rd",
+                 Database = "sentinel",
+                 //Username="sa",
+                 Port = 1433,
+
+             })
+            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithCleanUp(true)
+            //.Build();
+            // .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
+            // .WithEnvironment("ACCEPT_EULA", "true")
+            // .WithEnvironment("SA_PASSWORD", "MySentP@ssw0rd")
+            //.WithBindMount(Path.GetFullPath("sql"), "/scripts/")
+            //.WithCommand("/bin/bash", "-c", "/scripts/init.sh")
+
+            .WithPortBinding(1433, 1433)
+            //  .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+            //.WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged(outputConsumer.Stdout, "INIT_COMPLETE"))
+             .Build();
+
+
+
+
+            await _sqlContainer.StartAsync();
+
             HealthCheckContext context = new HealthCheckContext();
 
             SqlConnectionHealthCheck sql = new SqlConnectionHealthCheck(conection);
