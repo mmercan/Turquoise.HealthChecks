@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.HealthChecks.Nats", "Turquoise.HealthChecks.Nats.csproj", "{0B7D10F3-5810-4B36-BDF2-0BAB50ED134F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.HealthChecks.Nats.Tests", "..\Turquoise.HealthChecks.Nats.Tests\Turquoise.HealthChecks.Nats.Tests.csproj", "{A93BE3ED-0E7A-42BB-A0E4-DAEC7EDF6060}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B7D10F3-5810-4B36-BDF2-0BAB50ED134F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7D10F3-5810-4B36-BDF2-0BAB50ED134F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7D10F3-5810-4B36-BDF2-0BAB50ED134F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7D10F3-5810-4B36-BDF2-0BAB50ED134F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93BE3ED-0E7A-42BB-A0E4-DAEC7EDF6060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93BE3ED-0E7A-42BB-A0E4-DAEC7EDF6060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93BE3ED-0E7A-42BB-A0E4-DAEC7EDF6060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93BE3ED-0E7A-42BB-A0E4-DAEC7EDF6060}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

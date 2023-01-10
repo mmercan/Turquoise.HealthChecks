@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.HealthChecks.MySql", "Turquoise.HealthChecks.MySql.csproj", "{15C6E42F-C130-40E7-ACB8-777376ABE249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turquoise.HealthChecks.MySql.Tests", "..\Turquoise.HealthChecks.MySql.Tests\Turquoise.HealthChecks.MySql.Tests.csproj", "{A4710616-496F-4763-9E04-7D59C7FA2EA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15C6E42F-C130-40E7-ACB8-777376ABE249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15C6E42F-C130-40E7-ACB8-777376ABE249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15C6E42F-C130-40E7-ACB8-777376ABE249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15C6E42F-C130-40E7-ACB8-777376ABE249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4710616-496F-4763-9E04-7D59C7FA2EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4710616-496F-4763-9E04-7D59C7FA2EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4710616-496F-4763-9E04-7D59C7FA2EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4710616-496F-4763-9E04-7D59C7FA2EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
