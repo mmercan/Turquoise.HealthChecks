@@ -21,9 +21,12 @@ jobs:
         dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ./HealthChecks
+      
     - name: Build
       run: dotnet build --no-restore
       working-directory: ./HealthChecks
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./HealthChecks
