@@ -4,11 +4,13 @@ on:
       working-directory:
         required: true
         type: string
+    secrets:
+      NugetApiKey:
+        required: true
 
 jobs:
-  reusable_workflow_job:
+  Build_Test_Pack_And_Push_Package:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -33,8 +35,8 @@ jobs:
         echo $GITHUB_REF 
         b=$GITHUB_REF
         if ($b -eq "master") then
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+          dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID
         else 
-          dotnet pack --output $(Build.ArtifactStagingDirectory) --no-restore --version-suffix ci-$(Build.BuildNumber)
+          dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID
         fi
       
