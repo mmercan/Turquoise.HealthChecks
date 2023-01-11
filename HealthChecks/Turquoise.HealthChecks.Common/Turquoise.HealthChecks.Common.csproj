@@ -4,11 +4,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Turquoise.HealthChecks.Common</PackageId>
-    <VersionPrefix>3.0.2</VersionPrefix>
+    <VersionPrefix>3.0.3</VersionPrefix>
     <Authors>Matt Mercan</Authors>
     <Company>Mercan</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docs\readme.md" Pack="true" PackagePath="\"/>
