@@ -1,20 +1,20 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: Turquoise.HealthChecks.Common
+name: Turquoise.HealthChecks.RabbitMQ
 
 on:
   push:
     paths:
-      - 'HealthChecks/Turquoise.HealthChecks.Common/**'
+      - 'HealthChecks/Turquoise.HealthChecks.RabbitMQ/**'
   pull_request:
     paths:
-      - 'HealthChecks/Turquoise.HealthChecks.Common/**'
+      - 'HealthChecks/Turquoise.HealthChecks.RabbitMQ/**'
 
 jobs:
   call-workflow-passing-data:
     uses: mmercan/Turquoise.HealthChecks/.github/workflows/reusable-buildPack-workflow.yml@master
     with:
-      working-directory: ./HealthChecks/Turquoise.HealthChecks.Common
+      working-directory: ./HealthChecks/Turquoise.HealthChecks.RabbitMQ
     secrets:
       NugetApiKey: ${{ secrets.NUGETAPIKEY }}
