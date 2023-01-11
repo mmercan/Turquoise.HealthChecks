@@ -43,5 +43,4 @@ jobs:
     - name: Push
       working-directory: ${{ runner.temp }}
       run: |
-
         dotnet nuget push "*.nupkg" -k ${{ secrets.NugetApiKey }} -s https://api.nuget.org/v3/index.json
