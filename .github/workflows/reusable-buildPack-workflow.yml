@@ -34,7 +34,7 @@ jobs:
       run: |
         echo $GITHUB_REF 
         b=$GITHUB_REF
-        if ($b -eq "master") then
+        if ($b -eq "refs/heads/master") then
           dotnet pack --output $RUNNER_TEMP --no-restore
         else 
           dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID

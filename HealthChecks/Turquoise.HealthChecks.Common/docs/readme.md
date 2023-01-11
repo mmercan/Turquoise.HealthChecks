@@ -1,2 +1,2 @@
 # Turquoise.HealthChecks.Common
-this contains some basic healthcheck extensions and some extensions to for outputs 
+this package contains some basic healthcheck extensions and some extensions to for outputs 
