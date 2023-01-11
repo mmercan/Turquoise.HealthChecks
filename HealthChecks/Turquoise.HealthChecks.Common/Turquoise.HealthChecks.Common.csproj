@@ -4,12 +4,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Turquoise.HealthChecks.Common</PackageId>
-    <VersionPrefix>3.0.1</VersionPrefix>
+    <VersionPrefix>3.0.2</VersionPrefix>
     <Authors>Matt Mercan</Authors>
     <Company>Mercan</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="docs\readme.md" Pack="true" PackagePath="\"/>
+</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
