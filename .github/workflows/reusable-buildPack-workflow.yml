@@ -33,7 +33,7 @@ jobs:
       working-directory: ${{ inputs.working-directory }}
       run: |
         echo $GITHUB_REF 
-        if ($GITHUB_REF -eq "refs/heads/master") then
+        if [[ ${{ github.ref }} == "refs/heads/master" ]]; then
           dotnet pack --output $RUNNER_TEMP --no-restore
         else 
           dotnet pack --output $RUNNER_TEMP --no-restore --version-suffix ci-$GITHUB_RUN_ID
