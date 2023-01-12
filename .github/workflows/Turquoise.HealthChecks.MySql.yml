@@ -7,11 +7,9 @@ on:
   push:
     paths:
       - 'HealthChecks/Turquoise.HealthChecks.MySql/**'
-    branches: [ "master" ]
   pull_request:
     paths:
       - 'HealthChecks/Turquoise.HealthChecks.MySql/**'
-    branches: [ "master" ]
 
 jobs:
   call-workflow-passing-data:

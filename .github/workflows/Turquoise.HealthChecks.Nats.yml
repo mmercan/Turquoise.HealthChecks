@@ -7,11 +7,9 @@ on:
   push:
     paths:
       - 'HealthChecks/Turquoise.HealthChecks.Nats/**'
-    branches: [ "master" ]
   pull_request:
     paths:
       - 'HealthChecks/Turquoise.HealthChecks.Nats/**'
-    branches: [ "master" ]
 
 jobs:
   call-workflow-passing-data:
