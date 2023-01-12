@@ -15,7 +15,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: mmercan/Turquoise.HealthChecks/.github/workflows/reusable-buildPack-workflow.yml@master
+    uses: mmercan/Turquoise.HealthChecks/.github/workflows/reusable-buildPack-workflow.yml@main
     with:
       working-directory: ./HealthChecks/Turquoise.HealthChecks.Nats
     secrets:
