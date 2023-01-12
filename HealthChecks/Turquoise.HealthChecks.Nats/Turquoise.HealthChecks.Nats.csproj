@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Turquoise.HealthChecks.Nats</PackageId>
-    <VersionPrefix>3.0.6</VersionPrefix>
+    <VersionPrefix>3.0.7</VersionPrefix>
     <Authors>Matt Mercan</Authors>
     <Company>Mercan</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
