@@ -4,13 +4,6 @@
 
 export const environment = {
   production: false,
-  // adalConfig: {
-  //   tenant: 'fee9c112-179f-46e3-ab98-f8d58602cf19',
-  //   clientId: '7773c68a-afa3-499f-9a77-ec1065bebed8',
-  //   redirectUri: window.location.origin + '/',
-  //   postLogoutRedirectUri: window.location.origin + '/',
-  //   cacheLocation: 'localStorage'
-  // },
   adalConfig: {
     tenant: 'e1870496-eab8-42d0-8eb9-75fa94cfc3b8',
     clientId: '67d009b1-97fe-4963-84ff-3590b06df0da',
